@@ -19,4 +19,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Listings\Marketplace.Modules.Listings.Application\Marketplace.Modules.Listings.Application.csproj" />
+    <ProjectReference Include="..\Modules\Listings\Marketplace.Modules.Listings.Infrastructure\Marketplace.Modules.Listings.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
