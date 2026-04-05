@@ -1,2 +1,9 @@
 <Solution>
+  <Folder Name="/Modules/" />
+  <Folder Name="/Modules/Listings/">
+    <Project Path="Modules/Listings/Marketplace.Modules.Listings.Application/Marketplace.Modules.Listings.Application.csproj" />
+    <Project Path="Modules/Listings/Marketplace.Modules.Listings.Domain/Marketplace.Modules.Listings.Domain.csproj" />
+    <Project Path="Modules/Listings/Marketplace.Modules.Listings.Infrastructure/Marketplace.Modules.Listings.Infrastructure.csproj" />
+  </Folder>
+  <Project Path="Marketplace.Web/Marketplace.Web.csproj" />
 </Solution>
