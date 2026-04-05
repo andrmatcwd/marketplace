@@ -9,6 +9,11 @@ public sealed class ServiceItemViewModel
     public decimal Price { get; set; }
     public string Currency { get; set; } = "USD";
     public string City { get; set; } = string.Empty;
+
+    public string? AddressLine { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+
     public double Rating { get; set; }
     public bool IsOnline { get; set; }
     public bool IsOffline { get; set; }

@@ -61,7 +61,9 @@ public sealed class ServiceCatalogService : IServiceCatalogService
                 Rating = Math.Round(4.0 + random.NextDouble(), 1),
                 IsOnline = random.Next(0, 2) == 1,
                 IsOffline = true,
-                ImageUrl = images[random.Next(images.Length)]
+                ImageUrl = images[random.Next(images.Length)],
+                Latitude = 50.4501,
+                Longitude = 30.5234
             });
         }
 

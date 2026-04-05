@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Marketplace.Web.Services.Catalog;
+using Marketplace.Web.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<GoogleMapsOptions>(
+    builder.Configuration.GetSection("GoogleMaps"));
 
 builder.Services.AddListingsModule(builder.Configuration);
 
