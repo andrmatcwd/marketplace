@@ -1,6 +1,7 @@
 window.Marketplace = window.Marketplace || {};
+
 window.Marketplace.ServicesFilters = (function ($) {
-    function init() {
+    function initSidebarToggle() {
         const $sidebar = $('#desktopFiltersSidebar');
         const $toggle = $('#desktopFiltersToggle');
         const $toggleText = $toggle.find('.services-toggle-text');
@@ -11,13 +12,11 @@ window.Marketplace.ServicesFilters = (function ($) {
 
         $toggle.on('click', function () {
             $sidebar.toggleClass('collapsed');
-            $toggleText.text(
-                $sidebar.hasClass('collapsed') ? 'Show filters' : 'Hide filters'
-            );
+            $toggleText.text($sidebar.hasClass('collapsed') ? 'Show filters' : 'Hide filters');
         });
     }
 
     return {
-        init: init
+        initSidebarToggle: initSidebarToggle
     };
 })(jQuery);
