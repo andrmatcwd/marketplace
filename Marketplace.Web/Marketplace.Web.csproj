@@ -28,6 +28,7 @@
   <ItemGroup>
     <Folder Include="Controllers/Api/" />
     <Folder Include="Models/Services/" />
+    <Folder Include="Options/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Catalog/" />
   </ItemGroup>
