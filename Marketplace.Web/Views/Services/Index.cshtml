@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Services";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/services-toolbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/services-filters.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/service-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/services.css" asp-append-version="true" />
+}
+
+<div class="services-page container-fluid py-4">
+    @await Html.PartialAsync("_ServicesToolbar")
+
+    <div class="services-layout d-flex gap-4 align-items-start">
+        <aside id="desktopFiltersSidebar" class="services-filters-sidebar d-none d-lg-block">
+            <div class="card border-0 shadow-sm services-filters-card">
+                <div class="card-body p-0">
+                    @await Html.PartialAsync("_ServicesFilters")
+                </div>
+            </div>
+        </aside>
+
+        <section class="services-content flex-grow-1">
+            @await Html.PartialAsync("_ServicesGrid")
+        </section>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ServicesFiltersOffcanvas")
+
+@section Scripts {
+    <script src="~/js/components/services-filters.js" asp-append-version="true"></script>
+    <script src="~/js/pages/services.js" asp-append-version="true"></script>
+}

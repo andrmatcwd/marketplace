@@ -1,0 +1,63 @@
+<div class="services-filters">
+    <div class="p-3 p-lg-4 border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">Filters</h5>
+                <p class="text-muted small mb-0">Refine service results</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-light">Reset</button>
+        </div>
+    </div>
+
+    <form method="get" action="#">
+        <div class="accordion accordion-flush" id="servicesFiltersAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingKeyword">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseKeyword">
+                        Search
+                    </button>
+                </h2>
+                <div id="collapseKeyword" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        <input type="text" class="form-control" placeholder="Keyword..." />
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingCategory">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory">
+                        Category
+                    </button>
+                </h2>
+                <div id="collapseCategory" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="categoryBeauty">
+                            <label class="form-check-label" for="categoryBeauty">Beauty</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="categoryRepair">
+                            <label class="form-check-label" for="categoryRepair">Repair</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="categoryEducation">
+                            <label class="form-check-label" for="categoryEducation">Education</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="categoryCleaning">
+                            <label class="form-check-label" for="categoryCleaning">Cleaning</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 p-lg-4 border-top">
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Apply filters</button>
+                <button type="reset" class="btn btn-outline-secondary">Clear all</button>
+            </div>
+        </div>
+    </form>
+</div>

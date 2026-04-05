@@ -1,0 +1,22 @@
+.services-filters-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: sticky;
+    top: 1rem;
+}
+
+.services-filters .accordion-button {
+    font-weight: 600;
+    background-color: #fff;
+}
+
+.services-filters .accordion-button:not(.collapsed) {
+    color: inherit;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.services-filters .accordion-item {
+    border-left: 0;
+    border-right: 0;
+}
