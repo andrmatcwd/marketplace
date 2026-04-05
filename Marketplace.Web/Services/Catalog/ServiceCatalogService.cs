@@ -4,21 +4,69 @@ namespace Marketplace.Web.Services.Catalog;
 
 public sealed class ServiceCatalogService : IServiceCatalogService
 {
-    private static readonly IReadOnlyList<ServiceItemViewModel> Seed =
-    [
-        new() { Id = 1, Title = "Hair Styling", Description = "Professional hair styling for events and daily looks.", Category = "beauty", Price = 50, City = "Kyiv", Rating = 4.8, IsOnline = false, IsOffline = true },
-        new() { Id = 2, Title = "Math Tutor", Description = "Online math tutoring for school students.", Category = "education", Price = 25, City = "Lviv", Rating = 4.9, IsOnline = true, IsOffline = false },
-        new() { Id = 3, Title = "Home Cleaning", Description = "Full apartment cleaning service.", Category = "cleaning", Price = 80, City = "Kyiv", Rating = 4.7, IsOnline = false, IsOffline = true },
-        new() { Id = 4, Title = "Laptop Repair", Description = "Hardware diagnostics and repair.", Category = "repair", Price = 65, City = "Odesa", Rating = 4.6, IsOnline = false, IsOffline = true },
-        new() { Id = 5, Title = "English Speaking Coach", Description = "One-on-one speaking practice sessions.", Category = "education", Price = 30, City = "Dnipro", Rating = 5.0, IsOnline = true, IsOffline = true },
-        new() { Id = 6, Title = "Makeup Artist", Description = "Event and bridal makeup services.", Category = "beauty", Price = 95, City = "Kyiv", Rating = 4.9, IsOnline = false, IsOffline = true },
-        new() { Id = 7, Title = "Window Cleaning", Description = "Residential and office window cleaning.", Category = "cleaning", Price = 40, City = "Kharkiv", Rating = 4.5, IsOnline = false, IsOffline = true },
-        new() { Id = 8, Title = "Phone Repair", Description = "Screen and battery replacement.", Category = "repair", Price = 55, City = "Kyiv", Rating = 4.8, IsOnline = false, IsOffline = true },
-        new() { Id = 9, Title = "UI Design Mentoring", Description = "Review and coaching sessions for designers.", Category = "education", Price = 45, City = "Remote", Rating = 4.9, IsOnline = true, IsOffline = false },
-        new() { Id = 10, Title = "Nail Service", Description = "Classic and gel manicure.", Category = "beauty", Price = 35, City = "Lviv", Rating = 4.7, IsOnline = false, IsOffline = true },
-        new() { Id = 11, Title = "Deep Cleaning", Description = "Detailed kitchen and bathroom cleaning.", Category = "cleaning", Price = 120, City = "Kyiv", Rating = 4.8, IsOnline = false, IsOffline = true },
-        new() { Id = 12, Title = "Bike Repair", Description = "Maintenance and tune-up for city bikes.", Category = "repair", Price = 28, City = "Lviv", Rating = 4.6, IsOnline = false, IsOffline = true }
-    ];
+    private static readonly IReadOnlyList<ServiceItemViewModel> Seed = GenerateSeed();
+
+    private static IReadOnlyList<ServiceItemViewModel> GenerateSeed()
+    {
+        var categories = new[]
+        {
+            ("beauty", "Beauty"),
+            ("repair", "Repair"),
+            ("education", "Education"),
+            ("cleaning", "Cleaning")
+        };
+
+        var cities = new[]
+        {
+            "Kyiv", "Lviv", "Odesa", "Dnipro", "Kharkiv"
+        };
+
+        var titles = new[]
+        {
+            "Hair Styling", "Makeup Artist", "Nail Service",
+            "Laptop Repair", "Phone Repair", "Bike Repair",
+            "Math Tutor", "English Coach", "UI Design Mentoring",
+            "Home Cleaning", "Deep Cleaning", "Window Cleaning"
+        };
+
+        var images = new[]
+        {
+            "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+            "https://images.unsplash.com/photo-1581578731548-c64695cc6952",
+            "https://images.unsplash.com/photo-1518779578993-ec3579fee39f",
+            "https://images.unsplash.com/photo-1584697964403-3d98f06c3b52"
+        };
+
+        var random = new Random();
+        var list = new List<ServiceItemViewModel>();
+
+        int id = 1;
+
+        // generate ~40 services
+        for (int i = 0; i < 40; i++)
+        {
+            var category = categories[random.Next(categories.Length)];
+            var title = titles[random.Next(titles.Length)];
+
+            list.Add(new ServiceItemViewModel
+            {
+                Id = id++,
+                Title = title,
+                Description = $"{title} professional service with high quality and experience.",
+                Category = category.Item1,
+                Price = random.Next(20, 150),
+                Currency = "USD",
+                City = cities[random.Next(cities.Length)],
+                Rating = Math.Round(4.0 + random.NextDouble(), 1),
+                IsOnline = random.Next(0, 2) == 1,
+                IsOffline = true,
+                ImageUrl = images[random.Next(images.Length)]
+            });
+        }
+
+        return list;
+    }
 
     public Task<IReadOnlyList<ServiceCategoryViewModel>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {

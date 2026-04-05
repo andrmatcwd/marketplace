@@ -31,4 +31,19 @@ public sealed class ServicesController(IServiceCatalogService catalogService) : 
 
         return PartialView("_ServicesGrid", model);
     }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var service = (await catalogService.GetServicesAsync(new ServicesFilterRequest
+        {
+            PageSize = int.MaxValue
+        }, cancellationToken))
+        .Items.FirstOrDefault(x => x.Id == id);
+
+        if (service == null)
+            return NotFound();
+
+        return View(service);
+    }
 }
