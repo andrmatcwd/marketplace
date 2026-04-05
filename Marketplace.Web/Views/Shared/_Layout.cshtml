@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,7 +28,24 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <div class="d-flex align-items-center gap-2">
+
+                        <!-- 🌍 Language switcher -->
+                        <form asp-controller="Culture" asp-action="SetLanguage" method="post" class="d-flex">
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit" name="culture" value="en" class="btn btn-sm btn-outline-secondary">
+                                EN
+                            </button>
+                            <button type="submit" name="culture" value="uk" class="btn btn-sm btn-outline-secondary ms-1">
+                                UK
+                            </button>
+                        </form>
+
+                        <!-- 👤 Login / Logout -->
+                        <partial name="_LoginPartial" />
+
+                    </div>
                 </div>
             </div>
         </nav>
