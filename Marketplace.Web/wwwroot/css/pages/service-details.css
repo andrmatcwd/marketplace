@@ -1,0 +1,10 @@
+.service-details-image-wrapper {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.service-details-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
