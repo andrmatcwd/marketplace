@@ -1,4 +1,3 @@
-using System;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

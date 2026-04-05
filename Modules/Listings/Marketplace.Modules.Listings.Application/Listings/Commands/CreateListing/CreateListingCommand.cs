@@ -1,4 +1,3 @@
-using System;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Commands.CreateListing;

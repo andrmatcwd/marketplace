@@ -1,4 +1,3 @@
-using System;
 using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 

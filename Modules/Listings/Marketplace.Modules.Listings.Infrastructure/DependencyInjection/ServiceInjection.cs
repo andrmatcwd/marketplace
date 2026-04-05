@@ -1,4 +1,3 @@
-using System;
 using Marketplace.Modules.Listings.Application.Services;
 using Marketplace.Modules.Listings.Application.Services.Implementations;
 using Microsoft.Extensions.DependencyInjection;
