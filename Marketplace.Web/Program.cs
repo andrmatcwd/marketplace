@@ -5,6 +5,7 @@ using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Marketplace.Web.Services.Catalog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddListingsModule(builder.Configuration);
+
+builder.Services.AddScoped<IServiceCatalogService, ServiceCatalogService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)

@@ -1,5 +1,4 @@
 $(function () {
-    if (window.Marketplace?.ServicesFilters) {
-        window.Marketplace.ServicesFilters.init();
-    }
+    window.Marketplace?.ServicesFilters?.initSidebarToggle();
+    window.Marketplace?.ServicesGrid?.init();
 });

@@ -1,55 +1,55 @@
+@model Marketplace.Web.Models.Services.ServicesPageViewModel
+
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body">
         <div class="row g-3 align-items-end">
-            <div class="col-md-6 col-xl-3">
-                <label class="form-label">Search</label>
-                <input type="text" class="form-control" placeholder="Search services..." />
-            </div>
-
-            <div class="col-md-6 col-xl-3">
-                <label class="form-label">Category</label>
-                <select class="form-select">
-                    <option selected>All categories</option>
-                    <option>Beauty</option>
-                    <option>Repair</option>
-                    <option>Education</option>
-                    <option>Cleaning</option>
-                </select>
-            </div>
-
-            <div class="col-md-6 col-xl-3">
+            <div class="col-md-6 col-xl-4">
                 <label class="form-label">Sort by</label>
-                <select class="form-select">
-                    <option selected>Newest</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Top Rated</option>
+                <select id="servicesSortBy" class="form-select">
+                    <option value="newest" selected="@(Model.Filters.SortBy == "newest")">Newest</option>
+                    <option value="price_asc" selected="@(Model.Filters.SortBy == "price_asc")">Price: Low to High</option>
+                    <option value="price_desc" selected="@(Model.Filters.SortBy == "price_desc")">Price: High to Low</option>
+                    <option value="rating_desc" selected="@(Model.Filters.SortBy == "rating_desc")">Top Rated</option>
+                    <option value="title_asc" selected="@(Model.Filters.SortBy == "title_asc")">Title A-Z</option>
                 </select>
             </div>
 
-            <div class="col-md-6 col-xl-3">
-                <label class="form-label">View</label>
-                <div class="d-grid">
-                    <button class="btn btn-outline-secondary" type="button">12 results found</button>
-                </div>
+            <div class="col-md-6 col-xl-4">
+                <label class="form-label">Results</label>
+                <div class="form-control bg-body-tertiary">@Model.Results.TotalItems services found</div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row g-4">
-    @for (int i = 1; i <= 9; i++)
+    @if (Model.Results.Items.Count == 0)
     {
-        @await Html.PartialAsync("_ServiceCard", i)
+        <div class="col-12">
+            <div class="alert alert-light border mb-0">No services found.</div>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model.Results.Items)
+        {
+            @await Html.PartialAsync("_ServiceCard", item)
+        }
     }
 </div>
 
-<nav class="mt-4" aria-label="Services pagination">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
+@if (Model.Results.TotalPages > 1)
+{
+    <nav class="mt-4" aria-label="Services pagination">
+        <ul class="pagination justify-content-center flex-wrap">
+            @for (var i = 1; i <= Model.Results.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Results.Page ? "active" : null)">
+                    <a href="#"
+                       class="page-link services-page-link"
+                       data-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

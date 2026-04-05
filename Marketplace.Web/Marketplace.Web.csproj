@@ -25,4 +25,11 @@
     <ProjectReference Include="..\Modules\Listings\Marketplace.Modules.Listings.Infrastructure\Marketplace.Modules.Listings.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers/Api/" />
+    <Folder Include="Models/Services/" />
+    <Folder Include="Services/" />
+    <Folder Include="Services/Catalog/" />
+  </ItemGroup>
+
 </Project>
