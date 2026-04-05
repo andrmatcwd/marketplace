@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -39,8 +40,26 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Marketplace.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <!-- Left side -->
+            <div>
+                &copy; 2026 - Marketplace.Web -
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+
+            <!-- Right side 🌍 Language switcher -->
+            <form asp-controller="Culture" asp-action="SetLanguage" method="post" class="d-flex">
+                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+
+                <button type="submit" name="culture" value="en" class="btn btn-sm btn-outline-secondary">
+                    EN
+                </button>
+                <button type="submit" name="culture" value="uk" class="btn btn-sm btn-outline-secondary ms-1">
+                    UK
+                </button>
+            </form>
+
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
