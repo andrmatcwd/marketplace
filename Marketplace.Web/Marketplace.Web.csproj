@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Modules\Listings\Marketplace.Modules.Listings.Infrastructure\Marketplace.Modules.Listings.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views/Services/" />
+  </ItemGroup>
+
 </Project>

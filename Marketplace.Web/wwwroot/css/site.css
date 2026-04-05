@@ -29,3 +29,77 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* .services-page {
+    --filters-width: 320px;
+}
+
+.services-layout {
+    min-height: 100%;
+}
+
+.services-filters-sidebar {
+    width: var(--filters-width);
+    min-width: var(--filters-width);
+    transition: width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+
+.services-filters-sidebar.collapsed {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateX(-12px);
+}
+
+.services-filters-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: sticky;
+    top: 1rem;
+}
+
+.services-content {
+    min-width: 0;
+}
+
+.service-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+}
+
+.service-card-image {
+    height: 180px;
+    background: linear-gradient(135deg, #dee2e6, #f8f9fa);
+}
+
+.services-filters .accordion-button {
+    font-weight: 600;
+    background-color: #fff;
+}
+
+.services-filters .accordion-button:not(.collapsed) {
+    color: inherit;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.services-filters .accordion-item {
+    border-left: 0;
+    border-right: 0;
+}
+
+@media (max-width: 991.98px) {
+    .services-page {
+        --filters-width: 100%;
+    }
+
+    .service-card-image {
+        height: 160px;
+    }
+} */
