@@ -1,11 +1,136 @@
-﻿@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<Marketplace.Web.SharedResource> Localizer
-
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">@Localizer["HomeTitle"]</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
+}
+
+<!-- Hero -->
+<section class="home-hero py-5">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold mb-3">
+                    Find the right service for any task
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    Discover trusted professionals, compare offers, and book services easily.
+                </p>
+
+                <div class="d-flex gap-2">
+                    <a asp-controller="Services"
+                       asp-action="Index"
+                       class="btn btn-primary btn-lg">
+                        Browse Services
+                    </a>
+
+                    <a href="#categories"
+                       class="btn btn-outline-secondary btn-lg">
+                        Explore Categories
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="hero-image"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section id="categories" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Popular Categories</h2>
+            <p class="text-muted">Choose from a wide range of services</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <a asp-controller="Services" asp-action="Index" asp-route-Categories="beauty"
+                   class="category-card">
+                    <div class="category-icon">💇‍♀️</div>
+                    <div class="category-title">Beauty</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Services" asp-action="Index" asp-route-Categories="repair"
+                   class="category-card">
+                    <div class="category-icon">🔧</div>
+                    <div class="category-title">Repair</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Services" asp-action="Index" asp-route-Categories="education"
+                   class="category-card">
+                    <div class="category-icon">📚</div>
+                    <div class="category-title">Education</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Services" asp-action="Index" asp-route-Categories="cleaning"
+                   class="category-card">
+                    <div class="category-icon">🧼</div>
+                    <div class="category-title">Cleaning</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How it works</h2>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">🔍</div>
+                    <h5 class="mt-3">Search</h5>
+                    <p class="text-muted">Find services that match your needs.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">⭐</div>
+                    <h5 class="mt-3">Compare</h5>
+                    <p class="text-muted">Check ratings, reviews, and pricing.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="how-step">
+                    <div class="how-icon">📞</div>
+                    <h5 class="mt-3">Contact</h5>
+                    <p class="text-muted">Get in touch and book your service.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="home-cta py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to get started?</h2>
+        <p class="text-muted mb-4">
+            Join our marketplace and connect with trusted professionals today.
+        </p>
+
+        <a asp-controller="Services"
+           asp-action="Index"
+           class="btn btn-primary btn-lg">
+            Explore Services
+        </a>
+    </div>
+</section>

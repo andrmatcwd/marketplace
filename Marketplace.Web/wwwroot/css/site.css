@@ -29,3 +29,78 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+
+
+
+
+.home-hero {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+}
+
+.hero-image {
+    height: 300px;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #dee2e6, #f1f3f5);
+}
+
+.category-card {
+    display: block;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+
+.category-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-title {
+    font-weight: 600;
+}
+
+.how-icon {
+    font-size: 2rem;
+}
+
+.home-cta {
+    background: #f8f9fa;
+}
+
+@media (max-width: 991.98px) {
+    .hero-image {
+        height: 200px;
+    }
+}
+
+
+
+
+.privacy-page {
+    background-color: #f8f9fa;
+}
+
+.privacy-card {
+    border-radius: 1rem;
+}
+
+.privacy-page h2 {
+    color: #212529;
+}
+
+.privacy-page p,
+.privacy-page li {
+    color: #495057;
+    line-height: 1.7;
+}
