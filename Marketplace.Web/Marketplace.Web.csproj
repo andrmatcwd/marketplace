@@ -31,6 +31,8 @@
     <Folder Include="Options/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Catalog/" />
+    <Folder Include="Views/Home/Sections/" />
+    <Folder Include="Views/Services/Sections/" />
   </ItemGroup>
 
 </Project>
