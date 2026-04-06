@@ -30,3 +30,15 @@ window.initServiceMap = async function () {
         title
     });
 };
+
+window.setMainImage = function (img) {
+    const main = document.getElementById('mainServiceImage');
+    if (!main) return;
+
+    main.src = img.src;
+
+    document.querySelectorAll('.gallery-thumb')
+        .forEach(x => x.classList.remove('active'));
+
+    img.classList.add('active');
+};

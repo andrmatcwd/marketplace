@@ -18,4 +18,6 @@ public sealed class ServiceItemViewModel
     public bool IsOnline { get; set; }
     public bool IsOffline { get; set; }
     public string ImageUrl { get; set; } = string.Empty;
+
+    public List<string> ImageUrls { get; set; } = [];
 }
