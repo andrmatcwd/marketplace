@@ -62,6 +62,12 @@ public sealed class ServiceCatalogService : IServiceCatalogService
                 IsOnline = random.Next(0, 2) == 1,
                 IsOffline = true,
                 ImageUrl = images[random.Next(images.Length)],
+                ImageUrls = new List<string>
+                {
+                    "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+                    "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+                    "https://images.unsplash.com/photo-1581578731548-c64695cc6952"
+                },
                 Latitude = 50.4501,
                 Longitude = 30.5234
             });

@@ -17,10 +17,26 @@
 
         <!-- Image -->
         <div class="col-lg-6">
-            <div class="service-details-image-wrapper">
-                <img src="@Model.ImageUrl"
-                    alt="@Model.Title"
-                    class="service-details-image" />
+            <div class="service-gallery">
+                <!-- Main image -->
+                <div class="service-gallery-main">
+                    <img id="mainServiceImage"
+                        src="@(Model.ImageUrls.FirstOrDefault() ?? Model.ImageUrl)"
+                        alt="@Model.Title" />
+                </div>
+
+                <!-- Thumbnails -->
+                @if (Model.ImageUrls != null && Model.ImageUrls.Count > 1)
+                {
+                    <div class="service-gallery-thumbs">
+                        @foreach (var img in Model.ImageUrls)
+                        {
+                            <img src="@img"
+                                class="gallery-thumb"
+                                onclick="setMainImage(this)" />
+                        }
+                    </div>
+                }
             </div>
         </div>
 
