@@ -1,0 +1,31 @@
+.listings-page {
+    --filters-width: 320px;
+}
+
+.listings-layout {
+    min-height: 100%;
+}
+
+.listings-content {
+    min-width: 0;
+}
+
+.listings-filters-sidebar {
+    width: var(--filters-width);
+    min-width: var(--filters-width);
+    transition: width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+}
+
+.listings-filters-sidebar.collapsed {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateX(-12px);
+}
+
+@media (max-width: 991.98px) {
+    .listings-page {
+        --filters-width: 100%;
+    }
+}

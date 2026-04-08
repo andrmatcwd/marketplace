@@ -1,0 +1,33 @@
+﻿@model Marketplace.Web.Models.Listings.ListingItemViewModel
+@using Marketplace.Web.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<GoogleMapsOptions> GoogleMapsOptions
+
+@{
+    ViewData["Title"] = Model.Title;
+    var apiKey = GoogleMapsOptions.Value.ApiKey;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/listing-details.css" asp-append-version="true" />
+}
+
+<div class="container py-4 listing-details-page">
+    <div class="row g-4">
+        <partial name="DetailsSections/_ListingGallerySection" model="Model" />
+        <partial name="DetailsSections/_ListingInfoSection" model="Model" />
+    </div>
+
+    <partial name="DetailsSections/_ListingLocationSection" model="Model" />
+    <partial name="DetailsSections/_ListingReviewsSection" model="Model" />
+</div>
+
+@section Scripts {
+    @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+    {
+        <script src="~/js/pages/listing-details.js" asp-append-version="true"></script>
+        <script async
+                src="https://maps.googleapis.com/maps/api/js?key=@apiKey&loading=async&callback=initListingMap&libraries=marker">
+        </script>
+    }
+}

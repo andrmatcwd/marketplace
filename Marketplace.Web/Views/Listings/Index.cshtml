@@ -1,0 +1,39 @@
+﻿@model Marketplace.Web.Models.Listings.ListingsPageViewModel
+
+@{
+    ViewData["Title"] = "Services";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/listings-filters.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/listings.css" asp-append-version="true" />
+}
+
+<div class="listings-page container-fluid py-4">
+    @await Html.PartialAsync("Sections/_ListingsToolbar", Model)
+
+    <div class="listings-layout d-flex gap-4 align-items-start">
+        <aside id="desktopFiltersSidebar" class="listings-filters-sidebar d-none d-lg-block">
+            <div class="card border-0 shadow-sm listings-filters-card">
+                <div class="card-body p-0">
+                    @await Html.PartialAsync("Sections/_ListingsFilters", Model)
+                </div>
+            </div>
+        </aside>
+
+       <section class="listings-content flex-grow-1">
+            <div id="listingsGridContainer">
+                @await Html.PartialAsync("Sections/_ListingsGrid", Model)
+            </div>
+        </section>
+    </div>
+</div>
+
+@await Html.PartialAsync("Sections/_ListingsFiltersOffcanvas", Model)
+
+@section Scripts {
+    <script src="~/js/components/listings-filters.js" asp-append-version="true"></script>
+    <script src="~/js/components/listings-grid.js" asp-append-version="true"></script>
+    <script src="~/js/pages/listings.js" asp-append-version="true"></script>
+}
