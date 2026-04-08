@@ -1,26 +1,3 @@
-/* .service-details-image-wrapper {
-    border-radius: 1rem;
-    overflow: hidden;
-}
-
-.service-details-image {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-} */
-
-/* .service-details-image-wrapper {
-    border-radius: 1rem;
-    overflow: hidden;
-    margin-bottom: 1rem;
-}
-
-.service-details-image {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-} */
-
 .service-map {
     width: 100%;
     height: 320px;
@@ -30,10 +7,6 @@
 }
 
 @media (max-width: 991.98px) {
-    /* .service-details-image {
-        height: 250px;
-    } */
-
     .service-map {
         height: 260px;
     }
