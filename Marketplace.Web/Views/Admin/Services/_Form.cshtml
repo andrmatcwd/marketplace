@@ -1,0 +1,82 @@
+﻿@model Marketplace.Web.Models.Services.ServiceItemViewModel
+@using Marketplace.Web.Models.Services
+
+@{
+    var categories = ViewBag.Categories as IReadOnlyList<ServiceCategoryViewModel> ?? [];
+}
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Category" class="form-label"></label>
+        <select asp-for="Category" class="form-select">
+            <option value="">Select category</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.Value">@category.Label</option>
+            }
+        </select>
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Currency" class="form-label"></label>
+        <input asp-for="Currency" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="City" class="form-label"></label>
+        <input asp-for="City" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Rating" class="form-label"></label>
+        <input asp-for="Rating" class="form-control" />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" class="form-control" />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="AddressLine" class="form-label"></label>
+        <input asp-for="AddressLine" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Latitude" class="form-label"></label>
+        <input asp-for="Latitude" class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Longitude" class="form-label"></label>
+        <input asp-for="Longitude" class="form-control" />
+    </div>
+
+    <div class="col-md-3 form-check mt-4 ms-3">
+        <input asp-for="IsOnline" class="form-check-input" />
+        <label asp-for="IsOnline" class="form-check-label"></label>
+    </div>
+
+    <div class="col-md-3 form-check mt-4">
+        <input asp-for="IsOffline" class="form-check-input" />
+        <label asp-for="IsOffline" class="form-check-label"></label>
+    </div>
+</div>
