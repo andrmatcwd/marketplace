@@ -1,4 +1,4 @@
-﻿@model Marketplace.Web.Models.Admin.Services.AdminServicesPageViewModel
+﻿@model Marketplace.Web.Areas.Admin.Models.Services.AdminServicesPageViewModel
 
 <div class="card shadow-sm border-0">
     <div class="card-body p-0">
@@ -43,16 +43,16 @@
                                 <td>@item.Rating</td>
                                 <td class="text-end">
                                     <div class="d-inline-flex gap-2">
-                                        <a asp-area=""
-                                           asp-controller="ServicesAdmin"
+                                        <a asp-area="Admin"
+                                           asp-controller="Services"
                                            asp-action="Edit"
                                            asp-route-id="@item.Id"
                                            class="btn btn-sm btn-outline-secondary">
                                             Edit
                                         </a>
 
-                                        <form asp-area=""
-                                              asp-controller="ServicesAdmin"
+                                        <form asp-area="Admin"
+                                              asp-controller="Services"
                                               asp-action="Delete"
                                               asp-route-id="@item.Id"
                                               method="post"
@@ -72,5 +72,5 @@
         </div>
     </div>
 
-    <partial name="~/Views/Admin/Services/_Pagination.cshtml" model="Model" />
+    <partial name="_Pagination.cshtml" model="Model" />
 </div>

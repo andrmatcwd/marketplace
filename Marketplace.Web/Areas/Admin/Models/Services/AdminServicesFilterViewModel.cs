@@ -1,6 +1,6 @@
 using Marketplace.Web.Models.Services;
 
-namespace Marketplace.Web.Models.Admin.Services;
+namespace Marketplace.Web.Areas.Admin.Models.Services;
 
 public sealed class AdminServicesFilterViewModel
 {

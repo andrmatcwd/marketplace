@@ -26,16 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers/Admin/" />
+    <Folder Include="Areas/Admin/Controllers/" />
+    <Folder Include="Areas/Admin/Views/Shared/" />
     <Folder Include="Controllers/Api/" />
     <Folder Include="Options/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Catalog/" />
-    <Folder Include="Views/Admin/" />
-    <Folder Include="Views/Admin/Categories/" />
-    <Folder Include="Views/Admin/Services/" />
     <Folder Include="Views/Home/Sections/" />
-    <Folder Include="Views/Services/Sections/" />
+    <Folder Include="Views/Services/DetailsSections/" />
   </ItemGroup>
 
 </Project>
