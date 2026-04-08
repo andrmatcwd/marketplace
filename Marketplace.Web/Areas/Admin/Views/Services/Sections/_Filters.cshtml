@@ -1,4 +1,4 @@
-﻿@model Marketplace.Web.Models.Admin.Services.AdminServicesPageViewModel
+﻿@model Marketplace.Web.Areas.Admin.Models.Services.AdminServicesPageViewModel
 
 @{
     var filter = Model.Filter;
@@ -90,8 +90,8 @@
 
             <div class="col-12 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Apply filters</button>
-                <a asp-area=""
-                   asp-controller="ServicesAdmin"
+                <a asp-area="Admin"
+                   asp-controller="Services"
                    asp-action="Index"
                    class="btn btn-outline-secondary">
                     Reset

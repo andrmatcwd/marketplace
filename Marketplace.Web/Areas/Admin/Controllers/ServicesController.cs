@@ -1,11 +1,12 @@
-using Marketplace.Web.Models.Admin.Services;
+using Marketplace.Web.Areas.Admin.Models.Services;
 using Marketplace.Web.Models.Services;
 using Marketplace.Web.Services.Catalog;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Marketplace.Web.Controllers.Admin
+namespace Marketplace.Web.Areas.Admin.Controllers
 {
-    public sealed class ServicesAdminController(IServiceCatalogService catalogService) : Controller
+    [Area("Admin")]
+    public sealed class ServicesController(IServiceCatalogService catalogService) : Controller
     {
         [HttpGet]
         public async Task<IActionResult> Index(
@@ -62,7 +63,7 @@ namespace Marketplace.Web.Controllers.Admin
                 TotalPages = result.TotalPages
             };
 
-            return View("~/Views/Admin/Services/Index.cshtml", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -70,7 +71,7 @@ namespace Marketplace.Web.Controllers.Admin
         {
             ViewBag.Categories = await catalogService.GetCategoriesAsync(cancellationToken);
 
-            return View("~/Views/Admin/Services/Create.cshtml", new ServiceItemViewModel
+            return View(new ServiceItemViewModel
             {
                 Currency = "USD",
                 IsOffline = true
@@ -84,7 +85,7 @@ namespace Marketplace.Web.Controllers.Admin
             if (!ModelState.IsValid)
             {
                 ViewBag.Categories = await catalogService.GetCategoriesAsync(cancellationToken);
-                return View("~/Views/Admin/Services/Create.cshtml", model);
+                return View(model);
             }
 
             await catalogService.CreateAsync(model, cancellationToken);
@@ -99,7 +100,7 @@ namespace Marketplace.Web.Controllers.Admin
                 return NotFound();
 
             ViewBag.Categories = await catalogService.GetCategoriesAsync(cancellationToken);
-            return View("~/Views/Admin/Services/Edit.cshtml", service);
+            return View(service);
         }
 
         [HttpPost]
@@ -109,7 +110,7 @@ namespace Marketplace.Web.Controllers.Admin
             if (!ModelState.IsValid)
             {
                 ViewBag.Categories = await catalogService.GetCategoriesAsync(cancellationToken);
-                return View("~/Views/Admin/Services/Edit.cshtml", model);
+                return View(model);
             }
 
             await catalogService.UpdateAsync(model, cancellationToken);
@@ -123,5 +124,6 @@ namespace Marketplace.Web.Controllers.Admin
             await catalogService.DeleteAsync(id, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

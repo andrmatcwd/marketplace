@@ -1,4 +1,4 @@
-﻿@model Marketplace.Web.Models.Admin.Services.AdminServicesPageViewModel
+﻿@model Marketplace.Web.Areas.Admin.Models.Services.AdminServicesPageViewModel
 
 @{
     var filter = Model.Filter;
@@ -15,8 +15,8 @@
             <ul class="pagination mb-0">
                 <li class="page-item @(filter.Page <= 1 ? "disabled" : null)">
                     <a class="page-link"
-                       asp-area=""
-                       asp-controller="ServicesAdmin"
+                       asp-area="Admin"
+                       asp-controller="Services"
                        asp-action="Index"
                        asp-route-Search="@filter.Search"
                        asp-route-Category="@filter.Category"
@@ -35,8 +35,8 @@
                 {
                     <li class="page-item @(i == filter.Page ? "active" : null)">
                         <a class="page-link"
-                           asp-area=""
-                           asp-controller="ServicesAdmin"
+                           asp-area="Admin"
+                           asp-controller="Services"
                            asp-action="Index"
                            asp-route-Search="@filter.Search"
                            asp-route-Category="@filter.Category"
@@ -54,8 +54,8 @@
 
                 <li class="page-item @(filter.Page >= Model.TotalPages ? "disabled" : null)">
                     <a class="page-link"
-                       asp-area=""
-                       asp-controller="ServicesAdmin"
+                       asp-area="Admin"
+                       asp-controller="Services"
                        asp-action="Index"
                        asp-route-Search="@filter.Search"
                        asp-route-Category="@filter.Category"
