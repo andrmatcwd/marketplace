@@ -1,22 +1,22 @@
-.services-page {
+.listings-page {
     --filters-width: 320px;
 }
 
-.services-layout {
+.listings-layout {
     min-height: 100%;
 }
 
-.services-content {
+.listings-content {
     min-width: 0;
 }
 
-.services-filters-sidebar {
+.listings-filters-sidebar {
     width: var(--filters-width);
     min-width: var(--filters-width);
     transition: width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
 }
 
-.services-filters-sidebar.collapsed {
+.listings-filters-sidebar.collapsed {
     width: 0;
     min-width: 0;
     opacity: 0;
@@ -25,7 +25,7 @@
 }
 
 @media (max-width: 991.98px) {
-    .services-page {
+    .listings-page {
         --filters-width: 100%;
     }
 }

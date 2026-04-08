@@ -1,16 +1,16 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Marketplace.Web.Models;
-using Marketplace.Web.Services.Catalog;
-using Marketplace.Web.Models.Services;
+using Marketplace.Web.Services.Listing;
+using Marketplace.Web.Models.Listings;
 
 namespace Marketplace.Web.Controllers;
 
-public class HomeController(IServiceCatalogService catalogService) : Controller
+public class HomeController(IListingCatalogService catalogService) : Controller
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var result = await catalogService.GetServicesAsync(new ServicesFilterRequest
+        var result = await catalogService.GetListingsAsync(new ListingsFilterRequest
         {
             Page = 1,
             PageSize = 6,

@@ -111,22 +111,22 @@
     font-size: 0.95rem;
 }
 
-.home-service-card {
+.home-listing-card {
     border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.home-service-card:hover {
+.home-listing-card:hover {
     transform: translateY(-4px);
 }
 
-.home-service-card-image-wrapper {
+.home-listing-card-image-wrapper {
     height: 210px;
     overflow: hidden;
 }
 
-.home-service-card-image {
+.home-listing-card-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -171,7 +171,7 @@
         min-height: 280px;
     }
 
-    .home-service-card-image-wrapper {
+    .home-listing-card-image-wrapper {
         height: 180px;
     }
 }
