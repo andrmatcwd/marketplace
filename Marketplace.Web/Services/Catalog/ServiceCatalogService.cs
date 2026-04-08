@@ -4,7 +4,7 @@ namespace Marketplace.Web.Services.Catalog;
 
 public sealed class ServiceCatalogService : IServiceCatalogService
 {
-    private static readonly IReadOnlyList<ServiceItemViewModel> Seed = GenerateSeed();
+    private static readonly List<ServiceItemViewModel> Seed = GenerateSeed().ToList();
 
     private static IReadOnlyList<ServiceItemViewModel> GenerateSeed()
     {
@@ -16,11 +16,7 @@ public sealed class ServiceCatalogService : IServiceCatalogService
             ("cleaning", "Cleaning")
         };
 
-        var cities = new[]
-        {
-            "Kyiv", "Lviv", "Odesa", "Dnipro", "Kharkiv"
-        };
-
+        var cities = new[] { "Kyiv", "Lviv", "Odesa", "Dnipro", "Kharkiv" };
         var titles = new[]
         {
             "Hair Styling", "Makeup Artist", "Nail Service",
@@ -40,10 +36,8 @@ public sealed class ServiceCatalogService : IServiceCatalogService
 
         var random = new Random();
         var list = new List<ServiceItemViewModel>();
-
         int id = 1;
 
-        // generate ~40 services
         for (int i = 0; i < 40; i++)
         {
             var category = categories[random.Next(categories.Length)];
@@ -76,7 +70,8 @@ public sealed class ServiceCatalogService : IServiceCatalogService
         return list;
     }
 
-    public Task<IReadOnlyList<ServiceCategoryViewModel>> GetCategoriesAsync(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<ServiceCategoryViewModel>> GetCategoriesAsync(
+        CancellationToken cancellationToken = default)
     {
         IReadOnlyList<ServiceCategoryViewModel> categories =
         [
@@ -98,6 +93,7 @@ public sealed class ServiceCatalogService : IServiceCatalogService
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.Trim();
+
             query = query.Where(x =>
                 x.Title.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                 x.Description.Contains(search, StringComparison.OrdinalIgnoreCase) ||
@@ -105,34 +101,22 @@ public sealed class ServiceCatalogService : IServiceCatalogService
         }
 
         if (request.Categories.Count > 0)
-        {
             query = query.Where(x => request.Categories.Contains(x.Category));
-        }
 
         if (request.PriceFrom.HasValue)
-        {
             query = query.Where(x => x.Price >= request.PriceFrom.Value);
-        }
 
         if (request.PriceTo.HasValue)
-        {
             query = query.Where(x => x.Price <= request.PriceTo.Value);
-        }
 
         if (request.OnlineOnly)
-        {
             query = query.Where(x => x.IsOnline);
-        }
 
         if (request.OfflineOnly)
-        {
             query = query.Where(x => x.IsOffline);
-        }
 
         if (request.RatingFrom.HasValue)
-        {
             query = query.Where(x => x.Rating >= request.RatingFrom.Value);
-        }
 
         query = request.SortBy.ToLowerInvariant() switch
         {
@@ -161,5 +145,57 @@ public sealed class ServiceCatalogService : IServiceCatalogService
             TotalItems = totalItems,
             TotalPages = totalPages
         });
+    }
+
+    public Task<ServiceItemViewModel?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var item = Seed.FirstOrDefault(x => x.Id == id);
+        return Task.FromResult(item);
+    }
+
+    public Task CreateAsync(ServiceItemViewModel model, CancellationToken cancellationToken = default)
+    {
+        model.Id = Seed.Count == 0 ? 1 : Seed.Max(x => x.Id) + 1;
+
+        if (string.IsNullOrWhiteSpace(model.ImageUrl))
+            model.ImageUrl = "https://via.placeholder.com/600x400?text=Service";
+
+        model.ImageUrls ??= new List<string>();
+
+        Seed.Add(model);
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateAsync(ServiceItemViewModel model, CancellationToken cancellationToken = default)
+    {
+        var existing = Seed.FirstOrDefault(x => x.Id == model.Id);
+        if (existing is null)
+            return Task.CompletedTask;
+
+        existing.Title = model.Title;
+        existing.Description = model.Description;
+        existing.Category = model.Category;
+        existing.Price = model.Price;
+        existing.Currency = model.Currency;
+        existing.City = model.City;
+        existing.AddressLine = model.AddressLine;
+        existing.Latitude = model.Latitude;
+        existing.Longitude = model.Longitude;
+        existing.Rating = model.Rating;
+        existing.IsOnline = model.IsOnline;
+        existing.IsOffline = model.IsOffline;
+        existing.ImageUrl = model.ImageUrl;
+        existing.ImageUrls = model.ImageUrls ?? new List<string>();
+
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var existing = Seed.FirstOrDefault(x => x.Id == id);
+        if (existing is not null)
+            Seed.Remove(existing);
+
+        return Task.CompletedTask;
     }
 }

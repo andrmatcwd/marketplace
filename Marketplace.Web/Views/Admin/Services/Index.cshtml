@@ -1,0 +1,12 @@
+﻿@model Marketplace.Web.Models.Admin.Services.AdminServicesPageViewModel
+
+@{
+    ViewData["Title"] = "Manage Services";
+}
+
+<div class="container py-4">
+    <partial name="~/Views/Admin/Services/_AdminNavigation.cshtml" model="Model" />
+    <partial name="~/Views/Admin/Services/_PageHeader.cshtml" model="Model" />
+    <partial name="~/Views/Admin/Services/_Filters.cshtml" model="Model" />
+    <partial name="~/Views/Admin/Services/_ServicesTable.cshtml" model="Model" />
+</div>

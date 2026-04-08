@@ -26,11 +26,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers/Admin/" />
     <Folder Include="Controllers/Api/" />
-    <Folder Include="Models/Services/" />
     <Folder Include="Options/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Catalog/" />
+    <Folder Include="Views/Admin/" />
+    <Folder Include="Views/Admin/Categories/" />
+    <Folder Include="Views/Admin/Services/" />
     <Folder Include="Views/Home/Sections/" />
     <Folder Include="Views/Services/Sections/" />
   </ItemGroup>
