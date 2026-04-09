@@ -35,13 +35,9 @@ public sealed class ListingsController(IListingCatalogService catalogService) : 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
-        var service = (await catalogService.GetListingsAsync(new ListingsFilterRequest
-        {
-            PageSize = int.MaxValue
-        }, cancellationToken))
-        .Items.FirstOrDefault(x => x.Id == id);
+        var service = await catalogService.GetByIdAsync(id, cancellationToken);
 
-        if (service == null)
+        if (service is null)
             return NotFound();
 
         return View(service);

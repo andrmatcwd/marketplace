@@ -1,5 +1,8 @@
+using System;
+
 namespace Marketplace.Modules.Listings.Domain.Entities;
 
-public class Listing
+public class Subcategory
 {
+
 }

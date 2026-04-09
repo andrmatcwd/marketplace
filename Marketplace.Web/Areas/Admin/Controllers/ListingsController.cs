@@ -19,6 +19,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
                 new ListingsFilterRequest
                 {
                     Search = filter.Search,
+                    City = filter.City,
                     Page = filter.Page <= 0 ? 1 : filter.Page,
                     PageSize = filter.PageSize <= 0 ? 10 : filter.PageSize,
                     PriceFrom = filter.PriceFrom,
@@ -31,17 +32,6 @@ namespace Marketplace.Web.Areas.Admin.Controllers
                     SortBy = "title_asc"
                 },
                 cancellationToken);
-
-            var items = result.Items.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(filter.City))
-            {
-                items = items.Where(x =>
-                    !string.IsNullOrWhiteSpace(x.City) &&
-                    x.City.Contains(filter.City, StringComparison.OrdinalIgnoreCase));
-            }
-
-            var finalItems = items.ToList();
 
             var model = new AdminListingsPageViewModel
             {
@@ -58,7 +48,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
                     PageSize = result.PageSize,
                     Categories = categories
                 },
-                Items = finalItems,
+                Items = result.Items,
                 TotalItems = result.TotalItems,
                 TotalPages = result.TotalPages
             };

@@ -15,14 +15,42 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Listings/" />
+    <Folder Include="Appointments/" />
+    <Folder Include="Appointments/Commands/" />
+    <Folder Include="Appointments/Dtos/" />
+    <Folder Include="Appointments/Queries/" />
+    <Folder Include="Categories/" />
+    <Folder Include="Categories/Commands/" />
+    <Folder Include="Categories/Dtos/" />
+    <Folder Include="Categories/Queries/" />
     <Folder Include="Listings/Commands/" />
     <Folder Include="Listings/Commands/CreateListing/" />
+    <Folder Include="Listings/Commands/DeleteListing/" />
+    <Folder Include="Listings/Commands/EditListing/" />
     <Folder Include="Listings/Dtos/" />
-    <Folder Include="Listings/Queries/" />
-    <Folder Include="Repositories/" />
+    <Folder Include="Listings/Queries/GetListingsByFilter/" />
+    <Folder Include="Locations/" />
+    <Folder Include="Locations/Commands/" />
+    <Folder Include="Locations/Dtos/" />
+    <Folder Include="Locations/Queries/" />
+    <Folder Include="Regions/" />
+    <Folder Include="Regions/Commands/" />
+    <Folder Include="Regions/Dtos/" />
+    <Folder Include="Regions/Queries/" />
+    <Folder Include="Reviewers/" />
+    <Folder Include="Reviewers/Commands/" />
+    <Folder Include="Reviewers/Dtos/" />
+    <Folder Include="Reviewers/Queries/" />
+    <Folder Include="Reviews/" />
+    <Folder Include="Reviews/Commands/" />
+    <Folder Include="Reviews/Dtos/" />
+    <Folder Include="Reviews/Queries/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Implementations/" />
+    <Folder Include="Subcategories/" />
+    <Folder Include="Subcategories/Commands/" />
+    <Folder Include="Subcategories/Dtos/" />
+    <Folder Include="Subcategories/Queries/" />
   </ItemGroup>
 
 </Project>
