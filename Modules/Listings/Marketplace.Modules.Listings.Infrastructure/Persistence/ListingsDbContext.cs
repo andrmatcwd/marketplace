@@ -9,32 +9,20 @@ public sealed class ListingsDbContext : DbContext
     {
     }
 
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<SubCategory> SubCategories => Set<SubCategory>();
+    public DbSet<Region> Regions => Set<Region>();
+    public DbSet<Location> Locations => Set<Location>();
     public DbSet<Listing> Listings => Set<Listing>();
+    public DbSet<Image> Images => Set<Image>();
+    public DbSet<Reviewer> Reviewers => Set<Reviewer>();
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<Appointment> Appointments => Set<Appointment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Listing>(builder =>
-        {
-            builder.ToTable("Listings");
-
-            builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Title)
-                .HasMaxLength(200)
-                .IsRequired();
-
-            builder.Property(x => x.Description)
-                .HasMaxLength(2000)
-                .IsRequired();
-
-            builder.Property(x => x.Price)
-                .HasColumnType("decimal(18,2)");
-
-            builder.Property(x => x.SellerId)
-                .HasMaxLength(450)
-                .IsRequired();
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ListingsDbContext).Assembly);
     }
 }

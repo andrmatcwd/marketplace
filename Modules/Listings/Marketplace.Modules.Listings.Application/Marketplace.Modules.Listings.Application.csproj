@@ -47,10 +47,10 @@
     <Folder Include="Reviews/Queries/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Implementations/" />
-    <Folder Include="Subcategories/" />
-    <Folder Include="Subcategories/Commands/" />
-    <Folder Include="Subcategories/Dtos/" />
-    <Folder Include="Subcategories/Queries/" />
+    <Folder Include="SubCategories/" />
+    <Folder Include="SubCategories/Commands/" />
+    <Folder Include="SubCategories/Dtos/" />
+    <Folder Include="SubCategories/Queries/" />
   </ItemGroup>
 
 </Project>
