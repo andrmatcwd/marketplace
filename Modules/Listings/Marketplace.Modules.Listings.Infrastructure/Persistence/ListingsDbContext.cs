@@ -17,7 +17,6 @@ public sealed class ListingsDbContext : DbContext
     public DbSet<Image> Images => Set<Image>();
     public DbSet<Reviewer> Reviewers => Set<Reviewer>();
     public DbSet<Review> Reviews => Set<Review>();
-    public DbSet<Appointment> Appointments => Set<Appointment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
