@@ -1,13 +1,13 @@
 using Marketplace.Modules.Listings.Application.Listings.Filters;
 using Marketplace.Modules.Listings.Application.Repositories;
 using Marketplace.Modules.Listings.Domain.Entities;
-using Marketplace.Modules.Listings.Domain.Enums;
+using Marketplace.Modules.Listings.Domain.Enums.Listing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Modules.Listings.Infrastructure.Persistence.Repositories;
 
 public class ListingRepository
-    : BaseRepository<Listing, Guid>, IListingRepository
+    : BaseRepository<Listing, int>, IListingRepository
 {
     public ListingRepository(ListingsDbContext dbContext) : base(dbContext)
     {

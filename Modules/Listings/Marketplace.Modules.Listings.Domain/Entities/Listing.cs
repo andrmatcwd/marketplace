@@ -1,4 +1,5 @@
-using Marketplace.Modules.Listings.Domain.Enums;
+using Marketplace.Modules.Listings.Domain.Enums.Listing;
+using Marketplace.Modules.Listings.Domain.Enums.Subscription;
 
 namespace Marketplace.Modules.Listings.Domain.Entities;
 

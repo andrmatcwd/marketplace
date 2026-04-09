@@ -3,7 +3,7 @@ using Marketplace.Modules.Listings.Domain.Entities;
 
 namespace Marketplace.Modules.Listings.Application.Repositories;
 
-public interface IListingRepository : IBaseRepository<Listing, Guid>
+public interface IListingRepository : IBaseRepository<Listing, int>
 {
     Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetListingsAsync(
         ListingFilter filter,

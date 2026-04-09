@@ -1,4 +1,4 @@
-namespace Marketplace.Modules.Listings.Domain.Enums;
+namespace Marketplace.Modules.Listings.Domain.Enums.Appointment;
 
 public enum AppointmentMeetingType
 {
