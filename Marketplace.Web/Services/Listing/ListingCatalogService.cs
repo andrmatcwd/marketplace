@@ -115,6 +115,14 @@ public sealed class ListingCatalogService : IListingCatalogService
         if (request.OfflineOnly)
             query = query.Where(x => x.IsOffline);
 
+        if (!string.IsNullOrWhiteSpace(request.City))
+        {
+            var city = request.City.Trim();
+            query = query.Where(x =>
+                !string.IsNullOrWhiteSpace(x.City) &&
+                x.City.Contains(city, StringComparison.OrdinalIgnoreCase));
+        }
+
         if (request.RatingFrom.HasValue)
             query = query.Where(x => x.Rating >= request.RatingFrom.Value);
 
