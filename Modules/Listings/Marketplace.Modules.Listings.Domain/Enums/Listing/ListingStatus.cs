@@ -1,4 +1,4 @@
-namespace Marketplace.Modules.Listings.Domain.Enums;
+namespace Marketplace.Modules.Listings.Domain.Enums.Listing;
 
 public enum ListingStatus
 {

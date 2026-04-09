@@ -1,4 +1,4 @@
-namespace Marketplace.Modules.Listings.Domain.Enums;
+namespace Marketplace.Modules.Listings.Domain.Enums.Subscription;
 
 public enum SubscriptionType
 {

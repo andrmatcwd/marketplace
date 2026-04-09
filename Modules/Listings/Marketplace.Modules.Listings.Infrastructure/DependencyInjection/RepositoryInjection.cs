@@ -9,6 +9,14 @@ public static class RepositoryInjection
     public static IServiceCollection AddListingsRepositories(this IServiceCollection services)
     {
         services.AddScoped<IListingRepository, ListingRepository>();
+        services.AddScoped<IRegionRepository, RegionRepository>();
+        services.AddScoped<IReviewerRepository, ReviewerRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
+
         return services;
     }
 }
