@@ -1,10 +1,12 @@
-using System;
+using Marketplace.Modules.Listings.Application.Common.Models;
+using Marketplace.Modules.Listings.Application.Listings.Dtos;
 using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Queries.GetListingsByFilter;
 
-public sealed class GetListingsByFilterHandler : IRequestHandler<GetListingsByFilterQuery, Guid>
+public sealed class GetListingsByFilterHandler
+: IRequestHandler<GetListingsByFilterQuery, PagedResult<ListingDto>>
 {
     private readonly IListingService listingService;
 
@@ -13,22 +15,11 @@ public sealed class GetListingsByFilterHandler : IRequestHandler<GetListingsByFi
         this.listingService = listingService;
     }
 
-    public async Task<Guid> Handle(GetListingsByFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PagedResult<ListingDto>> Handle(GetListingsByFilterQuery request, CancellationToken cancellationToken)
     {
-        // var listing = new Listing(
-        //     Guid.NewGuid(),
-        //     request.Title,
-        //     request.Description,
-        //     request.Price,
-        //     request.SellerId,
-        //     request.IsService ? ListingType.Service : ListingType.Product);
+        var result = await listingService.GetListingsAsync(request.Filter, cancellationToken);
 
-        // _dbContext.Listings.Add(listing);
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-
-        // return listing.Id;
-
-        return Guid.NewGuid(); // Placeholder until actual implementation is done
+        return result;
     }
 }
 
