@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
 
@@ -23,11 +25,15 @@
     <Folder Include="Categories/Commands/" />
     <Folder Include="Categories/Dtos/" />
     <Folder Include="Categories/Queries/" />
+    <Folder Include="Common/" />
+    <Folder Include="Common/Models/" />
     <Folder Include="Listings/Commands/" />
     <Folder Include="Listings/Commands/CreateListing/" />
     <Folder Include="Listings/Commands/DeleteListing/" />
     <Folder Include="Listings/Commands/EditListing/" />
     <Folder Include="Listings/Dtos/" />
+    <Folder Include="Listings/Filters/" />
+    <Folder Include="Listings/Mappings/" />
     <Folder Include="Listings/Queries/GetListingsByFilter/" />
     <Folder Include="Locations/" />
     <Folder Include="Locations/Commands/" />

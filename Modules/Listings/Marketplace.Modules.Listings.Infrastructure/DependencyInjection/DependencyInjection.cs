@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddListingsRepositories();
         services.AddListingsServices();
         services.AddListingsMediatR();
+        services.AddListingsAutoMapper();
 
         return services;
     }
