@@ -26,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas/Admin/Views/Shared/" />
+    <Folder Include="Controllers/Api/" />
     <Folder Include="Options/" />
+    <Folder Include="Services/" />
   </ItemGroup>
 
 </Project>

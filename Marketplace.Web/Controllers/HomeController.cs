@@ -1,23 +1,14 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Marketplace.Web.Models;
-using Marketplace.Web.Services.Listing;
-using Marketplace.Web.Models.Listings;
 
 namespace Marketplace.Web.Controllers;
 
-public class HomeController(IListingCatalogService catalogService) : Controller
+public class HomeController : Controller
 {
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var result = await catalogService.GetListingsAsync(new ListingsFilterRequest
-        {
-            Page = 1,
-            PageSize = 6,
-            SortBy = "rating_desc"
-        }, cancellationToken);
-
-        return View(result.Items);
+        return View();
     }
 
     public IActionResult Privacy()

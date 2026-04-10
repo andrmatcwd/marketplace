@@ -5,7 +5,6 @@ using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using Marketplace.Web.Services.Listing;
 using Marketplace.Web.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,8 +24,6 @@ builder.Services.Configure<GoogleMapsOptions>(
     builder.Configuration.GetSection("GoogleMaps"));
 
 builder.Services.AddListingsModule(builder.Configuration);
-
-builder.Services.AddScoped<IListingCatalogService, ListingCatalogService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
@@ -81,11 +78,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Listings}/{action=Index}/{id?}")
-    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
