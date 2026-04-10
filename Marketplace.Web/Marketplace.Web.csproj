@@ -27,7 +27,11 @@
 
   <ItemGroup>
     <Folder Include="Areas/Admin/Views/Shared/" />
+    <Folder Include="Models/Catalog/" />
+    <Folder Include="Models/City/" />
+    <Folder Include="Models/SubCategory/" />
     <Folder Include="Options/" />
+    <Folder Include="Seo/" />
   </ItemGroup>
 
 </Project>

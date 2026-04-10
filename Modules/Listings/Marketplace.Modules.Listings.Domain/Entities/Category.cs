@@ -1,6 +1,8 @@
+using Marketplace.Modules.Listings.Domain.Contracts;
+
 namespace Marketplace.Modules.Listings.Domain.Entities;
 
-public class Category
+public class Category : ISlugEntity
 {
     public int Id { get; set; }
 
