@@ -1,8 +1,9 @@
-﻿@model Marketplace.Web.Models.Listings.ListingItemViewModel
+﻿@model Marketplace.Web.Models.Listings.ListingViewModel
+@using Marketplace.Web.Models.Category
 @using Marketplace.Web.Models.Listings
 
 @{
-    var categories = ViewBag.Categories as IReadOnlyList<ListingCategoryViewModel> ?? [];
+    var categories = ViewBag.Categories as IReadOnlyList<CategoryViewModel> ?? [];
 }
 
 <div class="row g-3">

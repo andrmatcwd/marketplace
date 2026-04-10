@@ -1,4 +1,4 @@
-using Marketplace.Web.Models.Listings;
+using Marketplace.Web.Models.Category;
 
 namespace Marketplace.Web.Areas.Admin.Models.Listings;
 
@@ -17,5 +17,5 @@ public sealed class AdminListingsFilterViewModel
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 10;
 
-    public IReadOnlyList<ListingCategoryViewModel> Categories { get; set; } = [];
+    public IReadOnlyList<CategoryViewModel> Categories { get; set; } = [];
 }

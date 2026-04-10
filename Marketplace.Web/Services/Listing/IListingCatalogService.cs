@@ -1,26 +1,28 @@
+using Marketplace.Web.Models.Category;
+using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
 
 namespace Marketplace.Web.Services.Listing;
 
 public interface IListingCatalogService
 {
-    Task<IReadOnlyList<ListingCategoryViewModel>> GetCategoriesAsync(
+    Task<IReadOnlyList<CategoryViewModel>> GetCategoriesAsync(
         CancellationToken cancellationToken = default);
 
-    Task<PagedResult<ListingItemViewModel>> GetListingsAsync(
+    Task<PagedResult<ListingViewModel>> GetListingsAsync(
         ListingsFilterRequest request,
         CancellationToken cancellationToken = default);
 
-    Task<ListingItemViewModel?> GetByIdAsync(
+    Task<ListingViewModel?> GetByIdAsync(
         int id,
         CancellationToken cancellationToken = default);
 
     Task CreateAsync(
-        ListingItemViewModel model,
+        ListingViewModel model,
         CancellationToken cancellationToken = default);
 
     Task UpdateAsync(
-        ListingItemViewModel model,
+        ListingViewModel model,
         CancellationToken cancellationToken = default);
 
     Task DeleteAsync(
