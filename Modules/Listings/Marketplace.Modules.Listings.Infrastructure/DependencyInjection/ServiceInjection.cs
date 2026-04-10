@@ -17,6 +17,8 @@ public static class ServiceInjection
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<ILocationService, LocationService>();
 
+        services.AddScoped<ISlugService, SlugService>();
+
         return services;
     }
 }

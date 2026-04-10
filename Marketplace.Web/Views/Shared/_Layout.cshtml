@@ -1,10 +1,41 @@
 ﻿@using System.Globalization
+@using Marketplace.Web.Seo
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Marketplace.Web</title>
+    @{
+        var seo = ViewData["Seo"] as PageSeoData;
+    }
+
+    <title>@(seo?.Title ?? "Marketplace")</title>
+
+    @if (!string.IsNullOrWhiteSpace(seo?.Description))
+    {
+        <meta name="description" content="@seo.Description" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(seo?.CanonicalUrl))
+    {
+        <link rel="canonical" href="@seo.CanonicalUrl" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(seo?.Robots))
+    {
+        <meta name="robots" content="@seo.Robots" />
+    }
+
+    @if (seo?.JsonLdBlocks != null)
+    {
+        foreach (var block in seo.JsonLdBlocks)
+        {
+            <script type="application/ld+json">
+                @Html.Raw(block)
+            </script>
+        }
+    }
+
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />

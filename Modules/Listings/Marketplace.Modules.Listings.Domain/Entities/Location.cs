@@ -1,8 +1,9 @@
+using Marketplace.Modules.Listings.Domain.Contracts;
 using Marketplace.Modules.Listings.Domain.Enums;
 
 namespace Marketplace.Modules.Listings.Domain.Entities;
 
-public class Location
+public class Location : ISlugEntity
 {
     public int Id { get; set; }
 
