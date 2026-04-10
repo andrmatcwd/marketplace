@@ -1,6 +1,6 @@
 namespace Marketplace.Web.Models.Listings;
 
-public sealed class ListingItemViewModel
+public sealed class ListingViewModel
 {
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;

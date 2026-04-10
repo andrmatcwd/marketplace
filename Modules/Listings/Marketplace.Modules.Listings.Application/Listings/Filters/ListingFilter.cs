@@ -8,4 +8,5 @@ public class ListingFilter : PaginationFilter
     public int? CategoryId { get; init; }
     public bool? IsActive { get; init; }
     public int? LocationId { get; init; }
+    public string? OrderBy { get; init; }
 }

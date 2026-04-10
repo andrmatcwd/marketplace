@@ -1,4 +1,4 @@
-namespace Marketplace.Web.Models.Listings;
+namespace Marketplace.Web.Models.Common;
 
 public sealed class PagedResult<T>
 {

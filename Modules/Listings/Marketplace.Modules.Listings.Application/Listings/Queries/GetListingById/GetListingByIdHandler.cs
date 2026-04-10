@@ -1,9 +1,10 @@
+using Marketplace.Modules.Listings.Application.Listings.Dtos;
 using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Queries.GetById;
 
-public sealed class GetListingByIdHandler : IRequestHandler<GetListingByIdQuery, Guid>
+public sealed class GetListingByIdHandler : IRequestHandler<GetListingByIdQuery, ListingDto>
 {
     private readonly IListingService listingService;
 
@@ -12,7 +13,7 @@ public sealed class GetListingByIdHandler : IRequestHandler<GetListingByIdQuery,
         this.listingService = listingService;
     }
 
-    public async Task<Guid> Handle(GetListingByIdQuery request, CancellationToken cancellationToken)
+    public Task<ListingDto> Handle(GetListingByIdQuery request, CancellationToken cancellationToken)
     {
         // var listing = new Listing(
         //     Guid.NewGuid(),
@@ -27,7 +28,7 @@ public sealed class GetListingByIdHandler : IRequestHandler<GetListingByIdQuery,
 
         // return listing.Id;
 
-        return Guid.NewGuid(); // Placeholder until actual implementation is done
+        return Task.FromResult(new ListingDto());
     }
 }
 

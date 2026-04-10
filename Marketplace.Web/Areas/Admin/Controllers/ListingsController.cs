@@ -61,7 +61,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
         {
             ViewBag.Categories = await catalogService.GetCategoriesAsync(cancellationToken);
 
-            return View(new ListingItemViewModel
+            return View(new ListingViewModel
             {
                 Currency = "USD",
                 IsOffline = true
@@ -70,7 +70,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ListingItemViewModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(ListingViewModel model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace Marketplace.Web.Areas.Admin.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ListingItemViewModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(ListingViewModel model, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

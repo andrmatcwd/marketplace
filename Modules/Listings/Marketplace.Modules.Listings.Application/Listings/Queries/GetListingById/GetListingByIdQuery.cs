@@ -1,6 +1,6 @@
-using System;
+using Marketplace.Modules.Listings.Application.Listings.Dtos;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Queries.GetById;
 
-public sealed record GetListingByIdQuery(Guid Id) : IRequest<Guid>;
+public sealed record GetListingByIdQuery(int Id) : IRequest<ListingDto>;
