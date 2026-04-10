@@ -91,8 +91,8 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.MapControllerRoute(
-    name: "services",
-    pattern: "services",
+    name: "Listings",
+    pattern: "listings",
     defaults: new { controller = "Catalog", action = "Index" });
 
 app.MapControllerRoute(
