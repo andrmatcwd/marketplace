@@ -26,12 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas/Admin/Views/Shared/" />
     <Folder Include="Models/Catalog/" />
     <Folder Include="Models/City/" />
     <Folder Include="Models/SubCategory/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
+    <Folder Include="Views/Catalog/" />
+    <Folder Include="wwwroot/css/components/" />
+    <Folder Include="wwwroot/css/pages/" />
+    <Folder Include="wwwroot/js/components/" />
+    <Folder Include="wwwroot/js/pages/" />
   </ItemGroup>
 
 </Project>
