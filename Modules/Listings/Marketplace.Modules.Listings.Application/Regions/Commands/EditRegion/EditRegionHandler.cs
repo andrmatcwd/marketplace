@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Regions.Commands.EditRegion;
 
-public sealed class EditRegionHandler : IRequestHandler<EditRegionCommand, int>
+public sealed class EditRegionHandler
+    : IRequestHandler<EditRegionCommand, Unit>
 {
-    public Task<int> Handle(EditRegionCommand request, CancellationToken cancellationToken)
+    private readonly IRegionService _regionService;
+
+    public EditRegionHandler(IRegionService regionService)
     {
-        return Task.FromResult(request.Id);
+        _regionService = regionService;
+    }
+
+    public async Task<Unit> Handle(EditRegionCommand request, CancellationToken cancellationToken)
+    {
+        await _regionService.EditAsync(request, cancellationToken);
+        return Unit.Value;
     }
 }

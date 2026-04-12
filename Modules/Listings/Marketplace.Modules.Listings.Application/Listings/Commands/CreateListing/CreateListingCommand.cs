@@ -7,5 +7,6 @@ public sealed record CreateListingCommand(
     string Description,
     decimal Price,
     string SellerId,
-    bool IsService
-) : IRequest<Guid>;
+    int CategoryId,
+    int CityId
+) : IRequest<Unit>;

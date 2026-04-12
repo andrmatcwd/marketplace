@@ -3,30 +3,20 @@ using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Commands.CreateListing;
 
-public sealed class CreateListingHandler : IRequestHandler<CreateListingCommand, Guid>
+public sealed class CreateListingHandler
+    : IRequestHandler<CreateListingCommand, Unit>
 {
-    private readonly IListingService listingService;
+    private readonly IListingService _listingService;
 
     public CreateListingHandler(IListingService listingService)
     {
-        this.listingService = listingService;
+        _listingService = listingService;
     }
 
-    public async Task<Guid> Handle(CreateListingCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateListingCommand request, CancellationToken cancellationToken)
     {
-        // var listing = new Listing(
-        //     Guid.NewGuid(),
-        //     request.Title,
-        //     request.Description,
-        //     request.Price,
-        //     request.SellerId,
-        //     request.IsService ? ListingType.Service : ListingType.Product);
+        await _listingService.AddAsync(request, cancellationToken);
 
-        // _dbContext.Listings.Add(listing);
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-
-        // return listing.Id;
-
-        return Guid.NewGuid(); // Placeholder until actual implementation is done
+        return Unit.Value;
     }
 }

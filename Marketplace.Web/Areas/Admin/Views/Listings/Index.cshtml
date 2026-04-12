@@ -1,11 +1,127 @@
-﻿@model Marketplace.Web.Areas.Admin.Models.Listings.AdminListingsPageViewModel
+﻿@model ListingIndexVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Marketplace.Modules.Listings.Domain.Enums.Listing
 
 @{
-    ViewData["Title"] = "Manage Services";
+    ViewData["Title"] = "Listings";
+    var categories = ViewBag.Categories as List<SelectListItem> ?? new();
+    var subCategories = ViewBag.SubCategories as List<SelectListItem> ?? new();
+    var cities = ViewBag.Cities as List<SelectListItem> ?? new();
 }
 
-<div class="container py-4">
-    <partial name="Sections/_PageHeader.cshtml" model="Model" />
-    <partial name="Sections/_Filters.cshtml" model="Model" />
-    <partial name="Sections/_ListingsTable.cshtml" model="Model" />
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Listings</h2>
+            <p class="admin-page-subtitle">Керування оголошеннями каталогу.</p>
+        </div>
+
+        <div>
+            <a asp-action="Create" class="admin-btn admin-btn--primary">Створити listing</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <form method="get" class="admin-filterbar">
+            <div class="admin-filterbar__group">
+                <label for="search" class="admin-label">Пошук</label>
+                <input id="search" name="search" value="@Model.Search" class="admin-input" placeholder="Назва, опис, slug" />
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="categoryId" class="admin-label">Категорія</label>
+                <select id="categoryId" name="categoryId" class="admin-select">
+                    <option value="">Усі категорії</option>
+                    @foreach (var item in categories)
+                    {
+                        <option value="@item.Value" selected="@(Model.CategoryId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="subCategoryId" class="admin-label">Підкатегорія</label>
+                <select id="subCategoryId" name="subCategoryId" class="admin-select">
+                    <option value="">Усі підкатегорії</option>
+                    @foreach (var item in subCategories)
+                    {
+                        <option value="@item.Value" selected="@(Model.SubCategoryId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="locationId" class="admin-label">Місто</label>
+                <select id="locationId" name="locationId" class="admin-select">
+                    <option value="">Усі міста</option>
+                    @foreach (var item in cities)
+                    {
+                        <option value="@item.Value" selected="@(Model.LocationId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="status" class="admin-label">Статус</label>
+                <select id="status" name="status" class="admin-select">
+                    <option value="">Усі статуси</option>
+                    @foreach (var item in Enum.GetValues<ListingStatus>())
+                    {
+                        <option value="@item" selected="@(Model.Status == item)">@item</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Застосувати</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скинути</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Items.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Підкатегорія</th>
+                            <th>Місто</th>
+                            <th>Ціна</th>
+                            <th>Статус</th>
+                            <th>Створено</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Title</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.SubCategoryName</td>
+                                <td>@item.CityName</td>
+                                <td>@item.Price @item.Currency</td>
+                                <td>@item.Status</td>
+                                <td>@item.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml" model='"Listings ще не створені або не знайдені за фільтром."' />
+        }
+    </div>
 </div>

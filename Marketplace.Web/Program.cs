@@ -5,8 +5,8 @@ using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using Marketplace.Web.Services.Listing;
 using Marketplace.Web.Options;
+using Marketplace.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +26,8 @@ builder.Services.Configure<GoogleMapsOptions>(
 
 builder.Services.AddListingsModule(builder.Configuration);
 
-builder.Services.AddScoped<IListingCatalogService, ListingCatalogService>();
+builder.Services.AddScoped<IListingService, ListingService>();
+builder.Services.AddScoped<ICatalogService, CatalogService>();
 
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
@@ -84,7 +85,35 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Listings}/{action=Index}/{id?}")
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "Listings",
+    pattern: "listings",
+    defaults: new { controller = "Catalog", action = "Index" });
+
+app.MapControllerRoute(
+    name: "listing-details",
+    pattern: "{city}/{category}/{subcategory}/{slug}-{id:int}",
+    defaults: new { controller = "Listings", action = "Details" })
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "subcategory",
+    pattern: "{city}/{category}/{subcategory}",
+    defaults: new { controller = "Catalog", action = "Subcategory" })
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "category",
+    pattern: "{city}/{category}",
+    defaults: new { controller = "Catalog", action = "Category" })
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "city",
+    pattern: "{city}",
+    defaults: new { controller = "Catalog", action = "City" })
     .WithStaticAssets();
 
 app.MapControllerRoute(

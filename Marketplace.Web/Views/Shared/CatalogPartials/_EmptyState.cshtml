@@ -1,0 +1,9 @@
+﻿@model Marketplace.Web.Models.UI.EmptyStateVm
+
+<div class="empty-state">
+    <h3 class="empty-state__title">@Model.Title</h3>
+    @if (!string.IsNullOrWhiteSpace(Model.Text))
+    {
+        <p class="empty-state__text">@Model.Text</p>
+    }
+</div>

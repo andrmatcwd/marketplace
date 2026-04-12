@@ -4,31 +4,19 @@ using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Queries.GetById;
 
-public sealed class GetListingByIdHandler : IRequestHandler<GetListingByIdQuery, ListingDto>
+public sealed class GetListingByIdHandler
+    : IRequestHandler<GetListingByIdQuery, ListingDto>
 {
-    private readonly IListingService listingService;
+    private readonly IListingService _listingService;
 
     public GetListingByIdHandler(IListingService listingService)
     {
-        this.listingService = listingService;
+        _listingService = listingService;
     }
 
     public Task<ListingDto> Handle(GetListingByIdQuery request, CancellationToken cancellationToken)
     {
-        // var listing = new Listing(
-        //     Guid.NewGuid(),
-        //     request.Title,
-        //     request.Description,
-        //     request.Price,
-        //     request.SellerId,
-        //     request.IsService ? ListingType.Service : ListingType.Product);
-
-        // _dbContext.Listings.Add(listing);
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-
-        // return listing.Id;
-
-        return Task.FromResult(new ListingDto());
+        return _listingService.GetByIdAsync(request.Id, cancellationToken);
     }
 }
 

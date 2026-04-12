@@ -1,0 +1,52 @@
+﻿@{
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Admin";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle - Admin</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/admin/admin-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/admin-components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/admin-forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/admin-tables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/admin-responsive.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <partial name="~/Areas/Admin/Views/Shared/_AdminSidebar.cshtml" />
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-topbar">
+                <partial name="~/Areas/Admin/Views/Shared/_AdminTopbar.cshtml" />
+            </header>
+
+            <main class="admin-content">
+                @if (TempData["Error"] is string errorMessage)
+                {
+                    <div class="alert alert-danger mb-4">@errorMessage</div>
+                }
+
+                @if (TempData["Success"] is string successMessage)
+                {
+                    <div class="alert alert-success mb-4">@successMessage</div>
+                }
+
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/admin/admin-ui.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

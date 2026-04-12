@@ -1,0 +1,36 @@
+﻿@model Marketplace.Web.Models.UI.PaginationLinkVm
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="catalog-pagination" aria-label="Pagination">
+        <ul class="catalog-pagination__list">
+            <li class="catalog-pagination__item @(Model.HasPrevious ? "" : "is-disabled")">
+                @if (Model.HasPrevious)
+                {
+                    <a class="catalog-pagination__link" href="@Model.PreviousUrl">Назад</a>
+                }
+                else
+                {
+                    <span class="catalog-pagination__link">Назад</span>
+                }
+            </li>
+
+            <li class="catalog-pagination__item is-active">
+                <span class="catalog-pagination__link">
+                    @Model.CurrentPage / @Model.TotalPages
+                </span>
+            </li>
+
+            <li class="catalog-pagination__item @(Model.HasNext ? "" : "is-disabled")">
+                @if (Model.HasNext)
+                {
+                    <a class="catalog-pagination__link" href="@Model.NextUrl">Далі</a>
+                }
+                else
+                {
+                    <span class="catalog-pagination__link">Далі</span>
+                }
+            </li>
+        </ul>
+    </nav>
+}

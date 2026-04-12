@@ -14,14 +14,14 @@ public class ListingRepository
         
     }
 
-    public async Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetListingsAsync(
+    public async Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetByFilterAsync(
         ListingFilter filter,
         CancellationToken cancellationToken = default)
     {
         var query = DbSet
             .AsNoTracking()
             .Include(x => x.Category)
-            .Include(x => x.Location)
+            .Include(x => x.City)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(filter.Search))

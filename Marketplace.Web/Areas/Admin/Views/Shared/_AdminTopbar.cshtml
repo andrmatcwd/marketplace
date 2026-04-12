@@ -1,0 +1,17 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Admin";
+    var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "Index";
+}
+
+<div class="admin-topbar__inner">
+    <div>
+        <div class="admin-topbar__eyebrow">Admin</div>
+        <h1 class="admin-topbar__title">@controller</h1>
+    </div>
+
+    <div class="admin-topbar__actions">
+        <a asp-controller="Home" asp-action="Index" asp-area="" class="admin-btn admin-btn--secondary">
+            На сайт
+        </a>
+    </div>
+</div>

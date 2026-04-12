@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Regions.Commands.DeleteRegion;
 
-public sealed class DeleteRegionHandler : IRequestHandler<DeleteRegionCommand, int>
+public sealed class DeleteRegionHandler
+    : IRequestHandler<DeleteRegionCommand, Unit>
 {
-    public Task<int> Handle(DeleteRegionCommand request, CancellationToken cancellationToken)
+    private readonly IRegionService _regionService;
+
+    public DeleteRegionHandler(IRegionService regionService)
     {
-        return Task.FromResult(request.Id);
+        _regionService = regionService;
+    }
+    
+    public async Task<Unit> Handle(DeleteRegionCommand request, CancellationToken cancellationToken)
+    {
+        await _regionService.DeleteAsync(request.Id, cancellationToken);
+        return Unit.Value;
     }
 }

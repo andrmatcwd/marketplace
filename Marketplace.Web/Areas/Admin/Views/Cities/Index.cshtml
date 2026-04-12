@@ -1,0 +1,85 @@
+﻿@model CityIndexVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Cities";
+    var regions = ViewBag.Regions as List<SelectListItem> ?? new();
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Cities</h2>
+            <p class="admin-page-subtitle">Керування містами каталогу.</p>
+        </div>
+
+        <div>
+            <a asp-action="Create" class="admin-btn admin-btn--primary">Створити місто</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <form method="get" class="admin-filterbar">
+            <div class="admin-filterbar__group">
+                <label for="search" class="admin-label">Пошук</label>
+                <input id="search" name="search" value="@Model.Search" class="admin-input" placeholder="Назва або slug" />
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="regionId" class="admin-label">Регіон</label>
+                <select id="regionId" name="regionId" class="admin-select">
+                    <option value="">Усі регіони</option>
+                    @foreach (var item in regions)
+                    {
+                        <option value="@item.Value" selected="@(Model.RegionId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Застосувати</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скинути</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Items.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Slug</th>
+                            <th>Регіон</th>
+                            <th>Listings</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.Slug</td>
+                                <td>@item.RegionName</td>
+                                <td>@item.ListingsCount</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml" model='"Міста ще не створені або не знайдені за фільтром."' />
+        }
+    </div>
+</div>

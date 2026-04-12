@@ -1,0 +1,118 @@
+:root {
+    --admin-bg: #f5f7fb;
+    --admin-surface: #ffffff;
+    --admin-border: #e5e9f2;
+    --admin-text: #172033;
+    --admin-text-muted: #6b7487;
+    --admin-primary: #4f46e5;
+    --admin-primary-hover: #4338ca;
+    --admin-danger: #dc2626;
+    --admin-danger-soft: #fff1f2;
+    --admin-shadow: 0 10px 30px rgba(20, 32, 60, 0.08);
+    --admin-radius: 18px;
+    --admin-radius-sm: 12px;
+    --admin-sidebar-width: 260px;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body.admin-body {
+    margin: 0;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.admin-shell {
+    min-height: 100vh;
+    display: flex;
+}
+
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: #111827;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 24px 18px;
+}
+
+.admin-main {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.admin-topbar {
+    padding: 20px 28px 0;
+}
+
+.admin-content {
+    padding: 24px 28px 40px;
+}
+
+.admin-sidebar__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.admin-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.admin-logo__mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-nav__link {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    padding: 12px 14px;
+    border-radius: 12px;
+    transition: 0.2s ease;
+}
+
+.admin-nav__link:hover,
+.admin-nav__link.is-active {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.admin-topbar__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-topbar__eyebrow {
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.admin-topbar__title {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.1;
+}

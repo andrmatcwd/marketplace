@@ -1,0 +1,63 @@
+﻿@model Marketplace.Web.Models.Catalog.CatalogIndexPageVm
+@using Marketplace.Web.Models.UI
+
+<div class="catalog-page">
+    <partial name="~/Views/Shared/CatalogPartials/_CatalogHero.cshtml" model="Model" />
+
+    <partial name="~/Views/Shared/CatalogPartials/_CatalogFilters.cshtml" model="Model.Filter" />
+
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
+                 model='new SectionHeaderVm
+                 {
+                     Eyebrow = "Популярне",
+                     Title = "Популярні категорії",
+                     Text = "Оберіть напрямок, щоб швидше знайти потрібну послугу."
+                 }' />
+
+        @if (Model.PopularCategories.Any())
+        {
+            <partial name="~/Views/Shared/Lists/_CategoriesGrid.cshtml" model="Model.PopularCategories" />
+        }
+        else
+        {
+            <partial name="~/Views/Shared/CatalogPartials/_EmptyState.cshtml"
+                     model='new EmptyStateVm
+                     {
+                         Title = "Категорії поки відсутні",
+                         Text = "Список категорій з’явиться після додавання даних."
+                     }' />
+        }
+    </section>
+
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
+                 model='new SectionHeaderVm
+                 {
+                     Eyebrow = "Міста",
+                     Title = "Каталог по містах",
+                     Text = "Перейдіть до свого міста та перегляньте доступні категорії послуг."
+                 }' />
+
+        @if (Model.Cities.Any())
+        {
+            <partial name="~/Views/Shared/Lists/_CitiesGrid.cshtml" model="Model.Cities" />
+        }
+        else
+        {
+            <partial name="~/Views/Shared/CatalogPartials/_EmptyState.cshtml"
+                     model='new EmptyStateVm
+                     {
+                         Title = "Міста поки відсутні",
+                         Text = "Після наповнення каталогу тут з’являться доступні міста."
+                     }' />
+        }
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(Model.IntroText))
+    {
+        <section class="catalog-page__seo">
+            @Model.IntroText
+        </section>
+    }
+</div>

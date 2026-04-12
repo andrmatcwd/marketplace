@@ -4,30 +4,20 @@ using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Commands.DeleteListing;
 
-public sealed class DeleteListingHandler : IRequestHandler<DeleteListingCommand, int>
+public sealed class DeleteListingHandler
+    : IRequestHandler<DeleteListingCommand, Unit>
 {
-    private readonly IListingService listingService;
+    private readonly IListingService _listingService;
 
     public DeleteListingHandler(IListingService listingService)
     {
-        this.listingService = listingService;
+        _listingService = listingService;
     }
 
-    public async Task<int> Handle(DeleteListingCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteListingCommand request, CancellationToken cancellationToken)
     {
-        // var listing = new Listing(
-        //     Guid.NewGuid(),
-        //     request.Title,
-        //     request.Description,
-        //     request.Price,
-        //     request.SellerId,
-        //     request.IsService ? ListingType.Service : ListingType.Product);
+        await _listingService.DeleteAsync(request.Id, cancellationToken);
 
-        // _dbContext.Listings.Add(listing);
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-
-        // return listing.Id;
-
-        return 0; // Placeholder until actual implementation is done
+        return Unit.Value;
     }
 }

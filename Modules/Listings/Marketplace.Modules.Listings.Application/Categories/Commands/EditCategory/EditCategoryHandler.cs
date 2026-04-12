@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Categories.Commands.EditCategory;
 
-public sealed class EditCategoryHandler : IRequestHandler<EditCategoryCommand, int>
+public sealed class EditCategoryHandler
+    : IRequestHandler<EditCategoryCommand, Unit>
 {
-    public Task<int> Handle(EditCategoryCommand request, CancellationToken cancellationToken)
+    private readonly ICategoryService _categoryRepository;
+
+    public EditCategoryHandler(ICategoryService categoryRepository)
     {
-        return Task.FromResult(request.Id);
+        _categoryRepository = categoryRepository;
+    }
+    
+    public async Task<Unit> Handle(EditCategoryCommand request, CancellationToken cancellationToken)
+    {
+        await _categoryRepository.EditAsync(request, cancellationToken);
+        return Unit.Value;
     }
 }

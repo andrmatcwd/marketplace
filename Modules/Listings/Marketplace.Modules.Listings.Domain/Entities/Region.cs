@@ -7,5 +7,5 @@ public class Region
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
 
-    public ICollection<Location> Locations { get; set; } = new List<Location>();
+    public ICollection<City> Cities { get; set; } = new List<City>();
 }

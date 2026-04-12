@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Categories.Commands.CreateCategory;
 
-public sealed class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, int>
+public sealed class CreateCategoryHandler
+    : IRequestHandler<CreateCategoryCommand, Unit>
 {
-    public Task<int> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    private readonly ICategoryService _categoryRepository;
+
+    public CreateCategoryHandler(ICategoryService categoryRepository)
     {
-        return Task.FromResult(0);
+        _categoryRepository = categoryRepository;
+    }
+    
+    public async Task<Unit> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    {
+        await _categoryRepository.AddAsync(request, cancellationToken);
+        return Unit.Value;
     }
 }

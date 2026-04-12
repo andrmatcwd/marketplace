@@ -22,9 +22,9 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
             .HasForeignKey(x => x.SubCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Location)
+        builder.HasOne(x => x.City)
             .WithMany(x => x.Listings)
-            .HasForeignKey(x => x.LocationId)
+            .HasForeignKey(x => x.CityId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Images)

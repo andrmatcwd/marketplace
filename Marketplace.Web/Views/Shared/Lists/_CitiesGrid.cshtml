@@ -1,0 +1,10 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.City.CityItemVm>
+
+<div class="card-grid card-grid--cities">
+    @foreach (var city in Model)
+    {
+        <div>
+            <partial name="~/Views/Shared/Cards/_CityCard.cshtml" model="city" />
+        </div>
+    }
+</div>

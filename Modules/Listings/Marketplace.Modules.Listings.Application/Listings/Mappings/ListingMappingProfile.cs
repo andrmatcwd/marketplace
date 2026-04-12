@@ -12,6 +12,6 @@ public sealed class ListingMappingProfile : Profile
             .ForMember(d => d.CategoryName,
                 opt => opt.MapFrom(s => s.Category.Name))
             .ForMember(d => d.LocationName,
-                opt => opt.MapFrom(s => s.Location.Name));
+                opt => opt.MapFrom(s => s.City.Name));
     }
 }

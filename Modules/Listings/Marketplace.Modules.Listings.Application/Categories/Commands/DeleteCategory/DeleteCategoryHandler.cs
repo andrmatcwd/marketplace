@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Categories.Commands.DeleteCategory;
 
-public sealed class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, int>
+public sealed class DeleteCategoryHandler
+    : IRequestHandler<DeleteCategoryCommand, Unit>
 {
-    public Task<int> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    private readonly ICategoryService _categoryRepository;
+
+    public DeleteCategoryHandler(ICategoryService categoryRepository)
     {
-        return Task.FromResult(request.Id);
+        _categoryRepository = categoryRepository;
+    }
+    
+    public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    {
+        await _categoryRepository.DeleteAsync(request.Id, cancellationToken);
+        return Unit.Value;
     }
 }

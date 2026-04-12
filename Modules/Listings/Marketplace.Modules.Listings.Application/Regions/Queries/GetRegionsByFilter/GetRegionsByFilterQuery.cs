@@ -5,4 +5,5 @@ using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Regions.Queries.GetRegionsByFilter;
 
-public sealed record GetRegionsByFilterQuery(RegionFilter Filter) : IRequest<PagedResult<RegionDto>>;
+public sealed record GetRegionsByFilterQuery(RegionFilter Filter)
+    : IRequest<PagedResult<RegionDto>>;

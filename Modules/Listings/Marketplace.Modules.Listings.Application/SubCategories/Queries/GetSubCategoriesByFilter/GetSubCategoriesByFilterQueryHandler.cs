@@ -1,4 +1,5 @@
 using Marketplace.Modules.Listings.Application.Common.Models;
+using Marketplace.Modules.Listings.Application.Services;
 using Marketplace.Modules.Listings.Application.SubCategories.Dtos;
 using MediatR;
 
@@ -6,8 +7,15 @@ namespace Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubC
 
 public sealed class GetSubCategoriesByFilterQueryHandler : IRequestHandler<GetSubCategoriesByFilterQuery, PagedResult<SubCategoryDto>>
 {
+    private readonly ISubCategoryService _subCategoryService;
+
+    public GetSubCategoriesByFilterQueryHandler(ISubCategoryService subCategoryService)
+    {
+        _subCategoryService = subCategoryService;
+    }
+
     public Task<PagedResult<SubCategoryDto>> Handle(GetSubCategoriesByFilterQuery request, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new PagedResult<SubCategoryDto>());
+        return _subCategoryService.GetByFilterAsync(request.Filter, cancellationToken);
     }
 }

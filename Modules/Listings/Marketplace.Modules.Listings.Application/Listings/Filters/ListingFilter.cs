@@ -6,6 +6,7 @@ public class ListingFilter : PaginationFilter
 {
     public string? Search { get; init; }
     public int? CategoryId { get; init; }
+    public int? SubCategoryId { get; init; }
     public bool? IsActive { get; init; }
     public int? LocationId { get; init; }
     public string? OrderBy { get; init; }
