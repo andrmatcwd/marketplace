@@ -18,9 +18,11 @@ namespace Marketplace.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(
+            string culture,
+            CancellationToken cancellationToken)
         {
-            var vm = await _catalogService.GetCatalogIndexPageAsync(cancellationToken);
+            var vm = await _catalogService.GetCatalogIndexPageAsync(culture, cancellationToken);
 
             this.SetSeo(new PageSeoData
             {
@@ -34,12 +36,13 @@ namespace Marketplace.Web.Controllers
         }
 
         public async Task<IActionResult> City(
+            string culture,
             string city,
             [FromQuery] BaseFilter filter,
             CancellationToken cancellationToken)
         {
             var vm = await _catalogService.GetCityPageAsync(
-                city, filter, cancellationToken);
+                culture, city, filter, cancellationToken);
             if (vm is null) return NotFound();
 
             this.SetSeo(new PageSeoData
@@ -54,13 +57,14 @@ namespace Marketplace.Web.Controllers
         }
 
         public async Task<IActionResult> Category(
+            string culture,
             string city,
             string category,
             [FromQuery] BaseFilter filter,
             CancellationToken cancellationToken)
         {
             var vm = await _catalogService.GetCategoryPageAsync(
-                city, category, filter, cancellationToken);
+                culture, city, category, filter, cancellationToken);
             if (vm is null) return NotFound();
 
             this.SetSeo(new PageSeoData
@@ -79,6 +83,7 @@ namespace Marketplace.Web.Controllers
         }
 
         public async Task<IActionResult> Subcategory(
+            string culture,
             string city,
             string category,
             string subcategory,
@@ -86,7 +91,7 @@ namespace Marketplace.Web.Controllers
             CancellationToken cancellationToken)
         {
             var vm = await _catalogService.GetSubCategoryPageAsync(
-                city, category, subcategory, filter, cancellationToken);
+                culture, city, category, subcategory, filter, cancellationToken);
             if (vm is null) return NotFound();
 
             this.SetSeo(new PageSeoData

@@ -20,7 +20,9 @@ public class CatalogService : ICatalogService
         _db = db;
     }
 
-    public async Task<CatalogIndexPageVm> GetCatalogIndexPageAsync(CancellationToken cancellationToken)
+    public async Task<CatalogIndexPageVm> GetCatalogIndexPageAsync(
+        string culture,
+        CancellationToken cancellationToken)
     {
         var cities = await _db.Cities
             .AsNoTracking()
@@ -80,6 +82,7 @@ public class CatalogService : ICatalogService
     }
 
     public async Task<CityPageVm?> GetCityPageAsync(
+        string culture,
         string city,
         BaseFilter filter,
         CancellationToken cancellationToken)
@@ -138,6 +141,7 @@ public class CatalogService : ICatalogService
                 Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
                 ReviewsCount = x.ReviewsCount,
                 Url = BuildListingUrl(
+                    culture,
                     x.City.Slug,
                     x.Category.Slug,
                     x.SubCategory.Slug,
@@ -176,6 +180,7 @@ public class CatalogService : ICatalogService
     }
 
     public async Task<CategoryPageVm?> GetCategoryPageAsync(
+        string culture,
         string city,
         string categorySlug,
         BaseFilter filter,
@@ -245,6 +250,7 @@ public class CatalogService : ICatalogService
                 Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
                 ReviewsCount = x.ReviewsCount,
                 Url = BuildListingUrl(
+                    culture,
                     x.City.Slug,
                     x.Category.Slug,
                     x.SubCategory.Slug,
@@ -291,6 +297,7 @@ public class CatalogService : ICatalogService
     }
 
     public async Task<SubCategoryPageVm?> GetSubCategoryPageAsync(
+        string culture,
         string city,
         string categorySlug,
         string subCategorySlug,
@@ -354,6 +361,7 @@ public class CatalogService : ICatalogService
                 Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
                 ReviewsCount = x.ReviewsCount,
                 Url = BuildListingUrl(
+                    culture,
                     x.City.Slug,
                     x.Category.Slug,
                     x.SubCategory.Slug,
@@ -491,12 +499,13 @@ public class CatalogService : ICatalogService
     }
 
     private static string BuildListingUrl(
+        string culture,
         string citySlug,
         string categorySlug,
         string subCategorySlug,
         string listingSlug,
         int listingId)
     {
-        return $"/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}-{listingId}";
+        return $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}-{listingId}";
     }
 }
