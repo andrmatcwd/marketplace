@@ -15,7 +15,7 @@ public static class ServiceInjection
         services.AddScoped<ISubCategoryService, SubCategoryService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IImageService, ImageService>();
-        services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<ICityService, CityService>();
 
         services.AddScoped<ISlugService, SlugService>();
 

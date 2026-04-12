@@ -1,31 +1,72 @@
-html {
-  font-size: 14px;
+:root {
+    --app-bg: #f6f8fc;
+    --app-surface: #ffffff;
+    --app-surface-muted: #f9fbff;
+    --app-border: #e6eaf2;
+    --app-border-strong: #d6dce8;
+
+    --app-text: #172033;
+    --app-text-muted: #62708a;
+    --app-text-soft: #8a94a8;
+
+    --app-primary: #4f46e5;
+    --app-primary-hover: #4338ca;
+    --app-primary-soft: #eef0ff;
+
+    --app-success: #16a34a;
+    --app-warning: #f59e0b;
+
+    --app-shadow-sm: 0 8px 24px rgba(20, 32, 60, 0.06);
+    --app-shadow-md: 0 14px 40px rgba(20, 32, 60, 0.10);
+
+    --app-radius-sm: 12px;
+    --app-radius-md: 18px;
+    --app-radius-lg: 24px;
+
+    --app-container: 1240px;
+    --app-transition: 0.2s ease;
 }
 
-@media (min-width: 768px) {
-  html {
+html {
     font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    min-height: 100%;
+    background: var(--app-bg);
+    color: var(--app-text);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.18);
+    border-color: rgba(79, 70, 229, 0.35);
+}
+
+.visually-hidden-mobile {
+    display: inline;
 }

@@ -1,0 +1,24 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Common.BreadcrumbItemVm>
+
+@if (Model != null && Model.Any())
+{
+    <nav class="app-breadcrumbs" aria-label="breadcrumb">
+        <ol class="breadcrumb-list">
+            @foreach (var item in Model)
+            {
+                var itemClass = item.IsCurrent ? "breadcrumb-item-ui is-current" : "breadcrumb-item-ui";
+
+                <li class="@itemClass">
+                    @if (!item.IsCurrent && !string.IsNullOrWhiteSpace(item.Url))
+                    {
+                        <a href="@item.Url">@item.Title</a>
+                    }
+                    else
+                    {
+                        <span>@item.Title</span>
+                    }
+                </li>
+            }
+        </ol>
+    </nav>
+}

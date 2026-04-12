@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Application.Services;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Regions.Commands.CreateRegion;
 
-public sealed class CreateRegionHandler : IRequestHandler<CreateRegionCommand, int>
+public sealed class CreateRegionHandler
+    : IRequestHandler<CreateRegionCommand, Unit>
 {
-    public Task<int> Handle(CreateRegionCommand request, CancellationToken cancellationToken)
+    private readonly IRegionService _regionService;
+
+    public CreateRegionHandler(IRegionService regionService)
     {
-        return Task.FromResult(0);
+        _regionService = regionService;
+    }
+    
+    public async Task<Unit> Handle(CreateRegionCommand request, CancellationToken cancellationToken)
+    {
+        await _regionService.AddAsync(request, cancellationToken);
+        return Unit.Value;
     }
 }

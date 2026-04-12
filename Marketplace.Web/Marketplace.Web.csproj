@@ -26,12 +26,34 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas/Admin/" />
+    <Folder Include="Areas/Admin/Controllers/" />
+    <Folder Include="Areas/Admin/Models/" />
+    <Folder Include="Areas/Admin/Models/Categories/" />
+    <Folder Include="Areas/Admin/Models/Cities/" />
+    <Folder Include="Areas/Admin/Models/Dashboard/" />
+    <Folder Include="Areas/Admin/Models/Listings/" />
+    <Folder Include="Areas/Admin/Models/Regions/" />
+    <Folder Include="Areas/Admin/Models/SubCategories/" />
+    <Folder Include="Areas/Admin/Views/" />
+    <Folder Include="Areas/Admin/Views/Categories/" />
+    <Folder Include="Areas/Admin/Views/Cities/" />
+    <Folder Include="Areas/Admin/Views/Dashboard/" />
+    <Folder Include="Areas/Admin/Views/Listings/" />
+    <Folder Include="Areas/Admin/Views/Regions/" />
+    <Folder Include="Areas/Admin/Views/Shared/" />
+    <Folder Include="Areas/Admin/Views/SubCategories/" />
     <Folder Include="Models/Catalog/" />
     <Folder Include="Models/City/" />
     <Folder Include="Models/SubCategory/" />
+    <Folder Include="Models/UI/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
     <Folder Include="Views/Catalog/" />
+    <Folder Include="Views/Listings/" />
+    <Folder Include="Views/Shared/Cards/" />
+    <Folder Include="Views/Shared/CatalogPartials/" />
+    <Folder Include="Views/Shared/Lists/" />
     <Folder Include="wwwroot/css/components/" />
     <Folder Include="wwwroot/css/pages/" />
     <Folder Include="wwwroot/js/components/" />

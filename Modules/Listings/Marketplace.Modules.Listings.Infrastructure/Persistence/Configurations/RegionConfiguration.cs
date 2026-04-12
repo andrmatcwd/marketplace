@@ -12,7 +12,7 @@ public sealed class RegionConfiguration : IEntityTypeConfiguration<Region>
 
         builder.HasKey(x => x.Id);
 
-        builder.HasMany(x => x.Locations)
+        builder.HasMany(x => x.Cities)
             .WithOne(x => x.Region)
             .HasForeignKey(x => x.RegionId)
             .OnDelete(DeleteBehavior.Restrict);

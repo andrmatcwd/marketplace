@@ -11,7 +11,7 @@ public class Listing : AuditedEntity, ISlugEntity
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
 
-    //public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
 
     public int CategoryId { get; set; }
@@ -20,8 +20,8 @@ public class Listing : AuditedEntity, ISlugEntity
     public int SubCategoryId { get; set; }
     public SubCategory SubCategory { get; set; } = null!;
 
-    public int LocationId { get; set; }
-    public Location Location { get; set; } = null!;
+    public int CityId { get; set; }
+    public City City { get; set; } = null!;
 
     public decimal Price { get; set; }
     public string Currency { get; set; } = "USD";

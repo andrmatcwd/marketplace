@@ -1,0 +1,85 @@
+﻿@model SubCategoryIndexVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "SubCategories";
+    var categories = ViewBag.Categories as List<SelectListItem> ?? new();
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">SubCategories</h2>
+            <p class="admin-page-subtitle">Керування підкатегоріями.</p>
+        </div>
+
+        <div>
+            <a asp-action="Create" class="admin-btn admin-btn--primary">Створити підкатегорію</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <form method="get" class="admin-filterbar">
+            <div class="admin-filterbar__group">
+                <label for="search" class="admin-label">Пошук</label>
+                <input id="search" name="search" value="@Model.Search" class="admin-input" placeholder="Назва або slug" />
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="categoryId" class="admin-label">Категорія</label>
+                <select id="categoryId" name="categoryId" class="admin-select">
+                    <option value="">Усі категорії</option>
+                    @foreach (var item in categories)
+                    {
+                        <option value="@item.Value" selected="@(Model.CategoryId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Застосувати</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скинути</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Items.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Slug</th>
+                            <th>Категорія</th>
+                            <th>Listings</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.Slug</td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.ListingsCount</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml" model='"Підкатегорії ще не створені або не знайдені."' />
+        }
+    </div>
+</div>

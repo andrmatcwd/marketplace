@@ -1,0 +1,118 @@
+﻿@model Marketplace.Web.Models.Catalog.CategoryPageVm
+@using Marketplace.Web.Models.UI
+@using Microsoft.AspNetCore.WebUtilities
+@using System.Globalization
+
+@functions {
+    private string BuildPageUrl(int page)
+    {
+        var query = new Dictionary<string, string?>();
+
+        foreach (var item in Context.Request.Query)
+        {
+            query[item.Key] = item.Value.ToString();
+        }
+
+        query["page"] = page.ToString(CultureInfo.InvariantCulture);
+
+        return QueryHelpers.AddQueryString(Context.Request.Path, query);
+    }
+}
+
+<div class="catalog-page">
+    <partial name="~/Views/Shared/CatalogPartials/_Breadcrumbs.cshtml" model="Model.Breadcrumbs" />
+
+    <section class="catalog-hero">
+        <div class="catalog-hero__inner">
+            <span class="catalog-hero__badge">Категорія</span>
+
+            <h1 class="catalog-hero__title">@Model.H1</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.IntroText))
+            {
+                <p class="catalog-hero__text">@Model.IntroText</p>
+            }
+
+            <div class="catalog-stats">
+                <div class="catalog-stat">
+                    <span class="catalog-stat__value">@Model.TotalListingsCount</span>
+                    <span class="catalog-stat__label">Пропозицій</span>
+                </div>
+
+                <div class="catalog-stat">
+                    <span class="catalog-stat__value">@Model.Subcategories.Count</span>
+                    <span class="catalog-stat__label">Підкатегорій</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <partial name="~/Views/Shared/CatalogPartials/_CatalogFilters.cshtml" model="Model.Filter" />
+
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
+                 model='new SectionHeaderVm
+                 {
+                     Eyebrow = "Підкатегорії",
+                     Title = $"Напрямки в категорії {Model.CategoryName}",
+                     Text = "Оберіть вузьку спеціалізацію, щоб показати користувачу точні результати."
+                 }' />
+
+        @if (Model.Subcategories.Any())
+        {
+            <partial name="~/Views/Shared/Lists/_SubcategoriesGrid.cshtml" model="Model.Subcategories" />
+        }
+        else
+        {
+            <partial name="~/Views/Shared/CatalogPartials/_EmptyState.cshtml"
+                     model='new EmptyStateVm
+                     {
+                         Title = "Підкатегорії не знайдено",
+                         Text = "Для цієї категорії поки не додано підкатегорій."
+                     }' />
+        }
+    </section>
+
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
+                 model='new SectionHeaderVm
+                 {
+                     Eyebrow = "Лістинги",
+                     Title = $"Оголошення в категорії {Model.CategoryName}",
+                     Text = "Актуальні пропозиції компаній і виконавців у вибраному місті."
+                 }' />
+
+        @if (Model.Listings.Any())
+        {
+            <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="Model.Listings" />
+        }
+        else
+        {
+            <partial name="~/Views/Shared/CatalogPartials/_EmptyState.cshtml"
+                     model='new EmptyStateVm
+                     {
+                         Title = "Лістинги не знайдено",
+                         Text = "За цим напрямком поки немає доступних пропозицій."
+                     }' />
+        }
+    </section>
+
+    @{
+        var paginationVm = new PaginationLinkVm
+        {
+            CurrentPage = Model.Pagination.CurrentPage,
+            TotalPages = Model.Pagination.TotalPages,
+            PreviousUrl = Model.Pagination.HasPrevious ? BuildPageUrl(Model.Pagination.PreviousPage) : null,
+            NextUrl = Model.Pagination.HasNext ? BuildPageUrl(Model.Pagination.NextPage) : null
+        };
+    }
+
+    <partial name="~/Views/Shared/CatalogPartials/_Pagination.cshtml" model="paginationVm" />
+
+    @if (!string.IsNullOrWhiteSpace(Model.IntroText))
+    {
+        <section class="catalog-page__seo">
+            @Model.IntroText
+        </section>
+    }
+</div>

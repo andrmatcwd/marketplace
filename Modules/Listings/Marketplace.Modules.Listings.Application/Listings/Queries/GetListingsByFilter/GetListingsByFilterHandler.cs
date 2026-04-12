@@ -6,20 +6,18 @@ using MediatR;
 namespace Marketplace.Modules.Listings.Application.Listings.Queries.GetListingsByFilter;
 
 public sealed class GetListingsByFilterHandler
-: IRequestHandler<GetListingsByFilterQuery, PagedResult<ListingDto>>
+    : IRequestHandler<GetListingsByFilterQuery, PagedResult<ListingDto>>
 {
-    private readonly IListingService listingService;
+    private readonly IListingService _listingService;
 
     public GetListingsByFilterHandler(IListingService listingService)
     {
-        this.listingService = listingService;
+        _listingService = listingService;
     }
 
-    public async Task<PagedResult<ListingDto>> Handle(GetListingsByFilterQuery request, CancellationToken cancellationToken)
+    public Task<PagedResult<ListingDto>> Handle(GetListingsByFilterQuery request, CancellationToken cancellationToken)
     {
-        var result = await listingService.GetListingsAsync(request.Filter, cancellationToken);
-
-        return result;
+        return _listingService.GetByFilterAsync(request.Filter, cancellationToken);
     }
 }
 

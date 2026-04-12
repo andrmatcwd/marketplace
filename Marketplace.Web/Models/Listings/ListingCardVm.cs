@@ -12,7 +12,7 @@ public class ListingCardVm
     public string SubcategoryName { get; init; } = default!;
     public string SubcategorySlug { get; init; } = default!;
 
-    public decimal? Rating { get; init; }
+    public double Rating { get; init; }
     public int ReviewsCount { get; init; }
 
     public string Url { get; init; } = default!;
