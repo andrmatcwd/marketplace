@@ -1,226 +1,33 @@
-﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
-@using Marketplace.Web.Models.UI
+﻿@model Marketplace.Web.Models.Listings.ListingViewModel
+@using Marketplace.Web.Options
+@using Microsoft.Extensions.Options
+@inject IOptions<GoogleMapsOptions> GoogleMapsOptions
 
-<div class="catalog-page listing-details-page">
-    <partial name="~/Views/Shared/CatalogPartials/_Breadcrumbs.cshtml" model="Model.Breadcrumbs" />
+@{
+    ViewData["Title"] = Model.Title;
+    var apiKey = GoogleMapsOptions.Value.ApiKey;
+}
 
-    <section class="listing-hero">
-        <div class="listing-hero__content">
-            <div class="listing-hero__meta">
-                <span class="listing-hero__chip">@Model.SubcategoryName</span>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/listing-details.css" asp-append-version="true" />
+}
 
-                @if (Model.IsVerified)
-                {
-                    <span class="listing-hero__chip listing-hero__chip--verified">Перевірено</span>
-                }
-
-                @if (Model.Rating.HasValue)
-                {
-                    <span class="listing-hero__chip listing-hero__chip--rating">
-                        @Model.Rating.Value.ToString("0.0") · @Model.ReviewsCount відгуків
-                    </span>
-                }
-            </div>
-
-            <h1 class="listing-hero__title">@Model.H1</h1>
-
-            @if (!string.IsNullOrWhiteSpace(Model.ShortDescription))
-            {
-                <p class="listing-hero__text">@Model.ShortDescription</p>
-            }
-
-            <div class="listing-hero__facts">
-                <div class="listing-fact">
-                    <span class="listing-fact__label">Місто</span>
-                    <span class="listing-fact__value">@Model.CityName</span>
-                </div>
-
-                @if (!string.IsNullOrWhiteSpace(Model.PriceText))
-                {
-                    <div class="listing-fact">
-                        <span class="listing-fact__label">Ціна</span>
-                        <span class="listing-fact__value">@Model.PriceText</span>
-                    </div>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.Address))
-                {
-                    <div class="listing-fact">
-                        <span class="listing-fact__label">Адреса</span>
-                        <span class="listing-fact__value">@Model.Address</span>
-                    </div>
-                }
-            </div>
-        </div>
-
-        <aside class="listing-hero__sidebar">
-            <div class="listing-contact-card">
-                <h2 class="listing-contact-card__title">Інформація</h2>
-
-                <div class="listing-contact-card__list">
-                    <div class="listing-contact-card__item">
-                        <span class="listing-contact-card__label">Категорія</span>
-                        <span class="listing-contact-card__value">@Model.CategoryName</span>
-                    </div>
-
-                    <div class="listing-contact-card__item">
-                        <span class="listing-contact-card__label">Підкатегорія</span>
-                        <span class="listing-contact-card__value">@Model.SubcategoryName</span>
-                    </div>
-
-                    <div class="listing-contact-card__item">
-                        <span class="listing-contact-card__label">Місто</span>
-                        <span class="listing-contact-card__value">@Model.CityName</span>
-                    </div>
-
-                    @if (!string.IsNullOrWhiteSpace(Model.PriceText))
-                    {
-                        <div class="listing-contact-card__item">
-                            <span class="listing-contact-card__label">Вартість</span>
-                            <span class="listing-contact-card__value">@Model.PriceText</span>
-                        </div>
-                    }
-                </div>
-            </div>
-        </aside>
-    </section>
-
-    @if (!string.IsNullOrWhiteSpace(Model.MainImageUrl))
-    {
-        <section class="catalog-page__block app-section">
-            <div class="listing-gallery">
-                <div class="listing-gallery__main">
-                    <img src="@Model.MainImageUrl" alt="@Model.Title" />
-                </div>
-
-                @if (Model.Images.Count > 1)
-                {
-                    <div class="listing-gallery__thumbs">
-                        @foreach (var image in Model.Images.Skip(1).Take(4))
-                        {
-                            <div class="listing-gallery__thumb">
-                                <img src="@image.Url" alt="@(image.Alt ?? Model.Title)" />
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        </section>
-    }
-
-    <div class="listing-details-layout">
-        <div class="listing-details-layout__main">
-            @if (!string.IsNullOrWhiteSpace(Model.Description))
-            {
-                <section class="catalog-page__block app-section">
-                    <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
-                             model='new SectionHeaderVm
-                             {
-                                 Eyebrow = "Опис",
-                                 Title = "Деталі послуги",
-                                 Text = "Основна інформація про цю пропозицію."
-                             }' />
-
-                    <div class="listing-content-card">
-                        <div class="listing-content-card__text">
-                            @Model.Description
-                        </div>
-                    </div>
-                </section>
-            }
-
-            @if (Model.ServiceFeatures.Any())
-            {
-                <section class="catalog-page__block app-section">
-                    <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
-                             model='new SectionHeaderVm
-                             {
-                                 Eyebrow = "Характеристики",
-                                 Title = "Що доступно",
-                                 Text = "Короткий перелік основних характеристик пропозиції."
-                             }' />
-
-                    <div class="listing-features-card">
-                        <ul class="listing-features">
-                            @foreach (var feature in Model.ServiceFeatures)
-                            {
-                                <li class="listing-features__item">@feature</li>
-                            }
-                        </ul>
-                    </div>
-                </section>
-            }
-
-            @if (Model.Reviews.Any())
-            {
-                <section class="catalog-page__block app-section">
-                    <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
-                             model='new SectionHeaderVm
-                             {
-                                 Eyebrow = "Відгуки",
-                                 Title = "Що кажуть користувачі",
-                                 Text = "Останні відгуки по цій пропозиції."
-                             }' />
-
-                    <div class="listing-reviews">
-                        @foreach (var review in Model.Reviews)
-                        {
-                            <article class="listing-review-card">
-                                <div class="listing-review-card__top">
-                                    <div class="listing-review-card__author">@review.AuthorName</div>
-                                    <div class="listing-review-card__rating">@review.Rating.ToString("0.0")</div>
-                                </div>
-
-                                @if (!string.IsNullOrWhiteSpace(review.Text))
-                                {
-                                    <p class="listing-review-card__text">@review.Text</p>
-                                }
-
-                                <div class="listing-review-card__date">
-                                    @review.CreatedAtUtc.ToString("yyyy-MM-dd")
-                                </div>
-                            </article>
-                        }
-                    </div>
-                </section>
-            }
-        </div>
-
-        <aside class="listing-details-layout__sidebar">
-            <div class="listing-side-card">
-                <h3 class="listing-side-card__title">Локація</h3>
-
-                <div class="listing-side-card__content">
-                    <div><strong>Місто:</strong> @Model.CityName</div>
-
-                    @if (!string.IsNullOrWhiteSpace(Model.Address))
-                    {
-                        <div><strong>Адреса:</strong> @Model.Address</div>
-                    }
-
-                    @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
-                    {
-                        <div class="listing-side-card__coords">
-                            @Model.Latitude.Value.ToString("0.######"), @Model.Longitude.Value.ToString("0.######")
-                        </div>
-                    }
-                </div>
-            </div>
-        </aside>
+<div class="container py-4 listing-details-page">
+    <div class="row g-4">
+        <partial name="DetailsSections/_ListingGallerySection" model="Model" />
+        <partial name="DetailsSections/_ListingInfoSection" model="Model" />
     </div>
 
-    @if (Model.RelatedListings.Any())
-    {
-        <section class="catalog-page__block app-section">
-            <partial name="~/Views/Shared/CatalogPartials/_SectionHeader.cshtml"
-                     model='new SectionHeaderVm
-                     {
-                         Eyebrow = "Схожі пропозиції",
-                         Title = "Інші варіанти у цій категорії",
-                         Text = "Схожі лістинги в тому ж місті та категорії."
-                     }' />
-
-            <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="Model.RelatedListings" />
-        </section>
-    }
+    <partial name="DetailsSections/_ListingLocationSection" model="Model" />
+    <partial name="DetailsSections/_ListingReviewsSection" model="Model" />
 </div>
+
+@section Scripts {
+    @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+    {
+        <script src="~/js/pages/listing-details.js" asp-append-version="true"></script>
+        <script async
+                src="https://maps.googleapis.com/maps/api/js?key=@apiKey&loading=async&callback=initListingMap&libraries=marker">
+        </script>
+    }
+}

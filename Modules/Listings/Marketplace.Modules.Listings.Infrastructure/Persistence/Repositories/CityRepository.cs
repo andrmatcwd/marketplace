@@ -22,6 +22,9 @@ public class CityRepository
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
+            .Include(x => x.Region)
+            .Include(x => x.Categories)
+            .Include(x => x.Listings)
             .OrderByDescending(x => x.Id)
             .Skip((filter.Page - 1) * filter.PageSize)
             .Take(filter.PageSize)

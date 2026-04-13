@@ -1,20 +1,22 @@
+using Marketplace.Modules.Listings.Application.Listings.Queries.GetById;
 using Marketplace.Modules.Listings.Domain.Entities;
 using Marketplace.Modules.Listings.Domain.Enums.Listing;
 using Marketplace.Modules.Listings.Domain.Enums.Subscription;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
 using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Services;
 
 public class ListingService : IListingService
 {
-    private readonly ListingsDbContext _db;
+    private readonly ISender _sender;
 
-    public ListingService(ListingsDbContext db)
+    public ListingService(ISender sender)
     {
-        _db = db;
+        _sender = sender;
     }
 
     public async Task<ListingDetailsPageVm?> GetListingDetailsPageAsync(
@@ -26,99 +28,88 @@ public class ListingService : IListingService
         BaseFilter filter,
         CancellationToken cancellationToken)
     {
-        var listing = await _db.Listings
-            .AsNoTracking()
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Include(x => x.City)
-            .Include(x => x.Images)
-            .Include(x => x.Reviews)
-                .ThenInclude(x => x.Reviewer)
-            .FirstOrDefaultAsync(x =>
-                x.Id == listingId &&
-                x.Status == ListingStatus.Active,
-                cancellationToken);
+        var listing = await _sender.Send(new GetListingByIdQuery(listingId), cancellationToken);
 
         if (listing is null)
             return null;
 
-        var relatedListings = await _db.Listings
-            .AsNoTracking()
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Include(x => x.City)
-            .Where(x =>
-                x.Id != listing.Id &&
-                x.Status == ListingStatus.Active &&
-                x.CityId == listing.CityId &&
-                x.CategoryId == listing.CategoryId)
-            .OrderByDescending(x => x.RatingAverage)
-            .ThenByDescending(x => x.ReviewsCount)
-            .ThenByDescending(x => x.CreatedAtUtc)
-            .Take(8)
-            .Select(x => new ListingCardVm
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Slug = x.Slug,
-                SubcategoryName = x.SubCategory.Name,
-                SubcategorySlug = x.SubCategory.Slug,
-                Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
-                ReviewsCount = x.ReviewsCount,
-                Url = BuildListingUrl(
-                    x.City.Slug,
-                    x.Category.Slug,
-                    x.SubCategory.Slug,
-                    x.Slug,
-                    x.Id)
-            })
-            .ToListAsync(cancellationToken);
+        // var relatedListings = await _db.Listings
+        //     .AsNoTracking()
+        //     .Include(x => x.Category)
+        //     .Include(x => x.SubCategory)
+        //     .Include(x => x.City)
+        //     .Where(x =>
+        //         x.Id != listing.Id &&
+        //         x.Status == ListingStatus.Active &&
+        //         x.CityId == listing.CityId &&
+        //         x.CategoryId == listing.CategoryId)
+        //     //.OrderByDescending(x => x.RatingAverage)
+        //     //.ThenByDescending(x => x.ReviewsCount)
+        //     .OrderBy(x => x.CreatedAtUtc)
+        //     .Take(8)
+        //     .Select(x => new ListingCardVm
+        //     {
+        //         Id = x.Id,
+        //         Title = x.Title,
+        //         Slug = x.Slug,
+        //         SubcategoryName = x.SubCategory.Name,
+        //         SubcategorySlug = x.SubCategory.Slug,
+        //         //Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
+        //         //ReviewsCount = x.ReviewsCount,
+        //         Url = BuildListingUrl(
+        //             x.City.Slug,
+        //             x.Category.Slug,
+        //             x.SubCategory.Slug,
+        //             x.Slug,
+        //             x.Id)
+        //     })
+        //     .ToListAsync(cancellationToken);
 
-        var mainImage = listing.Images
-            .OrderByDescending(x => x.IsPrimary)
-            .ThenBy(x => x.Id)
-            .FirstOrDefault();
+        // var mainImage = listing.Images
+        //     .OrderByDescending(x => x.IsPrimary)
+        //     .ThenBy(x => x.Id)
+        //     .FirstOrDefault();
 
-        var images = listing.Images
-            .OrderByDescending(x => x.IsPrimary)
-            .ThenBy(x => x.Id)
-            .Select((x, index) => new ListingImageVm
-            {
-                Url = x.Url,
-                Alt = x.AltText,
-                SortOrder = index
-            })
-            .ToList();
+        // var images = listing.Images
+        //     .OrderByDescending(x => x.IsPrimary)
+        //     .ThenBy(x => x.Id)
+        //     .Select((x, index) => new ListingImageVm
+        //     {
+        //         Url = x.Url,
+        //         Alt = x.AltText,
+        //         SortOrder = index
+        //     })
+        //     .ToList();
 
-        var reviews = listing.Reviews
-            .OrderByDescending(x => x.CreatedAtUtc)
-            .Take(10)
-            .Select(x => new ListingReviewVm
-            {
-                // AuthorName = x.Reviewer != null
-                //     ? $"{x.Reviewer.FirstName} {x.Reviewer.LastName}".Trim()
-                //     : "Користувач",
-                AuthorName = "Користувач",
-                Rating = x.Rating,
-                Text = string.IsNullOrWhiteSpace(x.Comment) ? null : x.Comment,
-                CreatedAtUtc = x.CreatedAtUtc
-            })
-            .ToList();
+        // var reviews = listing.Reviews
+        //     .OrderByDescending(x => x.CreatedAtUtc)
+        //     .Take(10)
+        //     .Select(x => new ListingReviewVm
+        //     {
+        //         // AuthorName = x.Reviewer != null
+        //         //     ? $"{x.Reviewer.FirstName} {x.Reviewer.LastName}".Trim()
+        //         //     : "Користувач",
+        //         AuthorName = "Користувач",
+        //         Rating = x.Rating,
+        //         Text = string.IsNullOrWhiteSpace(x.Comment) ? null : x.Comment,
+        //         CreatedAtUtc = x.CreatedAtUtc
+        //     })
+        //     .ToList();
 
-        var features = BuildServiceFeatures(listing);
+        // var features = BuildServiceFeatures(listing);
 
         return new ListingDetailsPageVm
         {
             Id = listing.Id,
 
-            CityName = listing.City.Name,
-            CitySlug = listing.City.Slug,
+            CityName = listing.CityName,
+            CitySlug = listing.CitySlug,
 
-            CategoryName = listing.Category.Name,
-            CategorySlug = listing.Category.Slug,
+            CategoryName = listing.CategoryName,
+            CategorySlug = listing.CategorySlug,
 
-            SubcategoryName = listing.SubCategory.Name,
-            SubcategorySlug = listing.SubCategory.Slug,
+            SubcategoryName = listing.SubCategoryName,
+            SubcategorySlug = listing.SubCategorySlug,
 
             ListingSlug = listing.Slug,
 
@@ -137,18 +128,18 @@ public class ListingService : IListingService
             Latitude = listing.Latitude.HasValue ? (decimal?)listing.Latitude.Value : null,
             Longitude = listing.Longitude.HasValue ? (decimal?)listing.Longitude.Value : null,
 
-            Rating = listing.ReviewsCount > 0 ? (decimal?)listing.RatingAverage : null,
-            ReviewsCount = listing.ReviewsCount,
+            //Rating = listing.ReviewsCount > 0 ? (decimal?)listing.RatingAverage : null,
+            //ReviewsCount = listing.ReviewsCount,
             IsVerified = listing.SubscriptionType != SubscriptionType.Free,
 
-            MainImageUrl = mainImage?.Url,
-            Images = images,
+            // MainImageUrl = mainImage?.Url,
+            // Images = images,
 
-            PriceText = BuildPriceText(listing),
-            ServiceFeatures = features,
+            //PriceText = BuildPriceText(listing),
+            //ServiceFeatures = features,
 
-            Reviews = reviews,
-            RelatedListings = relatedListings,
+            // Reviews = reviews,
+            // RelatedListings = relatedListings,
 
             Breadcrumbs = new[]
             {
@@ -160,29 +151,29 @@ public class ListingService : IListingService
                 },
                 new BreadcrumbItemVm
                 {
-                    Title = listing.City.Name,
-                    Url = "/" + listing.City.Slug,
+                    Title = listing.CityName,
+                    Url = "/" + listing.CitySlug,
                     IsCurrent = false
                 },
                 new BreadcrumbItemVm
                 {
-                    Title = listing.Category.Name,
-                    Url = "/" + listing.City.Slug + "/" + listing.Category.Slug,
+                    Title = listing.CategoryName,
+                    Url = "/" + listing.CitySlug + "/" + listing.CategorySlug,
                     IsCurrent = false
                 },
                 new BreadcrumbItemVm
                 {
-                    Title = listing.SubCategory.Name,
-                    Url = "/" + listing.City.Slug + "/" + listing.Category.Slug + "/" + listing.SubCategory.Slug,
+                    Title = listing.SubCategoryName,
+                    Url = "/" + listing.CitySlug + "/" + listing.CategorySlug + "/" + listing.SubCategorySlug,
                     IsCurrent = false
                 },
                 new BreadcrumbItemVm
                 {
                     Title = listing.Title,
                     Url = BuildListingUrl(
-                        listing.City.Slug,
-                        listing.Category.Slug,
-                        listing.SubCategory.Slug,
+                        listing.CitySlug,
+                        listing.CategorySlug,
+                        listing.SubCategorySlug,
                         listing.Slug,
                         listing.Id),
                     IsCurrent = true
@@ -214,13 +205,13 @@ public class ListingService : IListingService
         return text[..180].TrimEnd() + "...";
     }
 
-    private static string? BuildPriceText(Listing listing)
-    {
-        if (listing.Price <= 0)
-            return null;
+    // private static string? BuildPriceText(Listing listing)
+    // {
+    //     if (listing.Price <= 0)
+    //         return null;
 
-        return $"{listing.Price:0.##} {listing.Currency}";
-    }
+    //     return $"{listing.Price:0.##} {listing.Currency}";
+    // }
 
     private static IReadOnlyCollection<string> BuildServiceFeatures(Listing listing)
     {
@@ -241,8 +232,8 @@ public class ListingService : IListingService
         if (listing.Latitude.HasValue && listing.Longitude.HasValue)
             items.Add("Є координати");
 
-        if (listing.ReviewsCount > 0)
-            items.Add($"{listing.ReviewsCount} відгуків");
+        // if (listing.ReviewsCount > 0)
+        //     items.Add($"{listing.ReviewsCount} відгуків");
 
         if (listing.SubscriptionType != SubscriptionType.Free)
             items.Add("Преміум розміщення");

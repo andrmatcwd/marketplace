@@ -1,4 +1,5 @@
 using System;
+using Marketplace.Web.Areas.Admin.Models.Listings;
 using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
 
@@ -25,15 +26,12 @@ public class SubCategoryPageVm
     // Stats
     public int TotalListingsCount { get; init; }
 
-    // Filters
-    public BaseFilter Filter { get; init; } = new();
+    // // Filters
+    // public BaseFilter Filter { get; init; } = new();
 
     // Results
-    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
-        = Array.Empty<ListingCardVm>();
-
-    // Pagination
-    public PaginationVm Pagination { get; init; } = new();
+    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
+        = Array.Empty<ListingListItemVm>();
 
     // Optional internal linking
     // public IReadOnlyCollection<SubcategoryLinkVm> RelatedSubcategories { get; init; }

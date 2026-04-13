@@ -49,15 +49,8 @@
     <Folder Include="Models/UI/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
-    <Folder Include="Views/Catalog/" />
-    <Folder Include="Views/Listings/" />
-    <Folder Include="Views/Shared/Cards/" />
-    <Folder Include="Views/Shared/CatalogPartials/" />
-    <Folder Include="Views/Shared/Lists/" />
-    <Folder Include="wwwroot/css/components/" />
-    <Folder Include="wwwroot/css/pages/" />
-    <Folder Include="wwwroot/js/components/" />
-    <Folder Include="wwwroot/js/pages/" />
+    <Folder Include="Views/Home/Sections/" />
+    <Folder Include="Views/Listings/DetailsSections/" />
   </ItemGroup>
 
 </Project>

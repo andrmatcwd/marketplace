@@ -1,4 +1,16 @@
-﻿@{
+﻿@model IEnumerable<Marketplace.Web.Models.Listings.ListingViewModel>
+
+@{
     ViewData["Title"] = "Home";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
+}
+
+<partial name="Sections/_HeroSection" />
+<partial name="Sections/_PopularCategoriesSection" />
+<partial name="Sections/_FeaturedListingsSection" model="Model" />
+<partial name="Sections/_HowItWorksSection" />
+<partial name="Sections/_VerifiedProvidersSection" />
+<partial name="Sections/_CtaSection" />

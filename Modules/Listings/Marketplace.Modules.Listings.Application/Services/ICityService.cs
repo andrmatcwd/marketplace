@@ -9,6 +9,8 @@ namespace Marketplace.Modules.Listings.Application.Services;
 public interface ICityService
 {
     Task<CityDto> GetByIdAsync(int id, CancellationToken cancellationToken);
+    
+    Task<CityDto> GetBySlagAsync(string slag, CancellationToken cancellationToken);
 
     Task<PagedResult<CityDto>> GetByFilterAsync(CityFilter filter, CancellationToken cancellationToken);
 

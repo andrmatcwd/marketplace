@@ -2,7 +2,7 @@ using Marketplace.Modules.Listings.Application.Categories.Commands.CreateCategor
 using Marketplace.Modules.Listings.Application.Categories.Commands.DeleteCategory;
 using Marketplace.Modules.Listings.Application.Categories.Commands.EditCategory;
 using Marketplace.Modules.Listings.Application.Categories.Filters;
-using Marketplace.Modules.Listings.Application.Categories.Queries.GetById;
+using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoryById;
 using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
 using Marketplace.Web.Areas.Admin.Models.Categories;
 using MediatR;
@@ -41,6 +41,8 @@ public class CategoriesController : Controller
                     Id = x.Id,
                     Name = x.Name,
                     Slug = x.Slug,
+                    SubCategoriesCount = x.SubCategoriesCount,
+                    ListingsCount = x.ListingsCount
                 }).ToList()
         };
 
@@ -62,8 +64,8 @@ public class CategoriesController : Controller
         }
 
         await _sender.Send(new CreateCategoryCommand(
+            model.CityId,
             model.Name,
-            model.Slug,
             model.Description,
             model.Icon), cancellationToken);
 
@@ -72,7 +74,6 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
-
         var category = await _sender.Send(new GetCategoryByIdQuery(id), cancellationToken);
         if (category is null) return NotFound();
 
@@ -98,9 +99,9 @@ public class CategoriesController : Controller
         }
 
         await _sender.Send(new EditCategoryCommand(
-            model.Id.Value,
+            id,
+            model.CityId,
             model.Name,
-            model.Slug,
             model.Description,
             model.Icon), cancellationToken);
             

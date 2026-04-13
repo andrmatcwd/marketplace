@@ -1,6 +1,6 @@
 namespace Marketplace.Modules.Listings.Application.Common.Models;
 
-public class PaginationFilter
+public class PaginationFilter : BaseFilter
 {
     private const int MaxPageSize = 100;
 

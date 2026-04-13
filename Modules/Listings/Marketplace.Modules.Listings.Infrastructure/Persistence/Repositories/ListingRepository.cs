@@ -18,30 +18,16 @@ public class ListingRepository
         ListingFilter filter,
         CancellationToken cancellationToken = default)
     {
-        var query = DbSet
-            .AsNoTracking()
-            .Include(x => x.Category)
-            .Include(x => x.City)
-            .AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(filter.Search))
-        {
-            query = query.Where(x => x.Title.Contains(filter.Search));
-        }
-
-        if (filter.CategoryId.HasValue)
-        {
-            query = query.Where(x => x.CategoryId == filter.CategoryId.Value);
-        }
-
-        if (filter.IsActive.HasValue)
-        {
-            query = query.Where(x => x.Status == ListingStatus.Active);
-        }
+        var query = DbSet.AsNoTracking();
 
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
+            .Include(x => x.City)
+            .Include(x => x.Category)
+            .Include(x => x.SubCategory)
+            .Include(x => x.Images)
+            .Include(x => x.Reviews)
             .OrderByDescending(x => x.Id)
             .Skip((filter.Page - 1) * filter.PageSize)
             .Take(filter.PageSize)

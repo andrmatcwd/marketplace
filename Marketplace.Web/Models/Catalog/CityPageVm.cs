@@ -1,4 +1,5 @@
 using System;
+using Marketplace.Web.Areas.Admin.Models.Listings;
 using Marketplace.Web.Models.Category;
 using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
@@ -16,20 +17,15 @@ public class CityPageVm
     public string? IntroText { get; init; }
 
     public int TotalListingsCount { get; init; }
+    public int TotalCategoriesCount { get; init; }
 
     // 📂 Categories (ГОЛОВНЕ на цій сторінці)
     public IReadOnlyCollection<CategoryItemVm> Categories { get; init; }
         = Array.Empty<CategoryItemVm>();
 
     // ⭐ (опціонально) популярні або нові лістинги
-    public IReadOnlyCollection<ListingCardVm> FeaturedListings { get; init; }
-        = Array.Empty<ListingCardVm>();
-
-    // 🔍 Filters
-    public BaseFilter Filter { get; init; } = new();
-
-    // 📄 Pagination
-    public PaginationVm Pagination { get; init; } = new();
+    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
+        = Array.Empty<ListingListItemVm>();
 
     // 🍞 Breadcrumbs
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }

@@ -1,0 +1,130 @@
+﻿@model Marketplace.Web.Models.Listings.ListingsPageViewModel
+
+<form id="listingsFiltersForm" method="get" asp-controller="Listings" asp-action="Index" class="listings-filters">
+    <div class="p-3 p-lg-4 border-bottom">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">Filters</h5>
+                <p class="text-muted small mb-0">Refine service results</p>
+            </div>
+            <a asp-controller="Listings" asp-action="Index" class="btn btn-sm btn-light">Reset</a>
+        </div>
+    </div>
+
+    <div class="accordion accordion-flush" id="listingsFiltersAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSearch">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearch">
+                    Search
+                </button>
+            </h2>
+            <div id="collapseSearch" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <input name="Search" value="@Model.Filters.Search" class="form-control" placeholder="Keyword..." />
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCategory">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory">
+                    Category
+                </button>
+            </h2>
+            <div id="collapseCategory" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    @foreach (var category in Model.Categories)
+                    {
+                        var isChecked = Model.Filters.Categories.Contains(category.Value);
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="Categories"
+                                   value="@category.Value"
+                                   id="category_@category.Value"
+                                   checked="@isChecked" />
+                            <label class="form-check-label" for="category_@category.Value">@category.Label</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingPrice">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrice">
+                    Price
+                </button>
+            </h2>
+            <div id="collapsePrice" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small">From</label>
+                            <input name="PriceFrom" value="@Model.Filters.PriceFrom" type="number" class="form-control" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small">To</label>
+                            <input name="PriceTo" value="@Model.Filters.PriceTo" type="number" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingType">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseType">
+                    Service type
+                </button>
+            </h2>
+            <div id="collapseType" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="OnlineOnly" value="true" id="onlineOnly" checked="@Model.Filters.OnlineOnly" />
+                        <label class="form-check-label" for="onlineOnly">Online only</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="OfflineOnly" value="true" id="offlineOnly" checked="@Model.Filters.OfflineOnly" />
+                        <label class="form-check-label" for="offlineOnly">Offline only</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingRating">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRating">
+                    Rating
+                </button>
+            </h2>
+            <div id="collapseRating" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    @foreach (var value in new[] { 4.0, 4.5, 5.0 })
+                    {
+                        var id = $"rating_{value.ToString().Replace(".", "_")}";
+                        var isChecked = Model.Filters.RatingFrom == value;
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="RatingFrom" value="@value" id="@id" checked="@isChecked" />
+                            <label class="form-check-label" for="@id">@value.ToString("0.0") and higher</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="SortBy" value="@Model.Filters.SortBy" />
+    <input type="hidden" name="Page" value="1" />
+    <input type="hidden" name="PageSize" value="@Model.Filters.PageSize" />
+
+    <div class="p-3 p-lg-4 border-top">
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Apply filters</button>
+            <button type="button" id="applyFiltersAjax" class="btn btn-outline-secondary">Apply without reload</button>
+        </div>
+    </div>
+</form>

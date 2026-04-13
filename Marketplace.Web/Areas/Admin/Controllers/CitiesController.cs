@@ -2,7 +2,7 @@ using Marketplace.Modules.Listings.Application.Cities.Commands.CreateCity;
 using Marketplace.Modules.Listings.Application.Cities.Commands.DeleteCity;
 using Marketplace.Modules.Listings.Application.Cities.Commands.EditCity;
 using Marketplace.Modules.Listings.Application.Cities.Filters;
-using Marketplace.Modules.Listings.Application.Cities.Queries.GetById;
+using Marketplace.Modules.Listings.Application.Cities.Queries.GetCityById;
 using Marketplace.Modules.Listings.Application.Cities.Queries.GetCitiesByFilter;
 using Marketplace.Modules.Listings.Domain.Entities;
 using Marketplace.Modules.Listings.Domain.Enums;
@@ -52,7 +52,7 @@ public class CitiesController : Controller
                     Id = x.Id,
                     Name = x.Name,
                     Slug = x.Slug,
-                    RegionId = x.RegionId
+                    //RegionId = x.RegionSlug
                 }).ToList()
         };
 
@@ -90,8 +90,7 @@ public class CitiesController : Controller
 
         await _sender.Send(new CreateCityCommand(
             model.RegionId,
-            model.Name,
-            model.Slug
+            model.Name
         ), cancellationToken);
 
         return RedirectToAction(nameof(Index));
@@ -108,7 +107,7 @@ public class CitiesController : Controller
         return View(new CityFormVm
         {
             Id = city.Id,
-            RegionId = city.RegionId,
+            //RegionId = city.RegionId,
             Name = city.Name,
             Slug = city.Slug
         });
@@ -130,8 +129,7 @@ public class CitiesController : Controller
         await _sender.Send(new EditCityCommand(
             id,
             model.RegionId,
-            model.Name,
-            model.Slug
+            model.Name
         ), cancellationToken);
 
         return RedirectToAction(nameof(Index));
@@ -148,7 +146,7 @@ public class CitiesController : Controller
             Id = city.Id,
             Name = city.Name,
             Slug = city.Slug,
-            RegionId = city.RegionId
+            //RegionId = city.RegionId
         });
     }
 

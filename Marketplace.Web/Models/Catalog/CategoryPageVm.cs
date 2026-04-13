@@ -1,4 +1,5 @@
 using System;
+using Marketplace.Web.Areas.Admin.Models.Listings;
 using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
 using Marketplace.Web.Models.SubCategory;
@@ -20,20 +21,15 @@ public class CategoryPageVm
     public string? IntroText { get; init; }
 
     public int TotalListingsCount { get; init; }
+    public int TotalSubCategoiesCount { get; init; }
 
     // 📊 Subcategories (дуже важливо для SEO)
-    public IReadOnlyCollection<SubCategoryItemVm> Subcategories { get; init; }
+    public IReadOnlyCollection<SubCategoryItemVm> SubCategories { get; init; }
         = Array.Empty<SubCategoryItemVm>();
 
     // 📦 Listings (якщо показуєш на цій сторінці)
-    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
-        = Array.Empty<ListingCardVm>();
-
-    // 🔍 Filters
-    public BaseFilter Filter { get; init; } = new();
-
-    // 📄 Pagination
-    public PaginationVm Pagination { get; init; } = new();
+    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
+        = Array.Empty<ListingListItemVm>();
 
     // 🍞 Breadcrumbs
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }

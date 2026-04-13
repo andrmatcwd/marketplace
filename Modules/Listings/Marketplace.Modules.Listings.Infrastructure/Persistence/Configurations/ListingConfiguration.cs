@@ -12,6 +12,12 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.SubscriptionType)
+            .HasConversion<int>();
+
+        builder.Property(x => x.Status)
+            .HasConversion<int>();
+
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Listings)
             .HasForeignKey(x => x.CategoryId)

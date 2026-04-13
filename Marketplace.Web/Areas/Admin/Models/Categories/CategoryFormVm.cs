@@ -7,6 +7,9 @@ public class CategoryFormVm
     public int? Id { get; set; }
 
     [Required]
+    public int CityId { get; set; }
+
+    [Required]
     [Display(Name = "Назва")]
     public string Name { get; set; } = string.Empty;
 

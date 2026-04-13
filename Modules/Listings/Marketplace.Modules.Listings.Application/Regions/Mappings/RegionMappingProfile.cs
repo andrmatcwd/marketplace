@@ -8,6 +8,7 @@ public sealed class RegionMappingProfile : Profile
 {
     public RegionMappingProfile()
     {
-        CreateMap<Region, RegionDto>();
+        CreateMap<Region, RegionDto>()
+            .ForMember(dest => dest.CitiesCount, opt => opt.MapFrom(src => src.Cities.Count));
     }
 }

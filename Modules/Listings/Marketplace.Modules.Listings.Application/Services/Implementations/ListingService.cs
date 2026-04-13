@@ -32,6 +32,18 @@ public class ListingService : IListingService
         return _mapper.Map<ListingDto>(listing);
     }
 
+    public Task<ListingDto> GetBySlagsAsync(
+        string citySlag,
+        string categorySlag,
+        string subCategorySlag,
+        string slag,
+        int id,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<PagedResult<ListingDto>> GetByFilterAsync(ListingFilter filter, CancellationToken cancellationToken)
     {
         var (items, totalCount) = await _listingRepository.GetByFilterAsync(filter, cancellationToken);
@@ -48,8 +60,7 @@ public class ListingService : IListingService
         var listing = new Listing
         {
             Title = command.Title,
-            Description = command.Description,
-            Price = command.Price
+            Description = command.Description
         };
 
         await _listingRepository.AddAsync(listing, cancellationToken);
@@ -68,7 +79,6 @@ public class ListingService : IListingService
 
         listing.Title = command.Title;
         listing.Description = command.Description;
-        listing.Price = command.Price;
 
         _listingRepository.Update(listing);
         await _listingRepository.SaveChangesAsync(cancellationToken);

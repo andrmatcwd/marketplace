@@ -10,6 +10,8 @@ public interface ICategoryService
 {
     Task<CategoryDto> GetByIdAsync(int id, CancellationToken cancellationToken);
 
+    Task<CategoryDto> GetBySlagsAsync(string citySlag, string categorySlag, CancellationToken cancellationToken);
+
     Task<PagedResult<CategoryDto>> GetByFilterAsync(CategoryFilter filter, CancellationToken cancellationToken);
 
     Task AddAsync(CreateCategoryCommand command, CancellationToken cancellationToken);

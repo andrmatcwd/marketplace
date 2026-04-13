@@ -64,8 +64,8 @@ public class RegionsController : Controller
         }
 
         await _sender.Send(new CreateRegionCommand(
-            model.Name,
-            model.Slug), cancellationToken);
+            model.Name),
+            cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -96,8 +96,8 @@ public class RegionsController : Controller
 
         await _sender.Send(new EditRegionCommand(
             id,
-            model.Name,
-            model.Slug), cancellationToken);
+            model.Name),
+            cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }

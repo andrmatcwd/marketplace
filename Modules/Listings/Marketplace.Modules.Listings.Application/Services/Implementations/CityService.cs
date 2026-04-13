@@ -85,4 +85,9 @@ public class CityService : ICityService
         _cityRepository.Remove(city);
         await _cityRepository.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<CityDto> GetBySlagAsync(string slag, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

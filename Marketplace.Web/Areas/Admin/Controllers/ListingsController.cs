@@ -42,10 +42,10 @@ public class ListingsController : Controller
         var listings = await _sender.Send(new GetListingsByFilterQuery(new ListingFilter
         {
             Search = search,
-            CategoryId = categoryId,
-            SubCategoryId = subCategoryId,
-            LocationId = locationId,
-            IsActive = true,
+            //CategoryId = categoryId,
+            //SubCategoryId = subCategoryId,
+            //LocationId = locationId,
+            //IsActive = true,
             Page = 1,
             PageSize = int.MaxValue
         }), cancellationToken);
@@ -94,14 +94,14 @@ public class ListingsController : Controller
             return View(model);
         }
 
-        await _sender.Send(new CreateListingCommand(
-            model.Title,
-            model.Description,
-            model.Price,
-            model.SellerId,
-            model.CategoryId,
-            model.SubCategoryId
-        ), cancellationToken);
+        // await _sender.Send(new CreateListingCommand(
+        //     model.Title,
+        //     model.Description,
+        //     model.Price,
+        //     model.SellerId,
+        //     model.CategoryId,
+        //     model.SubCategoryId
+        // ), cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -116,8 +116,7 @@ public class ListingsController : Controller
         return View(new ListingFormVm
         {
             Id = listing.Id,
-            Title = listing.Title,
-            Price = listing.Price,
+            Title = listing.Title
         });
     }
 
@@ -137,14 +136,14 @@ public class ListingsController : Controller
         var listing = await _sender.Send(new GetListingByIdQuery(id), cancellationToken);
         if (listing is null) return NotFound();
 
-        await _sender.Send(new EditListingCommand(
-            id,
-            model.Title,
-            model.Description,
-            model.Price,
-            model.SellerId,
-            true
-        ), cancellationToken);
+        // await _sender.Send(new EditListingCommand(
+        //     id,
+        //     model.Title,
+        //     model.Description,
+        //     model.Price,
+        //     model.SellerId,
+        //     true
+        // ), cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }

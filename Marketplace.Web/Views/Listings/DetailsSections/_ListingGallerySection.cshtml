@@ -1,0 +1,26 @@
+﻿@model Marketplace.Web.Models.Listings.ListingViewModel
+
+<!-- Image -->
+<div class="col-lg-6">
+    <div class="listing-gallery">
+        <!-- Main image -->
+        <div class="listing-gallery-main">
+            <img id="mainListingImage"
+                 src="@(Model.ImageUrls.FirstOrDefault() ?? Model.ImageUrl)"
+                 alt="@Model.Title" />
+        </div>
+
+        <!-- Thumbnails -->
+        @if (Model.ImageUrls != null && Model.ImageUrls.Count > 1)
+        {
+            <div class="listing-gallery-thumbs">
+                @foreach (var img in Model.ImageUrls)
+                {
+                    <img src="@img"
+                         class="gallery-thumb"
+                         onclick="setMainImage(this)" />
+                }
+            </div>
+        }
+    </div>
+</div>

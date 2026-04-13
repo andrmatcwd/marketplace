@@ -21,5 +21,10 @@ public sealed class CityConfiguration : IEntityTypeConfiguration<City>
             .WithOne(x => x.City)
             .HasForeignKey(x => x.CityId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(x => x.Categories)
+            .WithOne(x => x.City)
+            .HasForeignKey(x => x.CityId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

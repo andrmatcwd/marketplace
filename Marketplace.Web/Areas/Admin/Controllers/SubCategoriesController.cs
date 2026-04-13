@@ -2,7 +2,7 @@ using Marketplace.Modules.Listings.Application.SubCategories.Commands.CreateSubC
 using Marketplace.Modules.Listings.Application.SubCategories.Commands.DeleteSubCategory;
 using Marketplace.Modules.Listings.Application.SubCategories.Commands.EditSubCategory;
 using Marketplace.Modules.Listings.Application.SubCategories.Filters;
-using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetById;
+using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoryById;
 using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoriesByFilter;
 using Marketplace.Modules.Listings.Domain.Entities;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
@@ -33,7 +33,7 @@ public class SubCategoriesController : Controller
         var subCategories = await _sender.Send(new GetSubCategoriesByFilterQuery(new SubCategoryFilter
         {
             Search = search,
-            CategoryId = categoryId,
+            //CategoryId = categoryId,
             Page = 1,
             PageSize = int.MaxValue
         }), cancellationToken);
@@ -48,7 +48,7 @@ public class SubCategoriesController : Controller
                 .Select(x => new SubCategoryListItemVm
                 {
                     Id = x.Id,
-                    CategoryId = x.CategoryId,
+                    //CategoryId = x.CategoryId,
                     Name = x.Name,
                     Slug = x.Slug
                 })
@@ -78,7 +78,6 @@ public class SubCategoriesController : Controller
         await _sender.Send(new CreateSubCategoryCommand(
             model.CategoryId,
             model.Name,
-            model.Slug,
             model.Description), cancellationToken);
 
         return RedirectToAction(nameof(Index));
@@ -94,7 +93,7 @@ public class SubCategoriesController : Controller
         return View(new SubCategoryFormVm
         {
             Id = subCategory.Id,
-            CategoryId = subCategory.CategoryId,
+            //CategoryId = subCategory.CategoryId,
             Name = subCategory.Name,
             Slug = subCategory.Slug,
             Description = subCategory.Description
@@ -133,7 +132,7 @@ public class SubCategoriesController : Controller
         return View(new SubCategoryListItemVm
         {
             Id = subCategory.Id,
-            CategoryId = subCategory.CategoryId,
+            //CategoryId = subCategory.CategoryId,
             Name = subCategory.Name,
             Slug = subCategory.Slug,
         });

@@ -84,4 +84,9 @@ public class SubCategoryService : ISubCategoryService
         _subCategoryRepository.Remove(subCategory);
         await _subCategoryRepository.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<SubCategoryDto> GetBySlagsAsync(string citySlag, string categorySlag, string subCategorySlag, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

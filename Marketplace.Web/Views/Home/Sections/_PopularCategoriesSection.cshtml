@@ -1,0 +1,48 @@
+﻿<section class="py-5 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="fw-bold mb-2">Popular categories</h2>
+                <p class="text-muted mb-0">Explore the most востребувані service categories.</p>
+            </div>
+
+            <a asp-controller="Listings" asp-action="Index" class="btn btn-outline-secondary d-none d-md-inline-flex">
+                View all services
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <a asp-controller="Listings" asp-action="Index" asp-route-Categories="beauty" class="category-card">
+                    <div class="category-icon">💇</div>
+                    <div class="category-title">Beauty</div>
+                    <div class="category-text">Hair, nails, makeup and more</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Listings" asp-action="Index" asp-route-Categories="repair" class="category-card">
+                    <div class="category-icon">🔧</div>
+                    <div class="category-title">Repair</div>
+                    <div class="category-text">Home, device and equipment repair</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Listings" asp-action="Index" asp-route-Categories="education" class="category-card">
+                    <div class="category-icon">📘</div>
+                    <div class="category-title">Education</div>
+                    <div class="category-text">Tutors, mentors and learning support</div>
+                </a>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <a asp-controller="Listings" asp-action="Index" asp-route-Categories="cleaning" class="category-card">
+                    <div class="category-icon">🧼</div>
+                    <div class="category-title">Cleaning</div>
+                    <div class="category-text">Home and office cleaning services</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -10,6 +10,15 @@ public interface IListingService
 {
     Task<ListingDto> GetByIdAsync(int id, CancellationToken cancellationToken);
 
+    Task<ListingDto> GetBySlagsAsync(
+        string citySlag,
+        string categorySlag,
+        string subCategorySlag,
+        string slag,
+        int id,
+        CancellationToken cancellationToken
+    );
+
     Task<PagedResult<ListingDto>> GetByFilterAsync(ListingFilter filter, CancellationToken cancellationToken);
 
     Task AddAsync(CreateListingCommand command, CancellationToken cancellationToken);

@@ -82,4 +82,9 @@ public class CategoryService : ICategoryService
         _categoryRepository.Remove(category);
         await _categoryRepository.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<CategoryDto> GetBySlagsAsync(string citySlag, string categorySlag, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

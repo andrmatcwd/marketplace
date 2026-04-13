@@ -27,6 +27,8 @@
     <Folder Include="Categories/Dtos/" />
     <Folder Include="Categories/Filters/" />
     <Folder Include="Categories/Mappings/" />
+    <Folder Include="Categories/Queries/GetCategoryBySlags/" />
+    <Folder Include="Cities/Queries/GetCityBySlags/" />
     <Folder Include="Common/" />
     <Folder Include="Common/Models/" />
     <Folder Include="Listings/Commands/" />
@@ -36,6 +38,7 @@
     <Folder Include="Listings/Dtos/" />
     <Folder Include="Listings/Filters/" />
     <Folder Include="Listings/Mappings/" />
+    <Folder Include="Listings/Queries/GetListingBySlags/" />
     <Folder Include="Listings/Queries/GetListingsByFilter/" />
     <Folder Include="Regions/Commands/" />
     <Folder Include="Regions/Dtos/" />
@@ -53,12 +56,11 @@
     <Folder Include="Reviews/Filters/" />
     <Folder Include="Reviews/Mappings/" />
     <Folder Include="Reviews/Queries/" />
-    <Folder Include="SubCategories/" />
     <Folder Include="SubCategories/Commands/" />
     <Folder Include="SubCategories/Dtos/" />
     <Folder Include="SubCategories/Filters/" />
     <Folder Include="SubCategories/Mappings/" />
-    <Folder Include="SubCategories/Queries/" />
+    <Folder Include="SubCategories/Queries/GetSubCategoryBySlags/" />
   </ItemGroup>
 
 </Project>

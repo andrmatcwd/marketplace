@@ -4,7 +4,8 @@ namespace Marketplace.Modules.Listings.Application.Categories.Commands.EditCateg
 
 public sealed record EditCategoryCommand(
     int Id,
+    int CityId,
     string Name,
-    string Slug,
     string? Description,
-    string? Icon) : IRequest<Unit>;
+    string? Icon
+) : IRequest<Unit>;

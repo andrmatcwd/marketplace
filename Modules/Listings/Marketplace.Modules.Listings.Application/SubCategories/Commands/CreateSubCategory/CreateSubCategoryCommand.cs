@@ -6,5 +6,5 @@ namespace Marketplace.Modules.Listings.Application.SubCategories.Commands.Create
 public sealed record CreateSubCategoryCommand(
     int CategoryId,
     string Name,
-    string Slug,
-    string? Description) : IRequest<Unit>;
+    string? Description
+) : IRequest<Unit>;

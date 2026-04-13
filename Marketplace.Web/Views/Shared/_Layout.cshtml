@@ -1,12 +1,10 @@
 ﻿@using System.Globalization
 @using Marketplace.Web.Seo
-
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     @{
         var seo = ViewData["Seo"] as PageSeoData;
     }
@@ -38,108 +36,75 @@
         }
     }
 
+    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/layout.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/components.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/cards.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/filters.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/pages.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/catalog/responsive.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Marketplace.Web.styles.css" asp-append-version="true" />
-
     @RenderSection("Styles", required: false)
 </head>
-<body class="app-body">
-    @{
-        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-
-        var isHome = string.Equals(currentController, "Home", StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase);
-
-        var isCatalog = string.Equals(currentController, "Catalog", StringComparison.OrdinalIgnoreCase);
-    }
-    <div class="app-shell">
-        <header class="app-header">
-            <nav class="navbar navbar-expand-lg app-navbar">
-                <div class="container app-container">
-                    <a class="navbar-brand app-brand" asp-controller="Home" asp-action="Index">
-                        <span class="app-brand__mark">M</span>
-                        <span class="app-brand__text">Marketplace</span>
-                    </a>
-
-                    <button class="navbar-toggler app-navbar-toggler"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#mainNav"
-                            aria-controls="mainNav"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="mainNav">
-                        <ul class="navbar-nav me-auto app-nav-list">
-                            <li class="nav-item">
-                                <a class="nav-link app-nav-link @(isHome ? "is-active" : "")"
-                                asp-controller="Home"
-                                asp-action="Index">
-                                    Головна
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link app-nav-link @(isCatalog ? "is-active" : "")"
-                                asp-controller="Catalog"
-                                asp-action="Index">
-                                    Каталог
-                                </a>
-                            </li>
-                        </ul>
-
-                        <div class="app-header-actions">
-                            <form asp-controller="Culture" asp-action="SetLanguage" method="post" class="app-lang-switcher">
-                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
-
-                                <button type="submit" name="culture" value="uk" class="app-lang-btn">
-                                    UK
-                                </button>
-                                <button type="submit" name="culture" value="en" class="app-lang-btn">
-                                    EN
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Marketplace.Web</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Listings" asp-action="Index">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Listings" asp-action="Index">
+                                Admin
+                            </a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
                 </div>
-            </nav>
-        </header>
-
-        <main class="app-main">
-            <div class="container app-container">
-                @RenderBody()
             </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
         </main>
-
-        <footer class="app-footer">
-            <div class="container app-container app-footer__inner">
-                <div class="app-footer__left">
-                    <div class="app-footer__brand">Marketplace</div>
-                    <div class="app-footer__text">Каталог послуг для швидкого пошуку виконавців і компаній.</div>
-                </div>
-
-                <div class="app-footer__right">
-                    <a asp-controller="Home" asp-action="Privacy" class="app-footer__link">Privacy</a>
-                </div>
-            </div>
-        </footer>
     </div>
 
+    <footer class="border-top footer text-muted">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <!-- Left side -->
+            <div>
+                &copy; 2026 - Marketplace.Web -
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+
+            <!-- Right side 🌍 Language switcher -->
+            <form asp-controller="Culture" asp-action="SetLanguage" method="post" class="d-flex">
+                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+
+                <button type="submit" name="culture" value="en" class="btn btn-sm btn-outline-secondary">
+                    EN
+                </button>
+                <button type="submit" name="culture" value="uk" class="btn btn-sm btn-outline-secondary ms-1">
+                    UK
+                </button>
+            </form>
+
+        </div>
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/catalog/filters.js" asp-append-version="true"></script>
-    <script src="~/js/catalog/mobile-ui.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

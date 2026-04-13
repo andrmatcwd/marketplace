@@ -1,0 +1,23 @@
+﻿@model Marketplace.Web.Models.Listings.ListingViewModel
+
+<!-- Location -->
+@if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-3">Location</h5>
+
+                    <div id="listingMap"
+                         class="listing-map"
+                         data-lat="@Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                         data-lng="@Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                         data-title="@Model.Title"
+                         data-address="@Model.AddressLine">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

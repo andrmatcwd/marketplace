@@ -1,83 +1,72 @@
-using Marketplace.Modules.Listings.Domain.Entities;
-using Marketplace.Modules.Listings.Domain.Enums.Listing;
-using Marketplace.Modules.Listings.Infrastructure.Persistence;
+using Marketplace.Modules.Listings.Application.Categories.Filters;
+using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
+using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoryBySlags;
+using Marketplace.Modules.Listings.Application.Cities.Filters;
+using Marketplace.Modules.Listings.Application.Cities.Queries.GetCitiesByFilter;
+using Marketplace.Modules.Listings.Application.Cities.Queries.GetCityBySlags;
+using Marketplace.Modules.Listings.Application.Listings.Filters;
+using Marketplace.Modules.Listings.Application.Listings.Queries.GetListingsByFilter;
+using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoryBySlags;
+using Marketplace.Web.Areas.Admin.Models.Listings;
 using Marketplace.Web.Models.Catalog;
 using Marketplace.Web.Models.Category;
 using Marketplace.Web.Models.City;
 using Marketplace.Web.Models.Common;
-using Marketplace.Web.Models.Listings;
 using Marketplace.Web.Models.SubCategory;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace Marketplace.Web.Services;
 
-public class CatalogService : ICatalogService
+public sealed class CatalogService : ICatalogService
 {
-    private readonly ListingsDbContext _db;
+    private const int DefaultPageSize = 12;
+    private const string CatalogTitle = "Каталог";
 
-    public CatalogService(ListingsDbContext db)
+    private readonly ISender _sender;
+
+    public CatalogService(ISender sender)
     {
-        _db = db;
+        _sender = sender;
     }
 
     public async Task<CatalogIndexPageVm> GetCatalogIndexPageAsync(
         string culture,
         CancellationToken cancellationToken)
     {
-        var cities = await _db.Cities
-            .AsNoTracking()
-            //.Where(x => x.Type.Equals(LocationType.City))
-            .Select(x => new CityItemVm
-            {
-                Name = x.Name,
-                Slug = x.Slug,
-                ListingsCount = x.Listings.Count(l => l.Status == ListingStatus.Active),
-                Url = "/" + x.Slug
-            })
-            .Where(x => x.ListingsCount > 0)
-            .OrderByDescending(x => x.ListingsCount)
-            .ThenBy(x => x.Name)
-            .Take(24)
-            .ToListAsync(cancellationToken);
+        var popularCitiesTask = _sender.Send(
+            new GetCitiesByFilterQuery(CreateCityFilter()),
+            cancellationToken);
 
-        var popularCategories = await _db.Categories
-            .AsNoTracking()
-            .Select(x => new CategoryItemVm
-            {
-                Name = x.Name,
-                Slug = x.Slug,
-                ListingsCount = x.Listings.Count(l => l.Status == ListingStatus.Active),
-                Url = "/" + x.Slug
-            })
-            .Where(x => x.ListingsCount > 0)
-            .OrderByDescending(x => x.ListingsCount)
-            .ThenBy(x => x.Name)
-            .Take(12)
-            .ToListAsync(cancellationToken);
+        var popularCategoriesTask = _sender.Send(
+            new GetCategoriesByFilterQuery(CreateCategoryFilter()),
+            cancellationToken);
+
+        var popularListingsTask = _sender.Send(
+            new GetListingsByFilterQuery(CreateListingFilter()),
+            cancellationToken);
+
+        await Task.WhenAll(popularCitiesTask, popularCategoriesTask, popularListingsTask);
+
+        var popularCities = await popularCitiesTask;
+        var popularCategories = await popularCategoriesTask;
+        var popularListings = await popularListingsTask;
 
         return new CatalogIndexPageVm
         {
             H1 = "Каталог послуг",
             IntroText = "Знайдіть послуги за містом, категорією та підкатегорією.",
-            Cities = cities,
-            PopularCategories = popularCategories,
-            Filter = new BaseFilter(),
-            Pagination = new PaginationVm
-            {
-                CurrentPage = 1,
-                TotalPages = 1,
-                PageSize = cities.Count,
-                TotalItems = cities.Count
-            },
-            Breadcrumbs = new[]
-            {
-                new BreadcrumbItemVm
-                {
-                    Title = "Каталог",
-                    Url = "/listings",
-                    IsCurrent = true
-                }
-            }
+            Categories = popularCategories.Items
+                .Select(x => MapCategoryItem(x, culture))
+                .ToList(),
+            Cities = popularCities.Items
+                .Select(x => MapCityItem(x, culture))
+                .ToList(),
+            Listings = popularListings.Items
+                .Select(x => MapListingItem(x, culture))
+                .ToList(),
+            Breadcrumbs = BuildBreadcrumbs(
+                culture,
+                Crumb(CatalogTitle))
         };
     }
 
@@ -87,68 +76,22 @@ public class CatalogService : ICatalogService
         BaseFilter filter,
         CancellationToken cancellationToken)
     {
-        filter = NormalizeFilter(filter);
+        // TODO: replace with GetCityBySlugQuery(city)
+        var cityTask = _sender.Send(new GetCityBySlagsQuery(city), cancellationToken);
 
-        var cityEntity = await _db.Cities
-            .AsNoTracking()
-            .Where(x => x.Slug == city)
-            .Select(x => new
-            {
-                x.Id,
-                x.Name,
-                x.Slug
-            })
-            .FirstOrDefaultAsync(cancellationToken);
+        var categoriesTask = _sender.Send(
+            new GetCategoriesByFilterQuery(CreateCategoryFilter()),
+            cancellationToken);
 
-        if (cityEntity is null)
-            return null;
+        var listingsTask = _sender.Send(
+            new GetListingsByFilterQuery(CreateListingFilter()),
+            cancellationToken);
 
-        var baseListings = _db.Listings
-            .AsNoTracking()
-            .Where(x =>
-                x.Status == ListingStatus.Active &&
-                x.CityId == cityEntity.Id);
+        await Task.WhenAll(cityTask, categoriesTask, listingsTask);
 
-        baseListings = ApplyListingFilters(baseListings, filter);
-
-        var totalListingsCount = await baseListings.CountAsync(cancellationToken);
-
-        var categories = await _db.Categories
-            .AsNoTracking()
-            .Select(x => new CategoryItemVm
-            {
-                Name = x.Name,
-                Slug = x.Slug,
-                ListingsCount = x.Listings.Count(l =>
-                    l.Status == ListingStatus.Active &&
-                    l.CityId == cityEntity.Id),
-                Url = "/" + cityEntity.Slug + "/" + x.Slug
-            })
-            .Where(x => x.ListingsCount > 0)
-            .OrderByDescending(x => x.ListingsCount)
-            .ThenBy(x => x.Name)
-            .ToListAsync(cancellationToken);
-
-        var featuredListings = await ApplyListingSort(baseListings, filter)
-            .Take(12)
-            .Select(x => new ListingCardVm
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Slug = x.Slug,
-                SubcategoryName = x.SubCategory.Name,
-                SubcategorySlug = x.SubCategory.Slug,
-                Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
-                ReviewsCount = x.ReviewsCount,
-                Url = BuildListingUrl(
-                    culture,
-                    x.City.Slug,
-                    x.Category.Slug,
-                    x.SubCategory.Slug,
-                    x.Slug,
-                    x.Id)
-            })
-            .ToListAsync(cancellationToken);
+        var cityEntity = await cityTask;
+        var categories = await categoriesTask;
+        var listings = await listingsTask;
 
         return new CityPageVm
         {
@@ -156,108 +99,49 @@ public class CatalogService : ICatalogService
             CitySlug = cityEntity.Slug,
             H1 = $"Послуги у {cityEntity.Name}",
             IntroText = $"Перегляньте доступні категорії та популярні пропозиції у місті {cityEntity.Name}.",
-            TotalListingsCount = totalListingsCount,
-            Categories = categories,
-            FeaturedListings = featuredListings,
-            Filter = filter,
-            Pagination = BuildPagination(1, 1, featuredListings.Count, featuredListings.Count),
-            Breadcrumbs = new[]
-            {
-                new BreadcrumbItemVm
-                {
-                    Title = "Каталог",
-                    Url = "/listings",
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = cityEntity.Name,
-                    Url = "/" + cityEntity.Slug,
-                    IsCurrent = true
-                }
-            }
+            TotalListingsCount = cityEntity.ListingsCount,
+            TotalCategoriesCount = cityEntity.CategoriesCount,
+            Categories = categories.Items
+                .Select(x => MapCategoryItem(x, culture, cityEntity.Slug))
+                .ToList(),
+            Listings = listings.Items
+                .Select(x => MapListingItem(x, culture, citySlug: cityEntity.Slug))
+                .ToList(),
+            Breadcrumbs = BuildBreadcrumbs(
+                culture,
+                Crumb(CatalogTitle),
+                Crumb(cityEntity.Name, cityEntity.Slug))
         };
     }
 
     public async Task<CategoryPageVm?> GetCategoryPageAsync(
         string culture,
         string city,
-        string categorySlug,
+        string category,
         BaseFilter filter,
         CancellationToken cancellationToken)
     {
-        filter = NormalizeFilter(filter);
+        // TODO: replace with GetCityBySlugQuery(city)
+        var cityTask = _sender.Send(new GetCityBySlagsQuery(city), cancellationToken);
 
-        var cityEntity = await _db.Cities
-            .AsNoTracking()
-            .Where(x => x.Slug == city)
-            .Select(x => new { x.Id, x.Name, x.Slug })
-            .FirstOrDefaultAsync(cancellationToken);
+        // TODO: replace with GetCategoryBySlugQuery(categorySlug)
+        var categoryTask = _sender.Send(new GetCategoryBySlagsQuery(city, category), cancellationToken);
 
-        if (cityEntity is null)
-            return null;
+        var listingsTask = _sender.Send(
+            new GetListingsByFilterQuery(CreateListingFilter()),
+            cancellationToken);
 
-        var categoryEntity = await _db.Categories
-            .AsNoTracking()
-            .Where(x => x.Slug == categorySlug)
-            .Select(x => new { x.Id, x.Name, x.Slug, x.Description })
-            .FirstOrDefaultAsync(cancellationToken);
+        // TODO: replace with GetSubCategoriesByFilterQuery(...)
+        var subCategoriesTask = _sender.Send(
+            new GetCategoriesByFilterQuery(CreateCategoryFilter()),
+            cancellationToken);
 
-        if (categoryEntity is null)
-            return null;
+        await Task.WhenAll(cityTask, categoryTask, listingsTask, subCategoriesTask);
 
-        var baseListings = _db.Listings
-            .AsNoTracking()
-            .Where(x =>
-                x.Status == ListingStatus.Active &&
-                x.CityId == cityEntity.Id &&
-                x.CategoryId == categoryEntity.Id);
-
-        baseListings = ApplyListingFilters(baseListings, filter);
-
-        var totalListingsCount = await baseListings.CountAsync(cancellationToken);
-
-        var subcategories = await _db.SubCategories
-            .AsNoTracking()
-            .Where(x => x.CategoryId == categoryEntity.Id)
-            .Select(x => new SubCategoryItemVm
-            {
-                Name = x.Name,
-                Slug = x.Slug,
-                ListingsCount = x.Listings.Count(l =>
-                    l.Status == ListingStatus.Active &&
-                    l.CityId == cityEntity.Id),
-                Url = "/" + cityEntity.Slug + "/" + categoryEntity.Slug + "/" + x.Slug
-            })
-            .Where(x => x.ListingsCount > 0)
-            .OrderByDescending(x => x.ListingsCount)
-            .ThenBy(x => x.Name)
-            .ToListAsync(cancellationToken);
-
-        var page = filter.Page;
-        var pageSize = filter.PageSize;
-
-        var listings = await ApplyListingSort(baseListings, filter)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(x => new ListingCardVm
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Slug = x.Slug,
-                SubcategoryName = x.SubCategory.Name,
-                SubcategorySlug = x.SubCategory.Slug,
-                Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
-                ReviewsCount = x.ReviewsCount,
-                Url = BuildListingUrl(
-                    culture,
-                    x.City.Slug,
-                    x.Category.Slug,
-                    x.SubCategory.Slug,
-                    x.Slug,
-                    x.Id)
-            })
-            .ToListAsync(cancellationToken);
+        var cityEntity = await cityTask;
+        var categoryEntity = await categoryTask;
+        var listings = await listingsTask;
+        var subCategories = await subCategoriesTask;
 
         return new CategoryPageVm
         {
@@ -267,108 +151,62 @@ public class CatalogService : ICatalogService
             CategorySlug = categoryEntity.Slug,
             H1 = $"{categoryEntity.Name} у {cityEntity.Name}",
             IntroText = categoryEntity.Description,
-            TotalListingsCount = totalListingsCount,
-            Subcategories = subcategories,
-            Listings = listings,
-            Filter = filter,
-            Pagination = BuildPagination(page, pageSize, totalListingsCount, listings.Count),
-            Breadcrumbs = new[]
-            {
-                new BreadcrumbItemVm
+            TotalListingsCount = categoryEntity.ListingsCount,
+            SubCategories = subCategories.Items
+                .Select(x => new SubCategoryItemVm
                 {
-                    Title = "Каталог",
-                    Url = "/listings",
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = cityEntity.Name,
-                    Url = "/" + cityEntity.Slug,
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = categoryEntity.Name,
-                    Url = "/" + cityEntity.Slug + "/" + categoryEntity.Slug,
-                    IsCurrent = true
-                }
-            }
+                    Name = x.Name,
+                    Slug = x.Slug,
+                    ListingsCount = x.ListingsCount,
+                    Url = BuildUrl(
+                        culture: culture,
+                        citySlug: cityEntity.Slug,
+                        categorySlug: categoryEntity.Slug,
+                        subCategorySlug: x.Slug)
+                })
+                .ToList(),
+            Listings = listings.Items
+                .Select(x => MapListingItem(
+                    x,
+                    culture,
+                    citySlug: cityEntity.Slug,
+                    categorySlug: categoryEntity.Slug))
+                .ToList(),
+            Breadcrumbs = BuildBreadcrumbs(
+                culture,
+                Crumb(CatalogTitle),
+                Crumb(cityEntity.Name, cityEntity.Slug),
+                Crumb(categoryEntity.Name, categoryEntity.Slug))
         };
     }
 
     public async Task<SubCategoryPageVm?> GetSubCategoryPageAsync(
         string culture,
         string city,
-        string categorySlug,
-        string subCategorySlug,
+        string category,
+        string subCategory,
         BaseFilter filter,
         CancellationToken cancellationToken)
     {
-        filter = NormalizeFilter(filter);
+        // TODO: replace with GetCityBySlugQuery(city)
+        var cityTask = _sender.Send(new GetCityBySlagsQuery(city), cancellationToken);
 
-        var cityEntity = await _db.Cities
-            .AsNoTracking()
-            .Where(x => x.Slug == city)
-            .Select(x => new { x.Id, x.Name, x.Slug })
-            .FirstOrDefaultAsync(cancellationToken);
+        // TODO: replace with GetCategoryBySlugQuery(categorySlug)
+        var categoryTask = _sender.Send(new GetCategoryBySlagsQuery(city, category), cancellationToken);
 
-        if (cityEntity is null)
-            return null;
+        // TODO: replace with GetSubCategoryBySlugQuery(subCategorySlug)
+        var subCategoryTask = _sender.Send(new GetSubCategoryBySlagsQuery(city, category, subCategory), cancellationToken);
 
-        var categoryEntity = await _db.Categories
-            .AsNoTracking()
-            .Where(x => x.Slug == categorySlug)
-            .Select(x => new { x.Id, x.Name, x.Slug })
-            .FirstOrDefaultAsync(cancellationToken);
+        var listingsTask = _sender.Send(
+            new GetListingsByFilterQuery(CreateListingFilter()),
+            cancellationToken);
 
-        if (categoryEntity is null)
-            return null;
+        await Task.WhenAll(cityTask, categoryTask, subCategoryTask, listingsTask);
 
-        var subCategoryEntity = await _db.SubCategories
-            .AsNoTracking()
-            .Where(x => x.CategoryId == categoryEntity.Id && x.Slug == subCategorySlug)
-            .Select(x => new { x.Id, x.Name, x.Slug, x.Description })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (subCategoryEntity is null)
-            return null;
-
-        var baseListings = _db.Listings
-            .AsNoTracking()
-            .Where(x =>
-                x.Status == ListingStatus.Active &&
-                x.CityId == cityEntity.Id &&
-                x.CategoryId == categoryEntity.Id &&
-                x.SubCategoryId == subCategoryEntity.Id);
-
-        baseListings = ApplyListingFilters(baseListings, filter);
-
-        var totalListingsCount = await baseListings.CountAsync(cancellationToken);
-
-        var page = filter.Page;
-        var pageSize = filter.PageSize;
-
-        var listings = await ApplyListingSort(baseListings, filter)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(x => new ListingCardVm
-            {
-                Id = x.Id,
-                Title = x.Title,
-                Slug = x.Slug,
-                SubcategoryName = x.SubCategory.Name,
-                SubcategorySlug = x.SubCategory.Slug,
-                Rating = x.ReviewsCount > 0 ? x.RatingAverage : 0,
-                ReviewsCount = x.ReviewsCount,
-                Url = BuildListingUrl(
-                    culture,
-                    x.City.Slug,
-                    x.Category.Slug,
-                    x.SubCategory.Slug,
-                    x.Slug,
-                    x.Id)
-            })
-            .ToListAsync(cancellationToken);
+        var cityEntity = await cityTask;
+        var categoryEntity = await categoryTask;
+        var subCategoryEntity = await subCategoryTask;
+        var listings = await listingsTask;
 
         return new SubCategoryPageVm
         {
@@ -380,132 +218,198 @@ public class CatalogService : ICatalogService
             SubcategorySlug = subCategoryEntity.Slug,
             H1 = $"{subCategoryEntity.Name} у {cityEntity.Name}",
             IntroText = subCategoryEntity.Description,
-            TotalListingsCount = totalListingsCount,
-            Listings = listings,
-            Filter = filter,
-            Pagination = BuildPagination(page, pageSize, totalListingsCount, listings.Count),
-            Breadcrumbs = new[]
-            {
-                new BreadcrumbItemVm
-                {
-                    Title = "Каталог",
-                    Url = "/listings",
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = cityEntity.Name,
-                    Url = "/" + cityEntity.Slug,
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = categoryEntity.Name,
-                    Url = "/" + cityEntity.Slug + "/" + categoryEntity.Slug,
-                    IsCurrent = false
-                },
-                new BreadcrumbItemVm
-                {
-                    Title = subCategoryEntity.Name,
-                    Url = "/" + cityEntity.Slug + "/" + categoryEntity.Slug + "/" + subCategoryEntity.Slug,
-                    IsCurrent = true
-                }
-            }
+            TotalListingsCount = subCategoryEntity.ListingsCount,
+            Listings = listings.Items
+                .Select(x => MapListingItem(
+                    x,
+                    culture,
+                    citySlug: cityEntity.Slug,
+                    categorySlug: categoryEntity.Slug,
+                    subCategorySlug: subCategoryEntity.Slug))
+                .ToList(),
+            Breadcrumbs = BuildBreadcrumbs(
+                culture,
+                Crumb(CatalogTitle),
+                Crumb(cityEntity.Name, cityEntity.Slug),
+                Crumb(categoryEntity.Name, categoryEntity.Slug),
+                Crumb(subCategoryEntity.Name, subCategoryEntity.Slug))
         };
     }
 
-    private static BaseFilter NormalizeFilter(BaseFilter? filter)
+    private static CityFilter CreateCityFilter()
     {
-        filter ??= new BaseFilter();
-
-        if (filter.Page < 1)
-            filter.Page = 1;
-
-        if (filter.PageSize <= 0)
-            filter.PageSize = 20;
-
-        if (filter.PageSize > 100)
-            filter.PageSize = 100;
-
-        if (string.IsNullOrWhiteSpace(filter.SortBy))
-            filter.SortBy = "newest";
-
-        return filter;
-    }
-
-    private static IQueryable<Listing> ApplyListingFilters(
-        IQueryable<Listing> query,
-        BaseFilter filter)
-    {
-        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        return new CityFilter
         {
-            var search = filter.SearchTerm.Trim();
-
-            query = query.Where(x =>
-                x.Title.Contains(search) ||
-                x.Description.Contains(search));
-        }
-
-        if (filter.RatingFrom.HasValue)
-        {
-            query = query.Where(x => x.RatingAverage >= filter.RatingFrom.Value);
-        }
-
-        return query;
-    }
-
-    private static IQueryable<Listing> ApplyListingSort(
-        IQueryable<Listing> query,
-        BaseFilter filter)
-    {
-        return filter.SortBy?.ToLowerInvariant() switch
-        {
-            "rating" => query
-                .OrderByDescending(x => x.RatingAverage)
-                .ThenByDescending(x => x.ReviewsCount)
-                .ThenBy(x => x.Title),
-
-            "popular" => query
-                .OrderByDescending(x => x.ReviewsCount)
-                .ThenByDescending(x => x.RatingAverage)
-                .ThenBy(x => x.Title),
-
-            _ => query
-                .OrderByDescending(x => x.CreatedAtUtc)
-                .ThenByDescending(x => x.Id)
+            Page = 1,
+            PageSize = DefaultPageSize
         };
     }
 
-    private static PaginationVm BuildPagination(
-        int currentPage,
-        int pageSize,
-        int totalItems,
-        int currentItemsCount)
+    private static CategoryFilter CreateCategoryFilter()
     {
-        var totalPages = totalItems == 0
-            ? 1
-            : (int)Math.Ceiling(totalItems / (double)pageSize);
-
-        if (currentPage > totalPages)
-            currentPage = totalPages;
-
-        return new PaginationVm
+        return new CategoryFilter
         {
-            CurrentPage = currentPage,
-            TotalPages = totalPages,
-            PageSize = pageSize == 0 ? currentItemsCount : pageSize,
-            TotalItems = totalItems
+            Page = 1,
+            PageSize = DefaultPageSize
         };
     }
 
-    private static string BuildListingUrl(
+    private static ListingFilter CreateListingFilter()
+    {
+        return new ListingFilter
+        {
+            Page = 1,
+            PageSize = DefaultPageSize
+        };
+    }
+
+    private static CategoryItemVm MapCategoryItem(
+        dynamic x,
         string culture,
-        string citySlug,
-        string categorySlug,
-        string subCategorySlug,
-        string listingSlug,
-        int listingId)
+        string? citySlug = null)
     {
-        return $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}-{listingId}";
+        return new CategoryItemVm
+        {
+            Name = x.Name,
+            Slug = x.Slug,
+            Description = x.Description,
+            Icon = x.Icon,
+            ListingsCount = x.ListingsCount,
+            SubCategoryCount = x.SubCategoriesCount,
+            Url = BuildUrl(
+                culture: culture,
+                citySlug: citySlug,
+                categorySlug: x.Slug)
+        };
     }
+
+    private static CityItemVm MapCityItem(dynamic x, string culture)
+    {
+        return new CityItemVm
+        {
+            Name = x.Name,
+            Slug = x.Slug,
+            RegionName = x.RegionName,
+            RegionSlug = x.RegionSlug,
+            ListingsCount = x.ListingsCount,
+            CategoriesCount = x.CategoriesCount,
+            Url = BuildUrl(
+                culture: culture,
+                citySlug: x.Slug)
+        };
+    }
+
+    private static ListingListItemVm MapListingItem(
+        dynamic x,
+        string culture,
+        string? citySlug = null,
+        string? categorySlug = null,
+        string? subCategorySlug = null)
+    {
+        return new ListingListItemVm
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Slug = x.Slug,
+            Description = x.Description,
+            Url = BuildUrl(
+                culture: culture,
+                citySlug: citySlug,
+                categorySlug: categorySlug,
+                subCategorySlug: subCategorySlug,
+                listingSlug: x.Slug,
+                listingId: x.Id)
+        };
+    }
+
+    private static string BuildUrl(
+        string? culture = null,
+        string? citySlug = null,
+        string? categorySlug = null,
+        string? subCategorySlug = null,
+        string? listingSlug = null,
+        int? listingId = null)
+    {
+        var parts = new List<string>();
+
+        AddIfHasValue(parts, culture);
+        AddIfHasValue(parts, citySlug);
+        AddIfHasValue(parts, categorySlug);
+        AddIfHasValue(parts, subCategorySlug);
+
+        if (!string.IsNullOrWhiteSpace(listingSlug) && listingId.HasValue)
+        {
+            parts.Add($"{listingSlug}-{listingId.Value}");
+        }
+        else if (!string.IsNullOrWhiteSpace(listingSlug))
+        {
+            parts.Add(listingSlug);
+        }
+        else if (listingId.HasValue)
+        {
+            parts.Add(listingId.Value.ToString());
+        }
+
+        return "/" + string.Join("/", parts);
+    }
+
+    private static IReadOnlyList<BreadcrumbItemVm> BuildBreadcrumbs(
+        string? culture,
+        params BreadcrumbSegment[] segments)
+    {
+        var validSegments = segments
+            .Where(x => !string.IsNullOrWhiteSpace(x.Title))
+            .ToList();
+
+        if (validSegments.Count == 0)
+            return [];
+
+        var items = new List<BreadcrumbItemVm>(validSegments.Count);
+
+        for (var i = 0; i < validSegments.Count; i++)
+        {
+            items.Add(new BreadcrumbItemVm
+            {
+                Title = validSegments[i].Title,
+                Url = i == validSegments.Count - 1
+                    ? null
+                    : BuildBreadcrumbUrl(culture, validSegments, i),
+                IsCurrent = i == validSegments.Count - 1
+            });
+        }
+
+        return items;
+    }
+
+    private static string BuildBreadcrumbUrl(
+        string? culture,
+        IReadOnlyList<BreadcrumbSegment> segments,
+        int lastIndexInclusive)
+    {
+        var parts = new List<string>();
+
+        AddIfHasValue(parts, culture);
+
+        for (var i = 0; i <= lastIndexInclusive; i++)
+        {
+            AddIfHasValue(parts, segments[i].Slug);
+        }
+
+        return "/" + string.Join("/", parts);
+    }
+
+    private static BreadcrumbSegment Crumb(string title, string? slug = null)
+    {
+        return new BreadcrumbSegment(title, slug);
+    }
+
+    private static void AddIfHasValue(List<string> parts, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            parts.Add(value);
+        }
+    }
+
+    private sealed record BreadcrumbSegment(string Title, string? Slug);
 }
