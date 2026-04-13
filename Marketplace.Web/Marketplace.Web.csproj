@@ -45,7 +45,6 @@
     <Folder Include="Areas/Admin/Views/SubCategories/" />
     <Folder Include="Mappings/" />
     <Folder Include="Models/Catalog/" />
-    <Folder Include="Models/City/" />
     <Folder Include="Models/Home/" />
     <Folder Include="Navigation/" />
     <Folder Include="Options/" />
