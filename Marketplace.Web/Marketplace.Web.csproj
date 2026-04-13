@@ -43,14 +43,23 @@
     <Folder Include="Areas/Admin/Views/Regions/" />
     <Folder Include="Areas/Admin/Views/Shared/" />
     <Folder Include="Areas/Admin/Views/SubCategories/" />
+    <Folder Include="Mappings/" />
     <Folder Include="Models/Catalog/" />
     <Folder Include="Models/City/" />
-    <Folder Include="Models/SubCategory/" />
-    <Folder Include="Models/UI/" />
+    <Folder Include="Models/Home/" />
+    <Folder Include="Navigation/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
-    <Folder Include="Views/Home/Sections/" />
-    <Folder Include="Views/Listings/DetailsSections/" />
+    <Folder Include="Views/Catalog/" />
+    <Folder Include="Views/Shared/Cards/" />
+    <Folder Include="Views/Shared/CatalogPartials/" />
+    <Folder Include="Views/Shared/Lists/" />
+    <Folder Include="wwwroot/css/pages/catalog/" />
+    <Folder Include="wwwroot/css/pages/home/" />
+    <Folder Include="wwwroot/css/pages/listings/" />
+    <Folder Include="wwwroot/js/admin/" />
+    <Folder Include="wwwroot/js/components/" />
+    <Folder Include="wwwroot/js/pages/" />
   </ItemGroup>
 
 </Project>

@@ -15,8 +15,8 @@ public class ListingDetailsPageVm
     public string CategoryName { get; init; } = default!;
     public string CategorySlug { get; init; } = default!;
 
-    public string SubcategoryName { get; init; } = default!;
-    public string SubcategorySlug { get; init; } = default!;
+    public string SubCategoryName { get; init; } = default!;
+    public string SubCategorySlug { get; init; } = default!;
 
     public string ListingSlug { get; init; } = default!;
 
@@ -49,7 +49,6 @@ public class ListingDetailsPageVm
         = Array.Empty<ListingImageVm>();
 
     // Service info
-    public string? PriceText { get; init; }
     public IReadOnlyCollection<string> ServiceFeatures { get; init; }
         = Array.Empty<string>();
 
@@ -58,8 +57,8 @@ public class ListingDetailsPageVm
         = Array.Empty<ListingReviewVm>();
 
     // Related content
-    public IReadOnlyCollection<ListingCardVm> RelatedListings { get; init; }
-        = Array.Empty<ListingCardVm>();
+    // public IReadOnlyCollection<ListingCardVm> RelatedListings { get; init; }
+    //     = Array.Empty<ListingCardVm>();
 
     // Navigation
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }

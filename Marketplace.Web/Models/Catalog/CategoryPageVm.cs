@@ -24,12 +24,12 @@ public class CategoryPageVm
     public int TotalSubCategoiesCount { get; init; }
 
     // 📊 Subcategories (дуже важливо для SEO)
-    public IReadOnlyCollection<SubCategoryItemVm> SubCategories { get; init; }
-        = Array.Empty<SubCategoryItemVm>();
+    public IReadOnlyCollection<SubCategoryCardVm> SubCategories { get; init; }
+        = Array.Empty<SubCategoryCardVm>();
 
     // 📦 Listings (якщо показуєш на цій сторінці)
-    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
-        = Array.Empty<ListingListItemVm>();
+    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
+        = Array.Empty<ListingCardVm>();
 
     // 🍞 Breadcrumbs
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }

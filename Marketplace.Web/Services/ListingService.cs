@@ -25,7 +25,6 @@ public class ListingService : IListingService
         string subCategorySlug,
         string listingSlug,
         int listingId,
-        BaseFilter filter,
         CancellationToken cancellationToken)
     {
         var listing = await _sender.Send(new GetListingByIdQuery(listingId), cancellationToken);
@@ -108,8 +107,8 @@ public class ListingService : IListingService
             CategoryName = listing.CategoryName,
             CategorySlug = listing.CategorySlug,
 
-            SubcategoryName = listing.SubCategoryName,
-            SubcategorySlug = listing.SubCategorySlug,
+            SubCategoryName = listing.SubCategoryName,
+            SubCategorySlug = listing.SubCategorySlug,
 
             ListingSlug = listing.Slug,
 

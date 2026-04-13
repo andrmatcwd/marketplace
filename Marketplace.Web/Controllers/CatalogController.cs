@@ -8,12 +8,10 @@ namespace Marketplace.Web.Controllers
 {
     public class CatalogController : Controller
     {
-        private readonly ISender _sender;
         private readonly ICatalogService _catalogService;
 
-        public CatalogController(ICatalogService catalogService, ISender sender)
+        public CatalogController(ICatalogService catalogService)
         {
-            _sender = sender;
             _catalogService = catalogService;
         }
 
@@ -96,13 +94,13 @@ namespace Marketplace.Web.Controllers
 
             this.SetSeo(new PageSeoData
             {
-                Title = $"{vm.SubcategoryName} у {vm.CityName}",
-                Description = $"{vm.SubcategoryName} у {vm.CityName}. Перелік виконавців і компаній.",
+                Title = $"{vm.SubCategoryName} у {vm.CityName}",
+                Description = $"{vm.SubCategoryName} у {vm.CityName}. Перелік виконавців і компаній.",
                 CanonicalUrl = Url.Action("Subcategory", "Catalog", new
                 {
                     city = vm.CitySlug,
                     category = vm.CategorySlug,
-                    subcategory = vm.SubcategorySlug
+                    subcategory = vm.SubCategorySlug
                 }, Request.Scheme),
                 Robots = "index,follow"
             });

@@ -11,20 +11,20 @@ public interface ICatalogService
 
     public Task<CityPageVm?> GetCityPageAsync(
         string culture,
-        string city,
+        string citySlag,
         BaseFilter filter,
         CancellationToken cancellationToken);
 
     public Task<CategoryPageVm?> GetCategoryPageAsync(
         string culture,
-        string city,
+        string citySlag,
         string categorySlug,
         BaseFilter filter,
         CancellationToken cancellationToken);
 
     public Task<SubCategoryPageVm?> GetSubCategoryPageAsync(
         string culture,
-        string city,
+        string citySlag,
         string categorySlug,
         string subCategorySlug,
         BaseFilter filter,

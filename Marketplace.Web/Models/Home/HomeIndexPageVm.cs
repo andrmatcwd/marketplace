@@ -1,13 +1,12 @@
 using System;
-using Marketplace.Web.Areas.Admin.Models.Listings;
 using Marketplace.Web.Models.Category;
 using Marketplace.Web.Models.City;
 using Marketplace.Web.Models.Common;
 using Marketplace.Web.Models.Listings;
 
-namespace Marketplace.Web.Models.Catalog;
+namespace Marketplace.Web.Models.Home;
 
-public class CatalogIndexPageVm
+public class HomeIndexPageVm
 {
     public string H1 { get; init; } = default!;
     public string? IntroText { get; init; }

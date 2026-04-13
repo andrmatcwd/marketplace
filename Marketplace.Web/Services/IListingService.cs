@@ -7,11 +7,10 @@ namespace Marketplace.Web.Services;
 public interface IListingService
 {
     public Task<ListingDetailsPageVm?> GetListingDetailsPageAsync(
-        string city,
+        string citySlag,
         string categorySlug,
         string subCategorySlug,
         string listingSlug,
         int listingId,
-        BaseFilter filter,
         CancellationToken cancellationToken);
 }

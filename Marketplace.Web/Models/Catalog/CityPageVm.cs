@@ -20,12 +20,12 @@ public class CityPageVm
     public int TotalCategoriesCount { get; init; }
 
     // 📂 Categories (ГОЛОВНЕ на цій сторінці)
-    public IReadOnlyCollection<CategoryItemVm> Categories { get; init; }
-        = Array.Empty<CategoryItemVm>();
+    public IReadOnlyCollection<CategoryCardVm> Categories { get; init; }
+        = Array.Empty<CategoryCardVm>();
 
     // ⭐ (опціонально) популярні або нові лістинги
-    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
-        = Array.Empty<ListingListItemVm>();
+    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
+        = Array.Empty<ListingCardVm>();
 
     // 🍞 Breadcrumbs
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }

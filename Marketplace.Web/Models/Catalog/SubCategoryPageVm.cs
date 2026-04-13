@@ -16,8 +16,8 @@ public class SubCategoryPageVm
     public string CategorySlug { get; init; } = default!;
 
     // Subcategory
-    public string SubcategoryName { get; init; } = default!;
-    public string SubcategorySlug { get; init; } = default!;
+    public string SubCategoryName { get; init; } = default!;
+    public string SubCategorySlug { get; init; } = default!;
 
     // SEO / Content
     public string H1 { get; init; } = default!;
@@ -30,8 +30,8 @@ public class SubCategoryPageVm
     // public BaseFilter Filter { get; init; } = new();
 
     // Results
-    public IReadOnlyCollection<ListingListItemVm> Listings { get; init; }
-        = Array.Empty<ListingListItemVm>();
+    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
+        = Array.Empty<ListingCardVm>();
 
     // Optional internal linking
     // public IReadOnlyCollection<SubcategoryLinkVm> RelatedSubcategories { get; init; }

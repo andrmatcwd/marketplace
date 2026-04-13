@@ -9,89 +9,96 @@ namespace Marketplace.Web.Controllers;
 
 public sealed class ListingsController : Controller
 {
-    [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] ListingsFilterRequest request, CancellationToken cancellationToken)
+    private readonly IListingService _listingService;
+
+    public ListingsController(IListingService listingService)
     {
-        this.SetSeo(new PageSeoData
-            {
-                Title = "Каталог послуг",
-                Description = "Знайдіть послуги за містом, категорією та підкатегорією.",
-                CanonicalUrl = Url.Action("Index", "Catalog", null, Request.Scheme),
-                Robots = "index,follow"
-            });
-
-        var model = new ListingsPageViewModel
-        {
-            Filters = request,
-            Categories = new List<CategoryViewModel>()
-            {
-                new CategoryViewModel { Value = "category-1", Label = "Категорія 1" },
-                new CategoryViewModel { Value = "category-2", Label = "Категорія 2" },
-                new CategoryViewModel { Value = "category-3", Label = "Категорія 3" }
-            },
-            Results = new PagedResult<ListingViewModel>
-            {
-                Items = new List<ListingViewModel>(),
-                Page = request.Page,
-                PageSize = request.PageSize,
-                TotalItems = 0,
-                TotalPages = 0
-            }
-        };
-
-        return View(model);
+        _listingService = listingService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> List([FromQuery] ListingsFilterRequest request, CancellationToken cancellationToken)
-    {
+    // [HttpGet]
+    // public async Task<IActionResult> Index([FromQuery] ListingsFilter request, CancellationToken cancellationToken)
+    // {
+    //     this.SetSeo(new PageSeoData
+    //         {
+    //             Title = "Каталог послуг",
+    //             Description = "Знайдіть послуги за містом, категорією та підкатегорією.",
+    //             CanonicalUrl = Url.Action("Index", "Catalog", null, Request.Scheme),
+    //             Robots = "index,follow"
+    //         });
+
+    //     var model = new ListingDetailsPageVm
+    //     {
+            
+    //     };
+
+    //     return View(model);
+    // }
+
+    // [HttpGet]
+    // public async Task<IActionResult> List([FromQuery] ListingsFilterRequest request, CancellationToken cancellationToken)
+    // {
         
-        var model = new ListingsPageViewModel
-        {
-            Filters = request,
-            Categories = new List<CategoryViewModel>()
-            {
-                new CategoryViewModel { Value = "category-1", Label = "Категорія 1" },
-                new CategoryViewModel { Value = "category-2", Label = "Категорія 2" },
-                new CategoryViewModel { Value = "category-3", Label = "Категорія 3" }
-            },
-            Results = new PagedResult<ListingViewModel>
-            {
-                Items = new List<ListingViewModel>(),
-                Page = request.Page,
-                PageSize = request.PageSize,
-                TotalItems = 0,
-                TotalPages = 0
-            }
-        };
+    //     var model = new ListingsPageViewModel
+    //     {
+    //         Filters = request,
+    //         Categories = new List<CategoryViewModel>()
+    //         {
+    //             new CategoryViewModel { Value = "category-1", Label = "Категорія 1" },
+    //             new CategoryViewModel { Value = "category-2", Label = "Категорія 2" },
+    //             new CategoryViewModel { Value = "category-3", Label = "Категорія 3" }
+    //         },
+    //         Results = new PagedResult<ListingViewModel>
+    //         {
+    //             Items = new List<ListingViewModel>(),
+    //             Page = request.Page,
+    //             PageSize = request.PageSize,
+    //             TotalItems = 0,
+    //             TotalPages = 0
+    //         }
+    //     };
 
-        return PartialView("_ListingsGrid", model);
-    }
+    //     return PartialView("_ListingsGrid", model);
+    // }
 
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> Details(
+        string citySlag,
+        string categorySlag,
+        string subCategorySlag,
+        string listingSlug,
+        int id,
+        CancellationToken cancellationToken)
     {
-        var service = new ListingDetailsPageVm
-        {
-            Id = id,
-            Title = $"Listing {id}",
-            Description = $"Description for listing {id}",
-            CityName = "City",
-            CitySlug = "city",
-            CategoryName = "Category",
-            CategorySlug = "category",
-            SubcategoryName = "Subcategory",
-            SubcategorySlug = "subcategory",
-            ListingSlug = $"listing-{id}",
-            Images = new List<ListingImageVm>(),
-            Reviews = new List<ListingReviewVm>(),
-            RelatedListings = new List<ListingCardVm>()
-        };
 
-        if (service is null)
+        var listing = await _listingService.GetListingDetailsPageAsync(
+            citySlag,
+            categorySlag,
+            subCategorySlag,
+            listingSlug,
+            id,
+            cancellationToken
+        );
+
+        if (listing is null)
             return NotFound();
 
-        return View(service);
+        this.SetSeo(new PageSeoData
+        {
+            Title = $"{listing.Title} — {listing.SubCategoryName} у {listing.CityName}",
+            Description = listing.Description,
+            CanonicalUrl = Url.RouteUrl("listing-details", new
+            {
+                city = listing.CitySlug,
+                category = listing.CategorySlug,
+                subCategory = listing.SubCategorySlug,
+                slug = listing.ListingSlug,
+                id = listing.Id
+            }, Request.Scheme),
+            Robots = "index,follow"
+        });
+
+        return View(listing);
     }
 
     // public async Task<IActionResult> Details(
