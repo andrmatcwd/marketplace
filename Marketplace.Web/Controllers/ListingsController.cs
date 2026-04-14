@@ -29,14 +29,14 @@ public sealed class ListingsController : Controller
         _structuredDataBuilder = structuredDataBuilder;
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}/{serviceSlug}")]
+    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}/{serviceSlug}/{id:guid}")]
     public async Task<IActionResult> Details(
         string culture,
         string citySlug,
         string categorySlug,
         string subCategorySlug,
         string serviceSlug,
-        //Guid id,
+        Guid id,
         CancellationToken cancellationToken)
     {
         culture = CultureHelper.Normalize(culture);
@@ -47,7 +47,7 @@ public sealed class ListingsController : Controller
             categorySlug,
             subCategorySlug,
             serviceSlug,
-            Guid.Empty,
+            id,
             cancellationToken);
 
         if (vm is null)

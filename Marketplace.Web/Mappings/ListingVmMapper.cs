@@ -104,7 +104,7 @@ public sealed class ListingVmMapper : IListingVmMapper
         {
             Id = entity.Id,
             Title = entity.Title,
-            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}-{entity.Id}",
+            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}/{entity.Id}",
             ImageUrl = entity.Images
                 .OrderBy(x => x.SortOrder)
                 .FirstOrDefault(x => x.IsPrimary)?.Url

@@ -36,6 +36,11 @@ public sealed class SeoMetaTagHelper : TagHelper
             html.Add($"""<link rel="canonical" href="{Encode(Model.CanonicalUrl)}" />""");
         }
 
+        foreach (var link in Model.Hreflangs)
+        {
+            html.Add($"""<link rel="alternate" hreflang="{Encode(link.Lang)}" href="{Encode(link.Url)}" />""");
+        }
+
         if (!string.IsNullOrWhiteSpace(Model.OgTitle))
         {
             html.Add($"""<meta property="og:title" content="{Encode(Model.OgTitle)}" />""");

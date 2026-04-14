@@ -18,5 +18,5 @@ public sealed class CatalogUrlBuilder : ICatalogUrlBuilder
         => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}";
 
     public string BuildListingUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, string listingSlug, Guid id)
-        => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}-{id}";
+        => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}/{id}";
 }

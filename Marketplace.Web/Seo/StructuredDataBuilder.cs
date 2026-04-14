@@ -10,6 +10,28 @@ public sealed class StructuredDataBuilder
         PropertyNamingPolicy = null
     };
 
+    public string BuildItemList(IEnumerable<(string Name, string Url)> items)
+    {
+        var list = items
+            .Select((x, index) => new Dictionary<string, object?>
+            {
+                ["@type"] = "ListItem",
+                ["position"] = index + 1,
+                ["name"] = x.Name,
+                ["url"] = x.Url
+            })
+            .ToList();
+
+        var payload = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "ItemList",
+            ["itemListElement"] = list
+        };
+
+        return JsonSerializer.Serialize(payload, JsonOptions);
+    }
+
     public string BuildListing(ListingDetailsPageVm model, string absoluteUrl, string? absoluteImageUrl = null)
     {
         var payload = new Dictionary<string, object?>

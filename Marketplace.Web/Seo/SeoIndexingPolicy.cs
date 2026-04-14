@@ -16,6 +16,12 @@ public sealed class SeoIndexingPolicy
             return true;
         }
 
+        if (!string.IsNullOrWhiteSpace(filter.Sort) &&
+            !string.Equals(filter.Sort, "rating", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
         return false;
     }
 

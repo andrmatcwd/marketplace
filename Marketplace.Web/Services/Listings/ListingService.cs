@@ -38,7 +38,7 @@ public sealed class ListingService : IListingService
             .Include(x => x.City)
             .Include(x => x.Images)
             .Include(x => x.Reviews)
-            .FirstOrDefaultAsync(x => x.IsPublished, cancellationToken);
+            .FirstOrDefaultAsync(x => x.IsPublished && x.Id == id, cancellationToken);
 
         if (entity is null)
         {
@@ -62,7 +62,7 @@ public sealed class ListingService : IListingService
                 x.CityId == entity.CityId &&
                 x.SubCategoryId == entity.SubCategoryId)
             .OrderByDescending(x => x.Rating)
-            //.ThenByDescending(x => x.CreatedAtUtc)
+            .ThenByDescending(x => x.ReviewsCount)
             .Take(6)
             .ToListAsync(cancellationToken);
 

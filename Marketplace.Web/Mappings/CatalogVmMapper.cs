@@ -17,7 +17,7 @@ public sealed class CatalogVmMapper : ICatalogVmMapper
         {
             Id = entity.Id,
             Title = entity.Title,
-            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}-{0}",
+            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}/{entity.Id}",
             ImageUrl = entity.Images
                 .OrderBy(x => x.SortOrder)
                 .FirstOrDefault(x => x.IsPrimary)?.Url

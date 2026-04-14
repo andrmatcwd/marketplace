@@ -75,6 +75,7 @@ builder.Services.AddScoped<MetaBuilder>();
 builder.Services.AddScoped<StructuredDataBuilder>();
 builder.Services.AddScoped<SeoPaginationBuilder>();
 builder.Services.AddScoped<SeoIndexingPolicy>();
+builder.Services.AddScoped<HreflangBuilder>();
 
 builder.Services.AddScoped<DbSeeder>();
 

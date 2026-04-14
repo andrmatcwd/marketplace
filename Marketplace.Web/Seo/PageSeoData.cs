@@ -25,26 +25,11 @@ public sealed class PageSeoData
     public string? PrevUrl { get; set; }
     public string? NextUrl { get; set; }
 
-    public static PageSeoData CreateDefault(string title, string? description = null)
-    {
-        return new PageSeoData
-        {
-            Title = title,
-            Description = description,
-            OgTitle = title,
-            OgDescription = description
-        };
-    }
+    public IReadOnlyCollection<HreflangLink> Hreflangs { get; set; } = Array.Empty<HreflangLink>();
+}
 
-    public static PageSeoData CreateNoIndex(string title, string? description = null)
-    {
-        return new PageSeoData
-        {
-            Title = title,
-            Description = description,
-            Robots = "noindex, nofollow",
-            OgTitle = title,
-            OgDescription = description
-        };
-    }
+public sealed class HreflangLink
+{
+    public string Lang { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
 }
