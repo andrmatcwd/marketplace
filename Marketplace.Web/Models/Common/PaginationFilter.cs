@@ -5,7 +5,7 @@ public sealed class PaginationFilter
     private const int MaxPageSize = 60;
 
     private int _page = 1;
-    private int _pageSize = 12;
+    private int _pageSize = 3;
 
     public int Page
     {

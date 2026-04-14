@@ -35,7 +35,7 @@ public class SubCategoriesController : Controller
             Search = search,
             //CategoryId = categoryId,
             Page = 1,
-            PageSize = int.MaxValue
+            PageSize = 3
         }), cancellationToken);
 
         ViewBag.Categories = await GetCategoriesSelectList(cancellationToken);

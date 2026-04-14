@@ -1,19 +1,29 @@
 :root {
-    --app-bg: #f6f6f4;
+    /* Base */
+    --app-bg: #f5f7fb;
     --app-surface: #ffffff;
-    --app-surface-muted: #f1efeb;
-    --app-border: #e5e1da;
+    --app-surface-muted: #eef2f7;
+    --app-border: #e1e6ef;
 
-    --app-text: #1f1f1c;
-    --app-text-muted: #6f6b64;
+    /* Text */
+    --app-text: #1e293b;
+    --app-text-muted: #64748b;
 
+    /* Accent */
+    --app-primary: #3b82f6;
+    --app-primary-hover: #2563eb;
+    --app-primary-light: #dbeafe;
+
+    /* Radius */
     --app-radius-sm: 10px;
     --app-radius-md: 14px;
-    --app-radius-lg: 20px;
+    --app-radius-lg: 18px;
 
-    --app-shadow-sm: 0 6px 20px rgba(31, 31, 28, 0.04);
-    --app-shadow-md: 0 12px 32px rgba(31, 31, 28, 0.06);
+    /* Shadows */
+    --app-shadow-sm: 0 4px 16px rgba(30, 41, 59, 0.05);
+    --app-shadow-md: 0 10px 30px rgba(30, 41, 59, 0.08);
 
+    /* Spacing */
     --app-space-1: 4px;
     --app-space-2: 8px;
     --app-space-3: 12px;

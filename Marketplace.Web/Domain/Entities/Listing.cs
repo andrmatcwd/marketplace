@@ -15,6 +15,9 @@ public sealed class Listing
     public string? Email { get; set; }
     public string? Website { get; set; }
 
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+
     public double Rating { get; set; }
     public int ReviewsCount { get; set; }
 

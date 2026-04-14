@@ -7,25 +7,26 @@
 }
 
 .btn-app {
-    background: var(--app-text);
-    color: #fff;
-    border: 1px solid var(--app-text);
+    background: var(--app-primary);
+    color: #ffffff;
+    border: 1px solid var(--app-primary);
 }
 
 .btn-app:hover,
 .btn-app:focus {
-    background: #2a2a26;
-    color: #fff;
+    background: var(--app-primary-hover);
+    border-color: var(--app-primary-hover);
+    color: #ffffff;
 }
 
 .btn-app-outline {
-    background: var(--app-surface);
-    color: var(--app-text);
-    border: 1px solid var(--app-border);
+    background: transparent;
+    color: var(--app-primary);
+    border: 1px solid var(--app-primary);
 }
 
 .btn-app-outline:hover,
 .btn-app-outline:focus {
-    background: var(--app-surface-muted);
-    color: var(--app-text);
+    background: var(--app-primary-light);
+    color: var(--app-primary);
 }

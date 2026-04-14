@@ -31,7 +31,7 @@ public class RegionsController : Controller
         {
             Search = search,
             Page = 1,
-            PageSize = int.MaxValue
+            PageSize = 3
         }), cancellationToken);
 
         var model = new RegionIndexVm

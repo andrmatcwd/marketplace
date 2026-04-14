@@ -50,4 +50,9 @@ public sealed class ListingDetailsPageVm
     public bool HasShortDescription => !string.IsNullOrWhiteSpace(ShortDescription);
     public bool HasAddress => !string.IsNullOrWhiteSpace(Address);
     public string RatingFormatted => Rating > 0 ? Rating.ToString("0.0") : string.Empty;
+
+    public double? Latitude { get; set; }
+public double? Longitude { get; set; }
+
+public bool HasCoordinates => Latitude.HasValue && Longitude.HasValue;
 }

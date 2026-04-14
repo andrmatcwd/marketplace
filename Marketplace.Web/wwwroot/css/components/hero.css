@@ -11,3 +11,16 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.page-title {
+    color: var(--app-text);
+}
+
+.page-intro {
+    color: var(--app-text-muted);
+    max-width: 760px;
+}
+
+.page-hero .page-title + .page-intro {
+    margin-top: 4px;
+}

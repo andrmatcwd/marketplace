@@ -13,6 +13,10 @@
     font-size: 0.94rem;
 }
 
+.app-breadcrumbs .breadcrumb-item a:hover {
+    color: var(--app-primary);
+}
+
 .app-breadcrumbs .breadcrumb-item.active {
     color: var(--app-text);
 }

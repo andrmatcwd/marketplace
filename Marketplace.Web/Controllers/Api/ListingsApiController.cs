@@ -61,7 +61,7 @@ public sealed class ListingsApiController : ControllerBase
             {
                 Search = search,
                 Page = 1,
-                PageSize = 8
+                PageSize =3
             },
             cancellationToken);
 

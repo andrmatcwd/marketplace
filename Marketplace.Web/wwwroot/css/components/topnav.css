@@ -1,9 +1,11 @@
 .app-navbar {
     min-height: 72px;
     padding: 8px 0;
+    background: #ffffff;
 }
 
 .app-brand {
+    color: var(--app-primary);
     font-weight: 700;
     letter-spacing: -0.02em;
     font-size: 1.1rem;
@@ -12,11 +14,12 @@
 .app-nav-link {
     color: var(--app-text-muted);
     font-weight: 500;
+    transition: color 0.2s ease;
 }
 
 .app-nav-link:hover,
 .app-nav-link:focus {
-    color: var(--app-text);
+    color: var(--app-primary);
 }
 
 .language-switcher {
@@ -45,4 +48,11 @@
     padding: 10px 12px;
     border-radius: 12px;
     font-weight: 600;
+    color: var(--app-text-muted);
+    transition: 0.2s ease;
+}
+
+.mobile-bottom-link:hover {
+    background: var(--app-primary-light);
+    color: var(--app-primary);
 }

@@ -36,7 +36,7 @@ public class CitiesController : Controller
         {
             Search = search,
             Page = 1,
-            PageSize = int.MaxValue
+            PageSize = 3
         }), cancellationToken);
 
 

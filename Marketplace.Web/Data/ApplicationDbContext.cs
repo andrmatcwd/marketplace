@@ -119,6 +119,9 @@ public sealed class ApplicationDbContext : IdentityDbContext
             entity.HasIndex(x => x.Slug)
                 .IsUnique();
 
+            entity.Property(x => x.Latitude);
+            entity.Property(x => x.Longitude);
+
             entity.HasIndex(x => x.IsPublished);
 
             entity.HasOne(x => x.Category)

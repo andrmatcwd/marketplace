@@ -10,7 +10,7 @@ public sealed class CatalogFilterVm
     public string? Sort { get; set; }
 
     public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 12;
+    public int PageSize { get; set; } = 3;
 
     public string ResetUrl { get; set; } = "/catalog";
 

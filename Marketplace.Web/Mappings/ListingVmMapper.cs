@@ -49,6 +49,9 @@ public sealed class ListingVmMapper : IListingVmMapper
             Rating = entity.Rating,
             ReviewsCount = entity.ReviewsCount,
 
+            Latitude = entity.Latitude,
+            Longitude = entity.Longitude,
+
             Contact = new ListingContactVm
             {
                 ContactName = entity.Title,

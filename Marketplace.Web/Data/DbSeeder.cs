@@ -1,158 +1,162 @@
 using Marketplace.Web.Domain.Entities;
-using Marketplace.Web.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Data;
 
 public sealed class DbSeeder
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _db;
 
-    public DbSeeder(ApplicationDbContext dbContext)
+    public DbSeeder(ApplicationDbContext db)
     {
-        _dbContext = dbContext;
+        _db = db;
     }
 
-    public async Task SeedAsync(CancellationToken cancellationToken = default)
+    public async Task SeedAsync()
     {
-        if (await _dbContext.Cities.AnyAsync(cancellationToken))
-        {
+        if (await _db.Cities.AnyAsync())
             return;
-        }
 
-        var kyiv = new City
-        {
-            Id = Guid.NewGuid(),
-            Name = "Kyiv",
-            Slug = SlugHelper.Generate("Kyiv"),
-            Description = "Capital city"
-        };
+        // ----------------------
+        // Cities
+        // ----------------------
+        var kyiv = new City { Id = Guid.NewGuid(), Name = "Kyiv", Slug = "kyiv", IsPublished = true };
+        var lviv = new City { Id = Guid.NewGuid(), Name = "Lviv", Slug = "lviv", IsPublished = true };
+        var odessa = new City { Id = Guid.NewGuid(), Name = "Odessa", Slug = "odessa", IsPublished = true };
+        var kharkiv = new City { Id = Guid.NewGuid(), Name = "Kharkiv", Slug = "kharkiv", IsPublished = true };
 
-        var lviv = new City
-        {
-            Id = Guid.NewGuid(),
-            Name = "Lviv",
-            Slug = SlugHelper.Generate("Lviv"),
-            Description = "Cultural city"
-        };
+        _db.Cities.AddRange(kyiv, lviv, odessa, kharkiv);
 
-        var repair = new Category
-        {
-            Id = Guid.NewGuid(),
-            Name = "Repair",
-            Slug = SlugHelper.Generate("Repair"),
-            Description = "Repair and renovation services"
-        };
+        // ----------------------
+        // Categories
+        // ----------------------
+        var medicine = new Category { Id = Guid.NewGuid(), Name = "Medicine", Slug = "medicine", IsPublished = true };
+        var beauty = new Category { Id = Guid.NewGuid(), Name = "Beauty", Slug = "beauty", IsPublished = true };
+        var home = new Category { Id = Guid.NewGuid(), Name = "Home Services", Slug = "home-services", IsPublished = true };
 
-        var medicine = new Category
-        {
-            Id = Guid.NewGuid(),
-            Name = "Medicine",
-            Slug = SlugHelper.Generate("Medicine"),
-            Description = "Healthcare and clinics"
-        };
+        _db.Categories.AddRange(medicine, beauty, home);
 
-        var finishing = new SubCategory
-        {
-            Id = Guid.NewGuid(),
-            Name = "Finishing works",
-            Slug = SlugHelper.Generate("Finishing works"),
-            Description = "Interior finishing services",
-            CategoryId = repair.Id
-        };
-
+        // ----------------------
+        // SubCategories
+        // ----------------------
         var dentistry = new SubCategory
         {
             Id = Guid.NewGuid(),
             Name = "Dentistry",
-            Slug = SlugHelper.Generate("Dentistry"),
-            Description = "Dental services",
-            CategoryId = medicine.Id
-        };
-
-        var repairListing = new Listing
-        {
-            Id = Guid.NewGuid(),
-            Title = "Apartment renovation specialist",
-            Slug = SlugHelper.Generate("Apartment renovation specialist"),
-            ShortDescription = "Turnkey apartment renovation in Kyiv.",
-            Description = "<p>Complete apartment renovation services for homes and offices.</p>",
-            Address = "Kyiv, Ukraine",
-            Phone = "+380000000000",
-            Email = "hello@example.com",
-            Website = "https://example.com",
-            Rating = 4.8,
-            ReviewsCount = 12,
-            CategoryId = repair.Id,
-            SubCategoryId = finishing.Id,
-            CityId = kyiv.Id,
+            Slug = "dentistry",
+            Category = medicine,
             IsPublished = true
         };
 
-        var dentalListing = new Listing
+        var therapy = new SubCategory
         {
             Id = Guid.NewGuid(),
-            Title = "Private dental clinic",
-            Slug = SlugHelper.Generate("Private dental clinic"),
-            ShortDescription = "Modern dental treatment in Lviv.",
-            Description = "<p>Modern diagnostics and treatment for adults and children.</p>",
-            Address = "Lviv, Ukraine",
-            Phone = "+380111111111",
-            Email = "clinic@example.com",
-            Website = "https://clinic.example.com",
-            Rating = 4.9,
-            ReviewsCount = 18,
-            CategoryId = medicine.Id,
-            SubCategoryId = dentistry.Id,
-            CityId = lviv.Id,
+            Name = "Therapy",
+            Slug = "therapy",
+            Category = medicine,
             IsPublished = true
         };
 
-        var repairImage = new ListingImage
+        var cosmetology = new SubCategory
         {
             Id = Guid.NewGuid(),
-            ListingId = repairListing.Id,
-            Url = "/img/placeholders/listing-default.jpg",
-            Alt = repairListing.Title,
-            IsPrimary = true,
-            SortOrder = 0
+            Name = "Cosmetology",
+            Slug = "cosmetology",
+            Category = beauty,
+            IsPublished = true
         };
 
-        var dentalImage = new ListingImage
+        var cleaning = new SubCategory
         {
             Id = Guid.NewGuid(),
-            ListingId = dentalListing.Id,
-            Url = "/img/placeholders/listing-default.jpg",
-            Alt = dentalListing.Title,
-            IsPrimary = true,
-            SortOrder = 0
+            Name = "Cleaning",
+            Slug = "cleaning",
+            Category = home,
+            IsPublished = true
         };
 
-        var review1 = new ListingReview
+        _db.SubCategories.AddRange(dentistry, therapy, cosmetology, cleaning);
+
+        // ----------------------
+        // Listings
+        // ----------------------
+        var random = new Random();
+
+        var cities = new[] { kyiv, lviv, odessa, kharkiv };
+        var subCategories = new[] { dentistry, therapy, cosmetology, cleaning };
+
+        var listings = new List<Listing>();
+
+        for (int i = 1; i <= 40; i++)
         {
-            Id = Guid.NewGuid(),
-            ListingId = repairListing.Id,
-            AuthorName = "Olena",
-            Text = "Great quality and very clear communication.",
-            Rating = 5.0
-        };
+            var city = cities[random.Next(cities.Length)];
+            var sub = subCategories[random.Next(subCategories.Length)];
 
-        var review2 = new ListingReview
-        {
-            Id = Guid.NewGuid(),
-            ListingId = dentalListing.Id,
-            AuthorName = "Andrii",
-            Text = "Very professional doctors and modern equipment.",
-            Rating = 4.9
-        };
+            var title = $"{sub.Name} Service {i} in {city.Name}";
 
-        _dbContext.Cities.AddRange(kyiv, lviv);
-        _dbContext.Categories.AddRange(repair, medicine);
-        _dbContext.SubCategories.AddRange(finishing, dentistry);
-        _dbContext.Listings.AddRange(repairListing, dentalListing);
-        _dbContext.ListingImages.AddRange(repairImage, dentalImage);
-        _dbContext.ListingReviews.AddRange(review1, review2);
+            var listing = new Listing
+            {
+                Id = Guid.NewGuid(),
+                Title = title,
+                Slug = GenerateSlug(title),
+                ShortDescription = "Professional service with high quality and great reviews.",
+                Description = "<p>This is a detailed description of the service. It is SEO-friendly and contains useful information.</p>",
+                Address = $"{city.Name} center",
+                Phone = "+380991112233",
+                Email = "info@example.com",
+                Website = "https://example.com",
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+                Rating = Math.Round(random.NextDouble() * 2 + 3, 1), // 3.0–5.0
+                ReviewsCount = random.Next(5, 120),
+
+                Latitude = 49.8397,
+                Longitude = 24.0297,
+
+                IsPublished = true,
+                CreatedAtUtc = DateTime.UtcNow.AddDays(-random.Next(0, 200)),
+
+                City = city,
+                Category = sub.Category,
+                SubCategory = sub
+            };
+
+            // Images
+            listing.Images = new List<ListingImage>
+            {
+                new ListingImage
+                {
+                    Id = Guid.NewGuid(),
+                    Url = "/img/placeholders/listing-default.jpg",
+                    Alt = listing.Title
+                }
+            };
+
+            // Reviews
+            listing.Reviews = Enumerable.Range(1, random.Next(2, 6))
+                .Select(x => new ListingReview
+                {
+                    Id = Guid.NewGuid(),
+                    AuthorName = $"User {x}",
+                    Rating = Math.Round(random.NextDouble() * 2 + 3, 1),
+                    Text = "Great service, highly recommend!",
+                    CreatedAtUtc = DateTime.UtcNow.AddDays(-random.Next(0, 100))
+                }).ToList();
+
+            listings.Add(listing);
+        }
+
+        _db.Listings.AddRange(listings);
+
+        await _db.SaveChangesAsync();
+    }
+
+    private static string GenerateSlug(string text)
+    {
+        return text
+            .ToLower()
+            .Replace(" ", "-")
+            .Replace(",", "")
+            .Replace(".", "")
+            .Replace("/", "-");
     }
 }

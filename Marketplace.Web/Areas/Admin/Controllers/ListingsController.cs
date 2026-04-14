@@ -47,7 +47,7 @@ public class ListingsController : Controller
             //LocationId = locationId,
             //IsActive = true,
             Page = 1,
-            PageSize = int.MaxValue
+            PageSize = 3
         }), cancellationToken);
 
         await FillLookups(cancellationToken);

@@ -1,14 +1,31 @@
-﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+﻿@using Marketplace.Web.Options
+@using Microsoft.Extensions.Options
+@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+@inject IOptions<GoogleMapsOptions> GoogleMapsOptions
 
-@if (Model.HasAddress)
+@{
+    ViewData["Title"] = Model.Title;
+
+    var apiKey = GoogleMapsOptions.Value.ApiKey;
+}
+
+@if (Model.HasCoordinates)
 {
     <section class="app-card listing-map-card">
         <div class="listing-map-body">
             <h2 class="section-title">Location</h2>
-            <p class="section-description">@Model.Address</p>
 
-            <div class="listing-map-placeholder">
-                Map placeholder
+            @if (!string.IsNullOrWhiteSpace(Model.Address))
+            {
+                <p class="section-description">@Model.Address</p>
+            }
+
+            <div id="listingMap"
+                 class="listing-map-canvas"
+                 data-lat="@Model.Latitude!.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                 data-lng="@Model.Longitude!.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                 data-title="@Model.Title"
+                 data-address="@Model.Address">
             </div>
         </div>
     </section>
