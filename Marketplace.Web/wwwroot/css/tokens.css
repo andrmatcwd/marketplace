@@ -1,0 +1,27 @@
+:root {
+    --app-bg: #f6f6f4;
+    --app-surface: #ffffff;
+    --app-surface-muted: #f1efeb;
+    --app-border: #e5e1da;
+
+    --app-text: #1f1f1c;
+    --app-text-muted: #6f6b64;
+
+    --app-radius-sm: 10px;
+    --app-radius-md: 14px;
+    --app-radius-lg: 20px;
+
+    --app-shadow-sm: 0 6px 20px rgba(31, 31, 28, 0.04);
+    --app-shadow-md: 0 12px 32px rgba(31, 31, 28, 0.06);
+
+    --app-space-1: 4px;
+    --app-space-2: 8px;
+    --app-space-3: 12px;
+    --app-space-4: 16px;
+    --app-space-5: 20px;
+    --app-space-6: 24px;
+    --app-space-7: 32px;
+    --app-space-8: 40px;
+
+    --app-container: 1240px;
+}

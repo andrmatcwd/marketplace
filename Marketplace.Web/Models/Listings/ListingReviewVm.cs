@@ -1,11 +1,13 @@
-using System;
-
 namespace Marketplace.Web.Models.Listings;
 
-public class ListingReviewVm
+public sealed class ListingReviewVm
 {
-    public string AuthorName { get; init; } = default!;
-    public decimal Rating { get; init; }
-    public string? Text { get; init; }
-    public DateTime CreatedAtUtc { get; init; }
+    public string AuthorName { get; set; } = string.Empty;
+    public string? Text { get; set; }
+
+    public double Rating { get; set; }
+    public DateTimeOffset CreatedAtUtc { get; set; }
+
+    public bool HasText => !string.IsNullOrWhiteSpace(Text);
+    public string RatingFormatted => Rating > 0 ? Rating.ToString("0.0") : string.Empty;
 }

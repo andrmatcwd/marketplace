@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Listings.ListingCardVm>
+
+@if (Model != null && Model.Any())
+{
+    <div class="listings-grid">
+        @foreach (var item in Model)
+        {
+            <partial name="~/Views/Shared/Cards/_ListingCard.cshtml" model="item" />
+        }
+    </div>
+}
+else
+{
+    var emptyState = new Marketplace.Web.Models.Shared.EmptyStateVm
+        {
+            Title = "Nothing found",
+            Message = "Try changing filters or selecting another category."
+        };
+
+    <partial name="~/Views/Shared/Sections/_EmptyState.cshtml" model="emptyState" />
 }

@@ -1,0 +1,23 @@
+﻿@model Marketplace.Web.Models.Shared.PaginationVm
+
+@if (Model != null && Model.TotalPages > 1)
+{
+    <nav class="app-pagination" aria-label="Pagination">
+        <ul class="pagination mb-0">
+            <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                <a class="page-link" href="@Model.BuildUrl(Model.PreviousPage)">Previous</a>
+            </li>
+
+            @foreach (var page in Model.GetPages())
+            {
+                <li class="page-item @(page == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Model.BuildUrl(page)">@(@page)</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                <a class="page-link" href="@Model.BuildUrl(Model.NextPage)">Next</a>
+            </li>
+        </ul>
+    </nav>
+}

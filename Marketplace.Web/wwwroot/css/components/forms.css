@@ -1,0 +1,13 @@
+.app-input,
+.app-select {
+    border-radius: var(--app-radius-md);
+    border: 1px solid var(--app-border);
+    min-height: 46px;
+    box-shadow: none;
+}
+
+.app-input:focus,
+.app-select:focus {
+    border-color: #cfc8be;
+    box-shadow: none;
+}

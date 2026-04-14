@@ -1,5 +1,3 @@
-using System;
-
 namespace Marketplace.Web.Options;
 
 public sealed class GoogleMapsOptions

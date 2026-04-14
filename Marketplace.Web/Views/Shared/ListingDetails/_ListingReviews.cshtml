@@ -1,0 +1,30 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Listings.ListingReviewVm>
+
+@if (Model != null && Model.Any())
+{
+    <section class="app-card listing-reviews-card">
+        <div class="listing-reviews-body">
+            <h2 class="section-title">Reviews</h2>
+
+            <div class="listing-reviews-list">
+                @foreach (var review in Model)
+                {
+                    <article class="listing-review-item">
+                        <div class="listing-review-head">
+                            <strong>@review.AuthorName</strong>
+                            @if (review.Rating > 0)
+                            {
+                                <span>★ @review.RatingFormatted</span>
+                            }
+                        </div>
+
+                        @if (review.HasText)
+                        {
+                            <p>@review.Text</p>
+                        }
+                    </article>
+                }
+            </div>
+        </div>
+    </section>
+}

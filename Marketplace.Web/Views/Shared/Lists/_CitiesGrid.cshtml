@@ -1,5 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Cards.CityCardVm>
+
+@if (Model != null && Model.Any())
+{
+    <div class="taxonomy-grid">
+        @foreach (var item in Model)
+        {
+            <partial name="~/Views/Shared/Cards/_CityCard.cshtml" model="item" />
+        }
+    </div>
 }

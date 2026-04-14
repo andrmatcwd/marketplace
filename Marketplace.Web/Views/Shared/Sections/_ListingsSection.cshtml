@@ -1,0 +1,24 @@
+﻿@model Marketplace.Web.Models.Shared.ListingsSectionVm
+
+<section class="app-section">
+    <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="Model.Header" />
+
+    @if (Model.ShowMobileFilterButton)
+    {
+        <button type="button" class="btn btn-app-outline d-lg-none mb-3" data-mobile-filter-open>
+            Filters
+        </button>
+    }
+
+    <div class="d-none d-lg-block">
+        <partial name="~/Views/Shared/Sections/_FilterBar.cshtml" model="Model.Filter" />
+    </div>
+
+    @if (Model.ShowMobileFilterButton)
+    {
+        <partial name="~/Views/Shared/Sections/_MobileFilterDrawer.cshtml" model="Model.Filter" />
+    }
+
+    <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="Model.Listings" />
+    <partial name="~/Views/Shared/Sections/_Pagination.cshtml" model="Model.Pagination" />
+</section>

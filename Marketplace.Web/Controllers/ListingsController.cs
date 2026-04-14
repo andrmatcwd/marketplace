@@ -1,8 +1,8 @@
-using Marketplace.Web.Models.Category;
-using Marketplace.Web.Models.Common;
-using Marketplace.Web.Models.Listings;
+using Marketplace.Web.Navigation;
 using Marketplace.Web.Seo;
-using Marketplace.Web.Services;
+using Marketplace.Web.Services.Listings;
+using Marketplace.Web.Services.Seo;
+using Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Controllers;
@@ -10,145 +10,88 @@ namespace Marketplace.Web.Controllers;
 public sealed class ListingsController : Controller
 {
     private readonly IListingService _listingService;
+    private readonly ISeoService _seoService;
+    private readonly ICatalogUrlBuilder _urlBuilder;
+    private readonly IAbsoluteUrlBuilder _absoluteUrlBuilder;
+    private readonly StructuredDataBuilder _structuredDataBuilder;
 
-    public ListingsController(IListingService listingService)
+    public ListingsController(
+        IListingService listingService,
+        ISeoService seoService,
+        ICatalogUrlBuilder urlBuilder,
+        IAbsoluteUrlBuilder absoluteUrlBuilder,
+        StructuredDataBuilder structuredDataBuilder)
     {
         _listingService = listingService;
+        _seoService = seoService;
+        _urlBuilder = urlBuilder;
+        _absoluteUrlBuilder = absoluteUrlBuilder;
+        _structuredDataBuilder = structuredDataBuilder;
     }
 
-    // [HttpGet]
-    // public async Task<IActionResult> Index([FromQuery] ListingsFilter request, CancellationToken cancellationToken)
-    // {
-    //     this.SetSeo(new PageSeoData
-    //         {
-    //             Title = "Каталог послуг",
-    //             Description = "Знайдіть послуги за містом, категорією та підкатегорією.",
-    //             CanonicalUrl = Url.Action("Index", "Catalog", null, Request.Scheme),
-    //             Robots = "index,follow"
-    //         });
-
-    //     var model = new ListingDetailsPageVm
-    //     {
-            
-    //     };
-
-    //     return View(model);
-    // }
-
-    // [HttpGet]
-    // public async Task<IActionResult> List([FromQuery] ListingsFilterRequest request, CancellationToken cancellationToken)
-    // {
-        
-    //     var model = new ListingsPageViewModel
-    //     {
-    //         Filters = request,
-    //         Categories = new List<CategoryViewModel>()
-    //         {
-    //             new CategoryViewModel { Value = "category-1", Label = "Категорія 1" },
-    //             new CategoryViewModel { Value = "category-2", Label = "Категорія 2" },
-    //             new CategoryViewModel { Value = "category-3", Label = "Категорія 3" }
-    //         },
-    //         Results = new PagedResult<ListingViewModel>
-    //         {
-    //             Items = new List<ListingViewModel>(),
-    //             Page = request.Page,
-    //             PageSize = request.PageSize,
-    //             TotalItems = 0,
-    //             TotalPages = 0
-    //         }
-    //     };
-
-    //     return PartialView("_ListingsGrid", model);
-    // }
-
-    [HttpGet]
+    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}/{serviceSlug}")]
     public async Task<IActionResult> Details(
-        string citySlag,
-        string categorySlag,
-        string subCategorySlag,
-        string listingSlug,
-        int id,
+        string culture,
+        string citySlug,
+        string categorySlug,
+        string subCategorySlug,
+        string serviceSlug,
+        //Guid id,
         CancellationToken cancellationToken)
     {
+        culture = CultureHelper.Normalize(culture);
 
-        var listing = await _listingService.GetListingDetailsPageAsync(
-            citySlag,
-            categorySlag,
-            subCategorySlag,
-            listingSlug,
-            id,
-            cancellationToken
-        );
+        var vm = await _listingService.GetDetailsPageAsync(
+            culture,
+            citySlug,
+            categorySlug,
+            subCategorySlug,
+            serviceSlug,
+            Guid.Empty,
+            cancellationToken);
 
-        if (listing is null)
-            return NotFound();
-
-        this.SetSeo(new PageSeoData
+        if (vm is null)
         {
-            Title = $"{listing.Title} — {listing.SubCategoryName} у {listing.CityName}",
-            Description = listing.Description,
-            CanonicalUrl = Url.RouteUrl("listing-details", new
-            {
-                city = listing.CitySlug,
-                category = listing.CategorySlug,
-                subCategory = listing.SubCategorySlug,
-                slug = listing.ListingSlug,
-                id = listing.Id
-            }, Request.Scheme),
-            Robots = "index,follow"
-        });
+            return NotFound();
+        }
 
-        return View(listing);
+        var canonicalPath = _urlBuilder.BuildListingUrl(
+            culture,
+            vm.CitySlug!,
+            vm.CategorySlug!,
+            vm.SubCategorySlug!,
+            vm.Slug,
+            vm.Id);
+
+        var requestedPath = Request.Path.Value ?? string.Empty;
+
+        if (!string.Equals(requestedPath, canonicalPath, StringComparison.OrdinalIgnoreCase))
+        {
+            return RedirectPermanent(canonicalPath);
+        }
+
+        ViewData["Seo"] = _seoService.BuildListingDetailsSeo(vm, Request, culture);
+
+        var absoluteCanonical = _absoluteUrlBuilder.Build(Request, canonicalPath);
+        var primaryImage = vm.Gallery.Images.FirstOrDefault(x => x.IsPrimary)?.Url
+                           ?? vm.Gallery.Images.FirstOrDefault()?.Url;
+
+        var absoluteImage = string.IsNullOrWhiteSpace(primaryImage)
+            ? null
+            : _absoluteUrlBuilder.Build(Request, primaryImage);
+
+        ViewData["StructuredData"] = _structuredDataBuilder.BuildListing(vm, absoluteCanonical, absoluteImage);
+
+        var breadcrumbItems = vm.Breadcrumbs
+            .Where(x => !string.IsNullOrWhiteSpace(x.Url))
+            .Select(x => (x.Title, _absoluteUrlBuilder.Build(Request, x.Url!)))
+            .ToList();
+
+        if (breadcrumbItems.Count > 0)
+        {
+            ViewData["BreadcrumbsStructuredData"] = _structuredDataBuilder.BuildBreadcrumbs(breadcrumbItems);
+        }
+
+        return View("Details", vm);
     }
-
-    // public async Task<IActionResult> Details(
-    //     string city,
-    //     string category,
-    //     string subcategory,
-    //     string slug,
-    //     int id,
-    //     [FromQuery] BaseFilter filter,
-    //     CancellationToken cancellationToken)
-    // {
-    //     var vm = await listingService.GetListingDetailsPageAsync(
-    //         city, category, subcategory, slug, id, filter, cancellationToken);
-
-    //     if (vm is null)
-    //         return NotFound();
-
-    //     var invalidUrl =
-    //         !string.Equals(vm.CitySlug, city, StringComparison.OrdinalIgnoreCase) ||
-    //         !string.Equals(vm.CategorySlug, category, StringComparison.OrdinalIgnoreCase) ||
-    //         !string.Equals(vm.SubcategorySlug, subcategory, StringComparison.OrdinalIgnoreCase) ||
-    //         !string.Equals(vm.ListingSlug, slug, StringComparison.OrdinalIgnoreCase);
-
-    //     if (invalidUrl)
-    //     {
-    //         return RedirectToRoutePermanent("listing-details", new
-    //         {
-    //             city = vm.CitySlug,
-    //             category = vm.CategorySlug,
-    //             subcategory = vm.SubcategorySlug,
-    //             slug = vm.ListingSlug,
-    //             id = vm.Id
-    //         });
-    //     }
-
-    //     this.SetSeo(new PageSeoData
-    //     {
-    //         Title = $"{vm.Title} — {vm.SubcategoryName} у {vm.CityName}",
-    //         Description = vm.Description,
-    //         CanonicalUrl = Url.RouteUrl("listing-details", new
-    //         {
-    //             city = vm.CitySlug,
-    //             category = vm.CategorySlug,
-    //             subcategory = vm.SubcategorySlug,
-    //             slug = vm.ListingSlug,
-    //             id = vm.Id
-    //         }, Request.Scheme),
-    //         Robots = "index,follow"
-    //     });
-
-    //     return View(vm);
-    // }
 }

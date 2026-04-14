@@ -1,66 +1,53 @@
-using System;
-using Marketplace.Web.Models.Common;
+using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Models.Listings;
 
-public class ListingDetailsPageVm
+public sealed class ListingDetailsPageVm
 {
-    // Identity
-    public int Id { get; init; }
+    public string Culture { get; set; } = "uk";
 
-    // URL structure
-    public string CityName { get; init; } = default!;
-    public string CitySlug { get; init; } = default!;
+    public Guid Id { get; set; }
 
-    public string CategoryName { get; init; } = default!;
-    public string CategorySlug { get; init; } = default!;
+    public string Title { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
 
-    public string SubCategoryName { get; init; } = default!;
-    public string SubCategorySlug { get; init; } = default!;
+    public string? ShortDescription { get; set; }
+    public string? Description { get; set; }
 
-    public string ListingSlug { get; init; } = default!;
+    public string? CategoryName { get; set; }
+    public string? CategorySlug { get; set; }
+    public string? CategoryUrl { get; set; }
 
-    // Main content
-    public string Title { get; init; } = default!;
-    public string H1 { get; init; } = default!;
-    public string? ShortDescription { get; init; }
-    public string? Description { get; init; }
+    public string? SubCategoryName { get; set; }
+    public string? SubCategorySlug { get; set; }
+    public string? SubCategoryUrl { get; set; }
 
-    // Business info
-    public string? ProviderName { get; init; }
-    public string? Phone { get; init; }
-    public string? Email { get; init; }
-    public string? Website { get; init; }
-    public string? Address { get; init; }
+    public string? CityName { get; set; }
+    public string? CitySlug { get; set; }
+    public string? CityUrl { get; set; }
 
-    // Geo
-    public string? CityDistrict { get; init; }
-    public decimal? Latitude { get; init; }
-    public decimal? Longitude { get; init; }
+    public ListingContactVm Contact { get; set; } = new();
+    public ListingGalleryVm Gallery { get; set; } = new();
 
-    // Trust / rating
-    public decimal? Rating { get; init; }
-    public int ReviewsCount { get; init; }
-    public bool IsVerified { get; init; }
+    public double Rating { get; set; }
+    public int ReviewsCount { get; set; }
 
-    // Media
-    public string? MainImageUrl { get; init; }
-    public IReadOnlyCollection<ListingImageVm> Images { get; init; }
-        = Array.Empty<ListingImageVm>();
+    public string? Address { get; set; }
+    public string? WorkingHours { get; set; }
 
-    // Service info
-    public IReadOnlyCollection<string> ServiceFeatures { get; init; }
-        = Array.Empty<string>();
+    public bool IsVerified { get; set; }
+    public bool IsFeatured { get; set; }
 
-    // Optional reviews preview
-    public IReadOnlyCollection<ListingReviewVm> Reviews { get; init; }
-        = Array.Empty<ListingReviewVm>();
+    public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; set; } = Array.Empty<BreadcrumbItemVm>();
+    public IReadOnlyCollection<ListingReviewVm> Reviews { get; set; } = Array.Empty<ListingReviewVm>();
+    public IReadOnlyCollection<RelatedListingVm> RelatedListings { get; set; } = Array.Empty<RelatedListingVm>();
 
-    // Related content
-    // public IReadOnlyCollection<ListingCardVm> RelatedListings { get; init; }
-    //     = Array.Empty<ListingCardVm>();
-
-    // Navigation
-    public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }
-        = Array.Empty<BreadcrumbItemVm>();
+    public bool HasRating => Rating > 0;
+    public bool HasReviews => Reviews.Count > 0;
+    public bool HasRelatedListings => RelatedListings.Count > 0;
+    public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
+    public bool HasShortDescription => !string.IsNullOrWhiteSpace(ShortDescription);
+    public bool HasAddress => !string.IsNullOrWhiteSpace(Address);
+    public string RatingFormatted => Rating > 0 ? Rating.ToString("0.0") : string.Empty;
 }

@@ -1,0 +1,48 @@
+.app-navbar {
+    min-height: 72px;
+    padding: 8px 0;
+}
+
+.app-brand {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: 1.1rem;
+}
+
+.app-nav-link {
+    color: var(--app-text-muted);
+    font-weight: 500;
+}
+
+.app-nav-link:hover,
+.app-nav-link:focus {
+    color: var(--app-text);
+}
+
+.language-switcher {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.mobile-bottom-bar {
+    position: fixed;
+    inset: auto 12px 12px 12px;
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
+    box-shadow: var(--app-shadow-md);
+    z-index: 1040;
+}
+
+.mobile-bottom-link {
+    flex: 1;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 600;
+}

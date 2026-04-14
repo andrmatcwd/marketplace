@@ -1,10 +1,10 @@
-using System;
-
 namespace Marketplace.Web.Models.Listings;
 
-public class ListingImageVm
+public sealed class ListingImageVm
 {
-    public string Url { get; init; } = default!;
-    public string? Alt { get; init; }
-    public int SortOrder { get; init; }
+    public string Url { get; set; } = string.Empty;
+    public string Alt { get; set; } = string.Empty;
+
+    public bool IsPrimary { get; set; }
+    public int SortOrder { get; set; }
 }

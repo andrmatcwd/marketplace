@@ -1,0 +1,6 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Listings.ListingCardVm>
+
+@if (Model != null && Model.Any())
+{
+    <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="Model" />
+}

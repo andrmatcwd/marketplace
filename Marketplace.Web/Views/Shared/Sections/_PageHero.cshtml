@@ -1,0 +1,19 @@
+﻿@model Marketplace.Web.Models.Shared.PageHeroVm
+
+<section class="page-hero app-section">
+    @if (Model.Breadcrumbs != null && Model.Breadcrumbs.Any())
+    {
+        <div class="page-hero-breadcrumbs">
+            <partial name="~/Views/Shared/Navigation/_Breadcrumbs.cshtml" model="Model.Breadcrumbs" />
+        </div>
+    }
+
+    <div class="page-hero-content">
+        <h1 class="page-title">@Model.Title</h1>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="page-intro">@Model.Description</p>
+        }
+    </div>
+</section>

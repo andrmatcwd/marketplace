@@ -1,3 +1,18 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model Marketplace.Web.Models.Home.HomePageVm
+
+@{
+    ViewData["Title"] = Model.Hero.Title;
 }
+
+<partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
+<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
+
+<div id="popular-cities">
+    <partial name="~/Views/Shared/Sections/_CitiesSection.cshtml" model="Model.PopularCitiesSection" />
+</div>
+
+<div id="popular-categories">
+    <partial name="~/Views/Shared/Sections/_CategoriesSection.cshtml" model="Model.PopularCategoriesSection" />
+</div>
+
+<partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.FeaturedListingsSection" />

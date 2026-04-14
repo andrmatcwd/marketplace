@@ -1,0 +1,22 @@
+.app-breadcrumbs {
+    margin-bottom: 16px;
+}
+
+.app-breadcrumbs .breadcrumb {
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.app-breadcrumbs .breadcrumb-item,
+.app-breadcrumbs .breadcrumb-item a {
+    color: var(--app-text-muted);
+    font-size: 0.94rem;
+}
+
+.app-breadcrumbs .breadcrumb-item.active {
+    color: var(--app-text);
+}
+
+.app-breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--app-text-muted);
+}

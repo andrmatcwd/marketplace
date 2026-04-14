@@ -1,27 +1,71 @@
 .listing-card {
-    border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .listing-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
+    box-shadow: var(--app-shadow-md);
 }
 
-.listing-card-image-wrapper {
-    height: 180px;
+.listing-card-link {
+    display: block;
+    height: 100%;
+}
+
+.listing-card-media {
+    aspect-ratio: 16 / 10;
+    background: #ece8e1;
     overflow: hidden;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-bottom: 1px solid var(--app-border);
 }
 
-.listing-card-image {
+.listing-card-media img {
     width: 100%;
     height: 100%;
+    display: block;
     object-fit: cover;
-    transition: transform 0.3s ease;
 }
 
-.listing-card:hover .listing-card-image {
-    transform: scale(1.05);
+.listing-card-body {
+    padding: 18px;
+}
+
+.listing-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    color: var(--app-text-muted);
+    font-size: 0.9rem;
+}
+
+.listing-card-title {
+    margin: 0 0 10px;
+    font-size: 1.08rem;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
+.listing-card-description {
+    margin: 0 0 14px;
+    color: var(--app-text-muted);
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.listing-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--app-text-muted);
+    font-size: 0.92rem;
+}
+
+.listing-card-rating {
+    color: var(--app-text);
+    font-weight: 600;
 }

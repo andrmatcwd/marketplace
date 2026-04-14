@@ -1,33 +1,18 @@
-using System;
-using Marketplace.Web.Areas.Admin.Models.Listings;
-using Marketplace.Web.Models.Category;
-using Marketplace.Web.Models.Common;
-using Marketplace.Web.Models.Listings;
+using Marketplace.Web.Models.Cards;
+using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Models.Catalog;
 
-public class CityPageVm
+public sealed class CityPageVm
 {
-    // 📍 City
-    public string CityName { get; init; } = default!;
-    public string CitySlug { get; init; } = default!;
+    public string Culture { get; set; } = "uk";
 
-    // 🧠 SEO / Content
-    public string H1 { get; init; } = default!;
-    public string? IntroText { get; init; }
+    public string CityName { get; set; } = string.Empty;
+    public string CitySlug { get; set; } = string.Empty;
 
-    public int TotalListingsCount { get; init; }
-    public int TotalCategoriesCount { get; init; }
+    public PageHeroVm Hero { get; set; } = new();
+    public SeoIntroVm SeoIntro { get; set; } = new();
 
-    // 📂 Categories (ГОЛОВНЕ на цій сторінці)
-    public IReadOnlyCollection<CategoryCardVm> Categories { get; init; }
-        = Array.Empty<CategoryCardVm>();
-
-    // ⭐ (опціонально) популярні або нові лістинги
-    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
-        = Array.Empty<ListingCardVm>();
-
-    // 🍞 Breadcrumbs
-    public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }
-        = Array.Empty<BreadcrumbItemVm>();
+    public TaxonomySectionVm<CategoryCardVm> CategoriesSection { get; set; } = new();
+    public ListingsSectionVm ListingsSection { get; set; } = new();
 }

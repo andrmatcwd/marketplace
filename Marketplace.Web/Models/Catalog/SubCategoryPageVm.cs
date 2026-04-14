@@ -1,43 +1,22 @@
-using System;
-using Marketplace.Web.Areas.Admin.Models.Listings;
-using Marketplace.Web.Models.Common;
-using Marketplace.Web.Models.Listings;
+using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Models.Catalog;
 
-public class SubCategoryPageVm
+public sealed class SubCategoryPageVm
 {
-    // Location
-    public string CityName { get; init; } = default!;
-    public string CitySlug { get; init; } = default!;
+    public string Culture { get; set; } = "uk";
 
-    // Category
-    public string CategoryName { get; init; } = default!;
-    public string CategorySlug { get; init; } = default!;
+    public string SubCategoryName { get; set; } = string.Empty;
+    public string SubCategorySlug { get; set; } = string.Empty;
 
-    // Subcategory
-    public string SubCategoryName { get; init; } = default!;
-    public string SubCategorySlug { get; init; } = default!;
+    public string? CategoryName { get; set; }
+    public string? CategorySlug { get; set; }
 
-    // SEO / Content
-    public string H1 { get; init; } = default!;
-    public string? IntroText { get; init; }
+    public string? CityName { get; set; }
+    public string? CitySlug { get; set; }
 
-    // Stats
-    public int TotalListingsCount { get; init; }
+    public PageHeroVm Hero { get; set; } = new();
+    public SeoIntroVm SeoIntro { get; set; } = new();
 
-    // // Filters
-    // public BaseFilter Filter { get; init; } = new();
-
-    // Results
-    public IReadOnlyCollection<ListingCardVm> Listings { get; init; }
-        = Array.Empty<ListingCardVm>();
-
-    // Optional internal linking
-    // public IReadOnlyCollection<SubcategoryLinkVm> RelatedSubcategories { get; init; }
-    //     = Array.Empty<SubcategoryLinkVm>();
-
-    // Breadcrumbs
-    public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; init; }
-        = Array.Empty<BreadcrumbItemVm>();
+    public ListingsSectionVm ListingsSection { get; set; } = new();
 }

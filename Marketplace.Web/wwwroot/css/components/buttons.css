@@ -1,0 +1,31 @@
+.btn-app,
+.btn-app-outline {
+    border-radius: var(--app-radius-md);
+    padding: 10px 16px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-app {
+    background: var(--app-text);
+    color: #fff;
+    border: 1px solid var(--app-text);
+}
+
+.btn-app:hover,
+.btn-app:focus {
+    background: #2a2a26;
+    color: #fff;
+}
+
+.btn-app-outline {
+    background: var(--app-surface);
+    color: var(--app-text);
+    border: 1px solid var(--app-border);
+}
+
+.btn-app-outline:hover,
+.btn-app-outline:focus {
+    background: var(--app-surface-muted);
+    color: var(--app-text);
+}

@@ -1,127 +1,114 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Marketplace.Web.Data;
-using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
-using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
-using Microsoft.AspNetCore.Localization;
+using Marketplace.Web.Data;
+using Marketplace.Web.Localization;
+using Marketplace.Web.Mappings;
+using Marketplace.Web.Navigation;
 using Marketplace.Web.Options;
-using Marketplace.Web.Services;
+using Marketplace.Web.Seo;
+using Marketplace.Web.Services.Catalog;
+using Marketplace.Web.Services.Home;
+using Marketplace.Web.Services.Listings;
+using Marketplace.Web.Services.Media;
+using Marketplace.Web.Services.Seo;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.Configure<UiOptions>(builder.Configuration.GetSection("Ui"));
+builder.Services.Configure<GoogleMapsOptions>(builder.Configuration.GetSection("GoogleMaps"));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.Configure<GoogleMapsOptions>(
-    builder.Configuration.GetSection("GoogleMaps"));
-
-builder.Services.AddListingsModule(builder.Configuration);
-
-builder.Services.AddScoped<IListingService, ListingService>();
-builder.Services.AddScoped<ICatalogService, CatalogService>();
-
-builder.Services.AddControllersWithViews()
-    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization();
-
-builder.Services.AddRazorPages()
-    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization();
-
-var supportedCultures = new[]
-{
-    new CultureInfo("en"),
-    new CultureInfo("uk")
-};
-
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.DefaultRequestCulture = new RequestCulture("en");
+    var supportedCultures = new[]
+    {
+        new CultureInfo("uk"),
+        new CultureInfo("en")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("uk");
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 
     options.RequestCultureProviders = new List<IRequestCultureProvider>
     {
-        new CookieRequestCultureProvider(),
-        new AcceptLanguageHeaderRequestCultureProvider()
+        new RouteSegmentRequestCultureProvider()
     };
 });
 
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
+builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services
+    .AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<ICatalogVmMapper, CatalogVmMapper>();
+builder.Services.AddScoped<IListingVmMapper, ListingVmMapper>();
+
+builder.Services.AddScoped<ICatalogUrlBuilder, CatalogUrlBuilder>();
+builder.Services.AddScoped<ICatalogBreadcrumbBuilder, CatalogBreadcrumbBuilder>();
+
+builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IListingService, ListingService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<ISeoService, SeoService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+
+builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();
+builder.Services.AddScoped<CanonicalUrlBuilder>();
+builder.Services.AddScoped<MetaBuilder>();
+builder.Services.AddScoped<StructuredDataBuilder>();
+builder.Services.AddScoped<SeoPaginationBuilder>();
+builder.Services.AddScoped<SeoIndexingPolicy>();
+
+builder.Services.AddScoped<DbSeeder>();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(localizationOptions.Value);
+
+if (!app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseExceptionHandler("/error/500");
+    app.UseHsts();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    using var scope = app.Services.CreateScope();
+    var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
+    await seeder.SeedAsync();
 }
 
-var localizationOptions =
-    app.Services.GetRequiredService<
-        Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value;
-
-app.UseRequestLocalization(localizationOptions);
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "Listings",
-    pattern: "listings",
-    defaults: new { controller = "Catalog", action = "Index" });
-
-app.MapControllerRoute(
-    name: "listing-details",
-    pattern: "{city}/{category}/{subcategory}/{slug}-{id:int}",
-    defaults: new { controller = "Listings", action = "Details" })
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "subcategory",
-    pattern: "{city}/{category}/{subcategory}",
-    defaults: new { controller = "Catalog", action = "Subcategory" })
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "category",
-    pattern: "{city}/{category}",
-    defaults: new { controller = "Catalog", action = "Category" })
-    .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "city",
-    pattern: "{city}",
-    defaults: new { controller = "Catalog", action = "City" })
-    .WithStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Root}/{action=Index}/{id?}");
 
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages();
 
 app.Run();

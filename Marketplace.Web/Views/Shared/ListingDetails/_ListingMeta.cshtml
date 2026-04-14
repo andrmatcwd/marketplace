@@ -1,0 +1,41 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+<section class="app-card listing-meta-card">
+    <div class="listing-meta-body">
+        <h2 class="section-title">Information</h2>
+
+        <dl class="listing-meta-list">
+            @if (!string.IsNullOrWhiteSpace(Model.CityName))
+            {
+                <div>
+                    <dt>City</dt>
+                    <dd>@Model.CityName</dd>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+            {
+                <div>
+                    <dt>Category</dt>
+                    <dd>@Model.CategoryName</dd>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.SubCategoryName))
+            {
+                <div>
+                    <dt>Subcategory</dt>
+                    <dd>@Model.SubCategoryName</dd>
+                </div>
+            }
+
+            @if (Model.HasAddress)
+            {
+                <div>
+                    <dt>Address</dt>
+                    <dd>@Model.Address</dd>
+                </div>
+            }
+        </dl>
+    </div>
+</section>

@@ -1,73 +1,22 @@
-using System;
-
 namespace Marketplace.Web.Navigation;
 
 public sealed class CatalogUrlBuilder : ICatalogUrlBuilder
 {
-    public string Build(
-        string? culture = null,
-        string? citySlug = null,
-        string? categorySlug = null,
-        string? subCategorySlug = null,
-        string? listingSlug = null,
-        int? listingId = null)
-    {
-        var parts = new List<string>();
+    public string BuildHomeUrl(string culture)
+        => $"/{culture}";
 
-        AddIfHasValue(parts, culture);
-        AddIfHasValue(parts, citySlug);
-        AddIfHasValue(parts, categorySlug);
-        AddIfHasValue(parts, subCategorySlug);
+    public string BuildCatalogUrl(string culture)
+        => $"/{culture}/catalog";
 
-        if (!string.IsNullOrWhiteSpace(listingSlug) && listingId.HasValue)
-        {
-            parts.Add($"{listingSlug}-{listingId.Value}");
-        }
-        else if (!string.IsNullOrWhiteSpace(listingSlug))
-        {
-            parts.Add(listingSlug);
-        }
-        else if (listingId.HasValue)
-        {
-            parts.Add(listingId.Value.ToString());
-        }
+    public string BuildCityUrl(string culture, string citySlug)
+        => $"/{culture}/{citySlug}";
 
-        return "/" + string.Join("/", parts);
-    }
+    public string BuildCategoryUrl(string culture, string citySlug, string categorySlug)
+        => $"/{culture}/{citySlug}/{categorySlug}";
 
-    public string BuildCity(string? culture, string citySlug)
-        => Build(culture: culture, citySlug: citySlug);
+    public string BuildSubCategoryUrl(string culture, string citySlug, string categorySlug, string subCategorySlug)
+        => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}";
 
-    public string BuildCategory(string? culture, string citySlug, string categorySlug)
-        => Build(culture: culture, citySlug: citySlug, categorySlug: categorySlug);
-
-    public string BuildSubCategory(string? culture, string citySlug, string categorySlug, string subCategorySlug)
-        => Build(
-            culture: culture,
-            citySlug: citySlug,
-            categorySlug: categorySlug,
-            subCategorySlug: subCategorySlug);
-
-    public string BuildListing(
-        string? culture,
-        string citySlug,
-        string categorySlug,
-        string subCategorySlug,
-        string listingSlug,
-        int listingId)
-        => Build(
-            culture: culture,
-            citySlug: citySlug,
-            categorySlug: categorySlug,
-            subCategorySlug: subCategorySlug,
-            listingSlug: listingSlug,
-            listingId: listingId);
-
-    private static void AddIfHasValue(List<string> parts, string? value)
-    {
-        if (!string.IsNullOrWhiteSpace(value))
-        {
-            parts.Add(value);
-        }
-    }
+    public string BuildListingUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, string listingSlug, Guid id)
+        => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}-{id}";
 }

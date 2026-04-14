@@ -1,0 +1,32 @@
+.mobile-filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: none;
+    align-items: end;
+    justify-content: center;
+    z-index: 1060;
+    padding: 0;
+}
+
+.mobile-filter-backdrop.is-open {
+    display: flex;
+}
+
+.mobile-filter-panel {
+    width: 100%;
+    max-width: 720px;
+    background: var(--app-surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.mobile-filter-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}

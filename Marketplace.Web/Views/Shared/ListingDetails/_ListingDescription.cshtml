@@ -1,0 +1,13 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+@if (Model.HasDescription)
+{
+    <section class="app-card listing-description-card">
+        <div class="listing-description-body">
+            <h2 class="section-title">Service description</h2>
+            <div class="listing-description-text">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+    </section>
+}

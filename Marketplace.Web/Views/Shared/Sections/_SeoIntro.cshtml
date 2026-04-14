@@ -1,0 +1,22 @@
+﻿@model Marketplace.Web.Models.Shared.SeoIntroVm
+
+@if (Model != null && Model.HasContent)
+{
+    <section class="seo-intro app-section">
+        <div class="app-card">
+            <div class="seo-intro-body">
+                @if (!string.IsNullOrWhiteSpace(Model.Title))
+                {
+                    <h2 class="section-title">@Model.Title</h2>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Text))
+                {
+                    <div class="seo-intro-text">
+                        @Html.Raw(Model.Text)
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

@@ -1,0 +1,35 @@
+﻿@using Marketplace.Web.Utils
+@{
+    var culture = CultureHelper.Current();
+}
+
+<nav class="navbar navbar-expand-lg app-navbar">
+    <a class="navbar-brand app-brand" href="/@culture">
+        Marketplace
+    </a>
+
+    <button class="navbar-toggler app-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="mainNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture/catalog">Catalog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-cities">Cities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-categories">Categories</a>
+            </li>
+            <li class="nav-item">
+                <partial name="~/Views/Shared/Layout/_LanguageSwitcher.cshtml" />
+            </li>
+            <li class="nav-item">
+                <partial name="~/Views/Shared/_LoginPartial.cshtml" />
+            </li>
+        </ul>
+    </div>
+</nav>

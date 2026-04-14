@@ -1,0 +1,15 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+@if (Model.HasAddress)
+{
+    <section class="app-card listing-map-card">
+        <div class="listing-map-body">
+            <h2 class="section-title">Location</h2>
+            <p class="section-description">@Model.Address</p>
+
+            <div class="listing-map-placeholder">
+                Map placeholder
+            </div>
+        </div>
+    </section>
+}

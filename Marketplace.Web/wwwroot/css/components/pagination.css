@@ -1,0 +1,21 @@
+.app-pagination {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.app-pagination .pagination {
+    gap: 4px;
+}
+
+.app-pagination .page-link {
+    color: var(--app-text);
+    border-color: var(--app-border);
+    border-radius: 10px;
+}
+
+.app-pagination .page-item.active .page-link {
+    background: var(--app-text);
+    border-color: var(--app-text);
+    color: #fff;
+}

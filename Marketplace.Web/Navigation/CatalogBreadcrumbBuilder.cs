@@ -1,5 +1,4 @@
-using System;
-using Marketplace.Web.Models.Common;
+using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Navigation;
 
@@ -12,106 +11,133 @@ public sealed class CatalogBreadcrumbBuilder : ICatalogBreadcrumbBuilder
         _urlBuilder = urlBuilder;
     }
 
-    public IReadOnlyList<BreadcrumbItemVm> Build(
-        string? culture,
-        params BreadcrumbSegment[] segments)
+    public IReadOnlyCollection<BreadcrumbItemVm> BuildCatalog(string culture)
     {
-        var validSegments = segments
-            .Where(x => !string.IsNullOrWhiteSpace(x.Title))
-            .ToList();
-
-        if (validSegments.Count == 0)
+        return new List<BreadcrumbItemVm>
         {
-            return [];
-        }
-
-        var items = new List<BreadcrumbItemVm>(validSegments.Count);
-
-        for (var i = 0; i < validSegments.Count; i++)
-        {
-            items.Add(new BreadcrumbItemVm
+            new()
             {
-                Title = validSegments[i].Title,
-                Url = i == validSegments.Count - 1
-                    ? null
-                    : BuildBreadcrumbUrl(culture, validSegments, i),
-                IsCurrent = i == validSegments.Count - 1
-            });
-        }
-
-        return items;
-    }
-
-    private string BuildBreadcrumbUrl(
-        string? culture,
-        IReadOnlyList<BreadcrumbSegment> segments,
-        int lastIndexInclusive)
-    {
-        string? citySlug = null;
-        string? categorySlug = null;
-        string? subCategorySlug = null;
-        string? listingSlug = null;
-        int? listingId = null;
-
-        for (var i = 0; i <= lastIndexInclusive; i++)
-        {
-            switch (segments[i].Type)
+                Title = "Home",
+                Url = _urlBuilder.BuildHomeUrl(culture)
+            },
+            new()
             {
-                case BreadcrumbSegmentType.City:
-                    citySlug = segments[i].Slug;
-                    break;
-                case BreadcrumbSegmentType.Category:
-                    categorySlug = segments[i].Slug;
-                    break;
-                case BreadcrumbSegmentType.SubCategory:
-                    subCategorySlug = segments[i].Slug;
-                    break;
-                case BreadcrumbSegmentType.Listing:
-                    listingSlug = segments[i].Slug;
-                    listingId = segments[i].ListingId;
-                    break;
+                Title = "Catalog"
             }
-        }
-
-        return _urlBuilder.Build(
-            culture: culture,
-            citySlug: citySlug,
-            categorySlug: categorySlug,
-            subCategorySlug: subCategorySlug,
-            listingSlug: listingSlug,
-            listingId: listingId);
+        };
     }
-}
 
-public sealed record BreadcrumbSegment(
-    string Title,
-    BreadcrumbSegmentType Type,
-    string? Slug = null,
-    int? ListingId = null);
+    public IReadOnlyCollection<BreadcrumbItemVm> BuildCity(string culture, string cityName, string citySlug)
+    {
+        return new List<BreadcrumbItemVm>
+        {
+            new()
+            {
+                Title = "Home",
+                Url = _urlBuilder.BuildHomeUrl(culture)
+            },
+            new()
+            {
+                Title = cityName
+            }
+        };
+    }
 
-public enum BreadcrumbSegmentType
-{
-    Root = 0,
-    City = 1,
-    Category = 2,
-    SubCategory = 3,
-    Listing = 4
-}
+    public IReadOnlyCollection<BreadcrumbItemVm> BuildCategory(
+        string culture,
+        string categoryName,
+        string categorySlug,
+        string cityName,
+        string citySlug)
+    {
+        return new List<BreadcrumbItemVm>
+        {
+            new()
+            {
+                Title = "Home",
+                Url = _urlBuilder.BuildHomeUrl(culture)
+            },
+            new()
+            {
+                Title = cityName,
+                Url = _urlBuilder.BuildCityUrl(culture, citySlug)
+            },
+            new()
+            {
+                Title = categoryName
+            }
+        };
+    }
 
-public static class BreadcrumbSegments
-{
-    public static BreadcrumbSegment Root(string title)
-        => new(title, BreadcrumbSegmentType.Root);
+    public IReadOnlyCollection<BreadcrumbItemVm> BuildSubCategory(
+        string culture,
+        string categoryName,
+        string categorySlug,
+        string subCategoryName,
+        string subCategorySlug,
+        string cityName,
+        string citySlug)
+    {
+        return new List<BreadcrumbItemVm>
+        {
+            new()
+            {
+                Title = "Home",
+                Url = _urlBuilder.BuildHomeUrl(culture)
+            },
+            new()
+            {
+                Title = cityName,
+                Url = _urlBuilder.BuildCityUrl(culture, citySlug)
+            },
+            new()
+            {
+                Title = categoryName,
+                Url = _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug)
+            },
+            new()
+            {
+                Title = subCategoryName
+            }
+        };
+    }
 
-    public static BreadcrumbSegment City(string title, string slug)
-        => new(title, BreadcrumbSegmentType.City, slug);
-
-    public static BreadcrumbSegment Category(string title, string slug)
-        => new(title, BreadcrumbSegmentType.Category, slug);
-
-    public static BreadcrumbSegment SubCategory(string title, string slug)
-        => new(title, BreadcrumbSegmentType.SubCategory, slug);
-
-    public static BreadcrumbSegment Listing(string title, string slug, int listingId)
-        => new(title, BreadcrumbSegmentType.Listing, slug, listingId);
+    public IReadOnlyCollection<BreadcrumbItemVm> BuildListing(
+        string culture,
+        string listingTitle,
+        string cityName,
+        string citySlug,
+        string categoryName,
+        string categorySlug,
+        string subCategoryName,
+        string subCategorySlug)
+    {
+        return new List<BreadcrumbItemVm>
+        {
+            new()
+            {
+                Title = "Home",
+                Url = _urlBuilder.BuildHomeUrl(culture)
+            },
+            new()
+            {
+                Title = cityName,
+                Url = _urlBuilder.BuildCityUrl(culture, citySlug)
+            },
+            new()
+            {
+                Title = categoryName,
+                Url = _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug)
+            },
+            new()
+            {
+                Title = subCategoryName,
+                Url = _urlBuilder.BuildSubCategoryUrl(culture, citySlug, categorySlug, subCategorySlug)
+            },
+            new()
+            {
+                Title = listingTitle
+            }
+        };
+    }
 }

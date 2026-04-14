@@ -1,0 +1,13 @@
+.page-hero {
+    padding: 8px 0 4px;
+}
+
+.page-hero-breadcrumbs {
+    margin-bottom: 12px;
+}
+
+.page-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

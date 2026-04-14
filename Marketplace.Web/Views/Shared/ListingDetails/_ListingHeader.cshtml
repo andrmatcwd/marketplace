@@ -1,0 +1,26 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+<section class="app-card listing-header-card">
+    <div class="listing-header-body">
+        <div class="listing-header-top">
+            @if (!string.IsNullOrWhiteSpace(Model.SubCategoryName))
+            {
+                <div class="listing-header-taxonomy">@Model.SubCategoryName</div>
+            }
+
+            @if (Model.HasRating)
+            {
+                <div class="listing-header-rating">
+                    ★ @Model.RatingFormatted (@Model.ReviewsCount)
+                </div>
+            }
+        </div>
+
+        <h1 class="page-title">@Model.Title</h1>
+
+        @if (Model.HasShortDescription)
+        {
+            <p class="page-intro">@Model.ShortDescription</p>
+        }
+    </div>
+</section>

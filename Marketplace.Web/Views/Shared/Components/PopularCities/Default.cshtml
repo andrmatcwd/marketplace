@@ -1,0 +1,6 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Cards.CityCardVm>
+
+@if (Model != null && Model.Any())
+{
+    <partial name="~/Views/Shared/Lists/_CitiesGrid.cshtml" model="Model" />
+}

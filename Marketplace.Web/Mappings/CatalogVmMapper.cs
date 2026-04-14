@@ -1,95 +1,90 @@
-using Marketplace.Modules.Listings.Application.Categories.Dtos;
-using Marketplace.Modules.Listings.Application.Cities.Dtos;
-using Marketplace.Modules.Listings.Application.Listings.Dtos;
-using Marketplace.Modules.Listings.Application.SubCategories.Dtos;
-using Marketplace.Web.Models.Category;
-using Marketplace.Web.Models.City;
+using Marketplace.Web.Domain.Entities;
+using Marketplace.Web.Models.Cards;
 using Marketplace.Web.Models.Listings;
-using Marketplace.Web.Models.SubCategory;
-using Marketplace.Web.Navigation;
+using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Mappings;
 
-
 public sealed class CatalogVmMapper : ICatalogVmMapper
 {
-    private readonly ICatalogUrlBuilder _urlBuilder;
-
-    public CatalogVmMapper(ICatalogUrlBuilder urlBuilder)
+    public ListingCardVm MapListingCard(Listing entity, string culture)
     {
-        _urlBuilder = urlBuilder;
-    }
+        var citySlug = entity.City?.Slug ?? string.Empty;
+        var categorySlug = entity.Category?.Slug ?? string.Empty;
+        var subCategorySlug = entity.SubCategory?.Slug ?? string.Empty;
 
-    public CategoryCardVm MapCategory(
-        CategoryDto dto,
-        string culture,
-        string? citySlug = null)
-    {
-        return new CategoryCardVm
+        return new ListingCardVm
         {
-            Name = dto.Name,
-            Slug = dto.Slug,
-            Description = dto.Description,
-            Icon = dto.Icon,
-            ListingsCount = dto.ListingsCount,
-            SubCategoryCount = dto.SubCategoriesCount,
-            Url = citySlug is null
-                ? _urlBuilder.Build(culture: culture, categorySlug: dto.Slug)
-                : _urlBuilder.BuildCategory(culture, citySlug, dto.Slug)
+            Id = entity.Id,
+            Title = entity.Title,
+            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}-{0}",
+            ImageUrl = entity.Images
+                .OrderBy(x => x.SortOrder)
+                .FirstOrDefault(x => x.IsPrimary)?.Url
+                ?? entity.Images.OrderBy(x => x.SortOrder).FirstOrDefault()?.Url,
+            ImageAlt = entity.Images
+                .OrderBy(x => x.SortOrder)
+                .FirstOrDefault(x => x.IsPrimary)?.Alt
+                ?? entity.Title,
+            ShortDescription = entity.ShortDescription,
+            CategoryName = entity.Category?.Name,
+            CategoryUrl = entity.Category is null || entity.City is null
+                ? null
+                : $"/{culture}/{entity.City.Slug}/{entity.Category.Slug}",
+            SubCategoryName = entity.SubCategory?.Name,
+            SubCategoryUrl = entity.SubCategory is null || entity.Category is null || entity.City is null
+                ? null
+                : $"/{culture}/{entity.City.Slug}/{entity.Category.Slug}/{entity.SubCategory.Slug}",
+            CityName = entity.City?.Name,
+            CityUrl = entity.City is null ? null : $"/{culture}/{entity.City.Slug}",
+            Rating = entity.Rating,
+            ReviewsCount = entity.ReviewsCount
         };
     }
 
-    public CityCardVm MapCity(
-        CityDto dto,
-        string culture)
+    public CityCardVm MapCityCard(City entity, int listingsCount, string culture)
     {
         return new CityCardVm
         {
-            Name = dto.Name,
-            Slug = dto.Slug,
-            RegionName = dto.RegionName,
-            RegionSlug = dto.RegionSlug,
-            ListingsCount = dto.ListingsCount,
-            CategoriesCount = dto.CategoriesCount,
-            Url = _urlBuilder.BuildCity(culture, dto.Slug)
+            Name = entity.Name,
+            Url = $"/{culture}/{entity.Slug}",
+            Description = entity.Description,
+            ListingsCount = listingsCount
         };
     }
 
-    public SubCategoryCardVm MapSubCategory(
-        SubCategoryDto dto,
-        string culture,
-        string citySlug,
-        string categorySlug)
+    public CategoryCardVm MapCategoryCard(Category entity, int listingsCount, string culture, string? citySlug = null)
+    {
+        return new CategoryCardVm
+        {
+            Name = entity.Name,
+            Url = string.IsNullOrWhiteSpace(citySlug)
+                ? $"/{culture}/catalog?category={Uri.EscapeDataString(entity.Slug)}"
+                : $"/{culture}/{citySlug}/{entity.Slug}",
+            Description = entity.Description,
+            ListingsCount = listingsCount
+        };
+    }
+
+    public SubCategoryCardVm MapSubCategoryCard(SubCategory entity, int listingsCount, string culture, string citySlug)
     {
         return new SubCategoryCardVm
         {
-            Name = dto.Name,
-            Slug = dto.Slug,
-            ListingsCount = dto.ListingsCount,
-            Url = _urlBuilder.BuildSubCategory(culture, citySlug, categorySlug, dto.Slug)
+            Name = entity.Name,
+            Url = entity.Category is null
+                ? "#"
+                : $"/{culture}/{citySlug}/{entity.Category.Slug}/{entity.Slug}",
+            Description = entity.Description,
+            ListingsCount = listingsCount
         };
     }
 
-    public ListingCardVm MapListing(
-        ListingDto dto,
-        string culture,
-        string? citySlug = null,
-        string? categorySlug = null,
-        string? subCategorySlug = null)
+    public FilterOptionVm MapFilterOption(string value, string text)
     {
-        return new ListingCardVm
+        return new FilterOptionVm
         {
-            Id = dto.Id,
-            Title = dto.Title,
-            Slug = dto.Slug,
-            ShortDescription = dto.Description,
-            Url = _urlBuilder.Build(
-                culture: culture,
-                citySlug: citySlug,
-                categorySlug: categorySlug,
-                subCategorySlug: subCategorySlug,
-                listingSlug: dto.Slug,
-                listingId: dto.Id)
+            Value = value,
+            Text = text
         };
     }
 }

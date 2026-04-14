@@ -1,28 +1,11 @@
-using System;
-
 namespace Marketplace.Web.Navigation;
 
 public interface ICatalogUrlBuilder
 {
-    string Build(
-        string? culture = null,
-        string? citySlug = null,
-        string? categorySlug = null,
-        string? subCategorySlug = null,
-        string? listingSlug = null,
-        int? listingId = null);
-
-    string BuildCity(string? culture, string citySlug);
-
-    string BuildCategory(string? culture, string citySlug, string categorySlug);
-
-    string BuildSubCategory(string? culture, string citySlug, string categorySlug, string subCategorySlug);
-
-    string BuildListing(
-        string? culture,
-        string citySlug,
-        string categorySlug,
-        string subCategorySlug,
-        string listingSlug,
-        int listingId);
+    string BuildHomeUrl(string culture);
+    string BuildCatalogUrl(string culture);
+    string BuildCityUrl(string culture, string citySlug);
+    string BuildCategoryUrl(string culture, string citySlug, string categorySlug);
+    string BuildSubCategoryUrl(string culture, string citySlug, string categorySlug, string subCategorySlug);
+    string BuildListingUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, string listingSlug, Guid id);
 }

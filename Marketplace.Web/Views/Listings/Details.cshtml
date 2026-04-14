@@ -1,1 +1,47 @@
-﻿
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+@{
+    ViewData["Title"] = Model.Title;
+    var structuredData = ViewData["StructuredData"] as string;
+    var breadcrumbsStructuredData = ViewData["BreadcrumbsStructuredData"] as string;
+}
+
+@section StructuredData {
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="structuredData" />
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="breadcrumbsStructuredData" />
+}
+
+@if (Model.Breadcrumbs.Any())
+{
+    <partial name="~/Views/Shared/Navigation/_Breadcrumbs.cshtml" model="Model.Breadcrumbs" />
+}
+
+<section class="listing-details-page">
+    <div class="listing-details-main">
+        <partial name="~/Views/Shared/ListingDetails/_ListingHeader.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingGallery.cshtml" model="Model.Gallery" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingDescription.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingMeta.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingReviews.cshtml" model="Model.Reviews" />
+    </div>
+
+    <aside class="listing-details-sidebar">
+        <partial name="~/Views/Shared/ListingDetails/_ListingContactCard.cshtml" model="Model.Contact" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingMap.cshtml" model="Model" />
+    </aside>
+</section>
+
+@if (Model.HasRelatedListings)
+{
+    <section class="app-section">
+        @{
+            var header = new Marketplace.Web.Models.Shared.SectionHeaderVm
+            {
+                Title = "Related services"
+            };
+        }
+
+        <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="header" />
+        <partial name="~/Views/Shared/Lists/_RelatedListingsGrid.cshtml" model="Model.RelatedListings" />
+    </section>
+}

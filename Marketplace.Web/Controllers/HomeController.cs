@@ -1,41 +1,46 @@
-using System.Diagnostics;
+using Marketplace.Web.Services.Home;
+using Marketplace.Web.Services.Seo;
+using Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Marketplace.Web.Models;
-using Marketplace.Web.Models.Home;
-using Marketplace.Web.Seo;
 
 namespace Marketplace.Web.Controllers;
 
-public class HomeController : Controller
+public sealed class HomeController : Controller
 {
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
-    {
-        var vm = new HomeIndexPageVm();
+    private readonly IHomeService _homeService;
+    private readonly ISeoService _seoService;
 
-        this.SetSeo(new PageSeoData
-            {
-                // Title = $"",
-                // Description = $"",
-                // CanonicalUrl = Url.Action("Subcategory", "Catalog", new
-                // {
-                //     city = vm.CitySlug,
-                //     category = vm.CategorySlug,
-                //     subcategory = vm.SubCategorySlug
-                // }, Request.Scheme),
-                // Robots = "index,follow"
-            });
+    public HomeController(IHomeService homeService, ISeoService seoService)
+    {
+        _homeService = homeService;
+        _seoService = seoService;
+    }
+
+    [HttpGet("/{culture:regex(^uk|en$)}")]
+    public async Task<IActionResult> Index(string culture, CancellationToken cancellationToken)
+    {
+        culture = CultureHelper.Normalize(culture);
+
+        var vm = await _homeService.GetHomePageAsync(culture, cancellationToken);
+        ViewData["Seo"] = _seoService.BuildHomePageSeo(vm, Request, culture);
 
         return View(vm);
     }
 
-    public IActionResult Privacy()
+    [HttpGet("/{culture:regex(^uk|en$)}/privacy")]
+    public IActionResult Privacy(string culture)
     {
-        return View();
-    }
+        culture = CultureHelper.Normalize(culture);
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        ViewData["Seo"] = new Marketplace.Web.Seo.PageSeoData
+        {
+            Title = culture == "uk" ? "Політика конфіденційності" : "Privacy Policy",
+            Description = culture == "uk"
+                ? "Інформація про конфіденційність і обробку даних."
+                : "Information about privacy and data processing.",
+            Robots = "index, follow"
+        };
+
+        return View();
     }
 }

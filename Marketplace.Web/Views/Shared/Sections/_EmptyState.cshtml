@@ -1,0 +1,12 @@
+﻿@model Marketplace.Web.Models.Shared.EmptyStateVm
+
+<section class="empty-state app-card">
+    <div class="empty-state-body">
+        <h2 class="empty-state-title">@Model.Title</h2>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Message))
+        {
+            <p class="empty-state-text">@Model.Message</p>
+        }
+    </div>
+</section>
