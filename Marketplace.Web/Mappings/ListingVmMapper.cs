@@ -1,5 +1,6 @@
 using Marketplace.Web.Domain.Entities;
 using Marketplace.Web.Models.Listings;
+using Marketplace.Web.Models.Listings.Forms;
 
 namespace Marketplace.Web.Mappings;
 
@@ -79,7 +80,11 @@ public sealed class ListingVmMapper : IListingVmMapper
                 .Select(MapReview)
                 .ToList(),
 
-            RelatedListings = relatedListings ?? Array.Empty<RelatedListingVm>()
+            RelatedListings = relatedListings ?? Array.Empty<RelatedListingVm>(),
+            ReviewForm = new CreateListingReviewVm
+            {
+                ListingId = entity.Id
+            }
         };
     }
 

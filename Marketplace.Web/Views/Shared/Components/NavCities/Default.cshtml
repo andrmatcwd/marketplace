@@ -1,0 +1,40 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Shared.NavCityOptionVm>
+@using Marketplace.Web.Utils
+
+@{
+    var culture = CultureHelper.Current();
+    var currentPath = Context.Request.Path.Value ?? string.Empty;
+    var currentCitySlug = string.Empty;
+
+    var segments = currentPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+    if (segments.Length >= 2)
+    {
+        currentCitySlug = segments[1];
+    }
+
+    var selectedCity = Model.FirstOrDefault(x =>
+        string.Equals(x.Slug, currentCitySlug, StringComparison.OrdinalIgnoreCase));
+}
+
+<div class="nav-city-dropdown">
+    <select class="form-select app-select nav-city-select"
+            aria-label="Select city"
+            onchange="if(this.value) window.location.href=this.value;">
+        <option value="/@culture/catalog">
+            @(selectedCity?.Name ?? "Оберіть місто")
+        </option>
+
+        @foreach (var city in Model)
+        {
+            if (string.Equals(city.Slug, currentCitySlug, StringComparison.OrdinalIgnoreCase))
+            {
+                <option value="@city.Url" selected>@city.Name</option>
+            }
+            else
+            {
+                <option value="@city.Url">@city.Name</option>
+            }
+        }
+    </select>
+</div>

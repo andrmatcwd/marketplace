@@ -101,7 +101,7 @@
 
 .listing-meta-list {
     display: grid;
-    gap: 12px;
+    gap: 10px;
     margin: 0;
 }
 
@@ -187,4 +187,66 @@
     .listing-gallery-thumb {
         max-height: none;
     }
+}
+
+
+
+.app-modal {
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.contact-form-feedback {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+}
+
+.contact-form-feedback.is-success {
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.contact-form-feedback.is-error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+
+
+.listing-reviews-list-wrapper {
+    position: relative;
+}
+
+.listing-reviews-list-collapsed {
+    max-height: 290px;
+    overflow: hidden;
+}
+
+.listing-reviews-list-wrapper.has-toggle .listing-reviews-list-collapsed::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 44px;
+    height: 28px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--app-bg));
+}
+
+.listing-reviews-list-expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.listing-reviews-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
 }

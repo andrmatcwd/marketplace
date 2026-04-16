@@ -44,16 +44,19 @@
     <Folder Include="Domain/Enums/" />
     <Folder Include="Localization/" />
     <Folder Include="Mappings/" />
+    <Folder Include="Models/Api/" />
     <Folder Include="Models/Cards/" />
     <Folder Include="Models/Catalog/" />
     <Folder Include="Models/Common/" />
     <Folder Include="Models/Home/" />
+    <Folder Include="Models/Listings/Forms/" />
     <Folder Include="Models/Shared/" />
     <Folder Include="Navigation/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
     <Folder Include="Services/" />
     <Folder Include="Services/Catalog/" />
+    <Folder Include="Services/ContactRequests/" />
     <Folder Include="Services/Home/" />
     <Folder Include="Services/Listings/" />
     <Folder Include="Services/Media/" />
@@ -68,6 +71,7 @@
     <Folder Include="Views/Shared/Components/" />
     <Folder Include="Views/Shared/Components/CategoryTree/" />
     <Folder Include="Views/Shared/Components/FeaturedListings/" />
+    <Folder Include="Views/Shared/Components/NavCities/" />
     <Folder Include="Views/Shared/Components/PopularCities/" />
     <Folder Include="Views/Shared/Layout/" />
     <Folder Include="Views/Shared/ListingDetails/" />

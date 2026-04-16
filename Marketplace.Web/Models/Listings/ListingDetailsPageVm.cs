@@ -1,3 +1,4 @@
+using Marketplace.Web.Models.Listings.Forms;
 using Marketplace.Web.Models.Shared;
 
 namespace Marketplace.Web.Models.Listings;
@@ -42,6 +43,8 @@ public sealed class ListingDetailsPageVm
     public IReadOnlyCollection<BreadcrumbItemVm> Breadcrumbs { get; set; } = Array.Empty<BreadcrumbItemVm>();
     public IReadOnlyCollection<ListingReviewVm> Reviews { get; set; } = Array.Empty<ListingReviewVm>();
     public IReadOnlyCollection<RelatedListingVm> RelatedListings { get; set; } = Array.Empty<RelatedListingVm>();
+
+    public CreateListingReviewVm ReviewForm { get; set; } = new();
 
     public bool HasRating => Rating > 0;
     public bool HasReviews => Reviews.Count > 0;

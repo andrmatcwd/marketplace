@@ -1,0 +1,50 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+@using Marketplace.Web.Utils
+
+@{
+    var culture = CultureHelper.Current();
+}
+
+<div class="modal fade" id="contactListingModal" tabindex="-1" aria-labelledby="contactListingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content app-modal">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="contactListingModalLabel">Написати щодо послуги</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="contactListingForm"
+                      data-culture="@culture"
+                      data-listing-id="@Model.Id">
+                    <div class="mb-3">
+                        <label for="contactName" class="form-label">Ім’я</label>
+                        <input type="text" id="contactName" name="name" class="form-control app-input" maxlength="120" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contactPhone" class="form-label">Телефон</label>
+                        <input type="text" id="contactPhone" name="phone" class="form-control app-input" maxlength="30" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contactMessage" class="form-label">Повідомлення</label>
+                        <textarea id="contactMessage"
+                                  name="message"
+                                  rows="5"
+                                  class="form-control app-input"
+                                  maxlength="2000"
+                                  required></textarea>
+                    </div>
+
+                    <div id="contactListingFeedback" class="contact-form-feedback" hidden></div>
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-app-outline" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="submit" class="btn btn-app" id="contactListingSubmitBtn">Надіслати</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,6 +6,7 @@ using Marketplace.Web.Navigation;
 using Marketplace.Web.Options;
 using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Catalog;
+using Marketplace.Web.Services.ContactRequests;
 using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Media;
@@ -68,6 +69,8 @@ builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+
+builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
 
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();
 builder.Services.AddScoped<CanonicalUrlBuilder>();

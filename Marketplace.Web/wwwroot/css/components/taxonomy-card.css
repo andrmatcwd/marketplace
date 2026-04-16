@@ -1,6 +1,6 @@
 .taxonomy-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
 }
 
@@ -47,6 +47,40 @@
     font-weight: 600;
 }
 
+/* Collapsible taxonomy grids */
+.taxonomy-grid-wrapper {
+    position: relative;
+}
+
+.taxonomy-grid-collapsed {
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.taxonomy-grid-wrapper.has-toggle .taxonomy-grid-collapsed::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 44px;
+    height: 40px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--app-bg));
+}
+
+.taxonomy-grid-expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.taxonomy-grid-actions {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
 @media (max-width: 991.98px) {
     .taxonomy-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -56,5 +90,9 @@
 @media (max-width: 575.98px) {
     .taxonomy-grid {
         grid-template-columns: 1fr;
+    }
+
+    .taxonomy-grid-collapsed {
+        max-height: 520px;
     }
 }

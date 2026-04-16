@@ -1,4 +1,161 @@
-#popular-categories,
-#popular-cities {
-    scroll-margin-top: 96px;
+.anchor-section {
+    scroll-margin-top: 104px;
+}
+
+.home-hero-page {
+    margin-bottom: 32px;
+}
+
+.home-hero-card {
+    background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 34%),
+        linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+    border: 1px solid var(--app-border);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--app-shadow-sm);
+}
+
+.home-hero-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(320px, 440px);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.home-hero-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.home-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.home-hero-title {
+    margin: 0 0 14px;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    line-height: 1.03;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    color: var(--app-text);
+}
+
+.home-hero-subtitle {
+    margin: 0 0 18px;
+    max-width: 720px;
+    color: var(--app-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.home-hero-points {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--app-text);
+}
+
+.home-hero-points li {
+    margin-bottom: 8px;
+}
+
+.home-search-panel {
+    height: 100%;
+}
+
+.home-search-panel-body {
+    padding: 22px;
+}
+
+.home-search-title {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--app-text);
+}
+
+.home-search-description {
+    margin: 0 0 18px;
+    color: var(--app-text-muted);
+    line-height: 1.65;
+}
+
+.home-search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.home-search-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.home-search-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.home-detected-city {
+    margin-top: 4px;
+    color: var(--app-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+@media (max-width: 991.98px) {
+    .home-hero-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .home-hero-card {
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .home-search-panel-body {
+        padding: 18px;
+    }
+
+    .home-search-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+.how-card,
+.trust-card {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+.how-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
 }

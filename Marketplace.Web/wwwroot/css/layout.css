@@ -36,7 +36,7 @@ body.app-body {
 
 .site-footer {
     border-top: 1px solid var(--app-border);
-    padding: 24px 0 40px;
+    padding: 20px 0 20px;
     /* margin-top: 40px; */
     background: #ffffff;
 }

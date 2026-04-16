@@ -2,6 +2,7 @@ using Marketplace.Web.Data;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Home;
 using Marketplace.Web.Models.Shared;
+using Marketplace.Web.Navigation;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Services.Home;
@@ -10,13 +11,16 @@ public sealed class HomeService : IHomeService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ICatalogVmMapper _catalogVmMapper;
+    private readonly ICatalogUrlBuilder _urlBuilder;
 
     public HomeService(
         ApplicationDbContext dbContext,
-        ICatalogVmMapper catalogVmMapper)
+        ICatalogVmMapper catalogVmMapper,
+        ICatalogUrlBuilder urlBuilder)
     {
         _dbContext = dbContext;
         _catalogVmMapper = catalogVmMapper;
+        _urlBuilder = urlBuilder;
     }
 
     public async Task<HomePageVm> GetHomePageAsync(string culture, CancellationToken cancellationToken)
@@ -54,30 +58,31 @@ public sealed class HomeService : IHomeService
             .Include(x => x.Category)
             .Include(x => x.SubCategory)
             .Include(x => x.Images)
-            .OrderByDescending(x => x.Rating)
-            .ThenByDescending(x => x.ReviewsCount)
-            .Take(6)
+            .OrderByDescending(x => x.ReviewsCount)
+            .ThenByDescending(x => x.Rating)
+            .Take(8)
             .ToListAsync(cancellationToken);
 
         return new HomePageVm
         {
             Culture = culture,
-            Hero = new PageHeroVm
+            Hero = new HomeHeroVm
             {
-                Title = "Service catalog in your city",
-                Description = "Find trusted services, companies, and specialists in a clean directory."
+                Title = "Знайдіть перевірені послуги у своєму місті",
+                Subtitle = "Каталог компаній, спеціалістів і локальних сервісів з пошуком за містами, категоріями та напрямками.",
+                SearchActionUrl = _urlBuilder.BuildCatalogUrl(culture),
+                SearchPlaceholder = "Наприклад: стоматолог, клінінг, майстер ремонту",
+                CityPlaceholder = "Оберіть місто"
             },
-            SeoIntro = new SeoIntroVm
-            {
-                Title = "About the catalog",
-                Text = "<p>Marketplace helps users quickly find actual services by city, category, and subcategory.</p>"
-            },
+            CityOptions = cities
+                .Select(x => _catalogVmMapper.MapFilterOption(x.Entity.Slug, x.Entity.Name))
+                .ToList(),
             PopularCitiesSection = new()
             {
                 Header = new SectionHeaderVm
                 {
-                    Title = "Popular cities",
-                    Description = "Choose a city to browse available services."
+                    Title = "Популярні міста",
+                    Description = "Оберіть місто та перегляньте доступні послуги."
                 },
                 Items = cities
                     .Select(x => _catalogVmMapper.MapCityCard(x.Entity, x.ListingsCount, culture))
@@ -87,8 +92,8 @@ public sealed class HomeService : IHomeService
             {
                 Header = new SectionHeaderVm
                 {
-                    Title = "Popular categories",
-                    Description = "Quick access to the main service directions."
+                    Title = "Популярні категорії",
+                    Description = "Швидкий доступ до основних напрямків послуг."
                 },
                 Items = categories
                     .Select(x => _catalogVmMapper.MapCategoryCard(x.Entity, x.ListingsCount, culture))
@@ -98,12 +103,21 @@ public sealed class HomeService : IHomeService
             {
                 Header = new SectionHeaderVm
                 {
-                    Title = "Featured services"
+                    Title = "Популярні пропозиції",
+                    Description = "Добірка актуальних і популярних послуг."
                 },
                 Listings = featuredListings
                     .Select(x => _catalogVmMapper.MapListingCard(x, culture))
                     .ToList(),
                 ShowMobileFilterButton = false
+            },
+            SeoIntro = new SeoIntroVm
+            {
+                Title = "Про каталог послуг",
+                Text = """
+                       <p>Marketplace допомагає швидко знайти послуги у потрібному місті: від медицини та краси до побутових і локальних сервісів.</p>
+                       <p>Оберіть місто, перегляньте категорії або скористайтеся пошуком, щоб знайти потрібну компанію чи спеціаліста.</p>
+                       """
             }
         };
     }

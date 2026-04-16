@@ -1,30 +1,121 @@
-﻿@model IReadOnlyCollection<Marketplace.Web.Models.Listings.ListingReviewVm>
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
 
-@if (Model != null && Model.Any())
-{
-    <section class="app-card listing-reviews-card">
-        <div class="listing-reviews-body">
-            <h2 class="section-title">Reviews</h2>
+@{
+    var hasReviews = Model.Reviews != null && Model.Reviews.Any();
+    var hasToggle = hasReviews && Model.Reviews.Count > 3;
+    var reviewsWrapperClass = hasToggle
+        ? "listing-reviews-list-wrapper has-toggle"
+        : "listing-reviews-list-wrapper";
+    var reviewsListClass = hasToggle
+        ? "listing-reviews-list listing-reviews-list-collapsed"
+        : "listing-reviews-list";
+}
 
-            <div class="listing-reviews-list">
-                @foreach (var review in Model)
-                {
-                    <article class="listing-review-item">
-                        <div class="listing-review-head">
-                            <strong>@review.AuthorName</strong>
-                            @if (review.Rating > 0)
+<section class="app-card listing-reviews-card">
+    <div class="listing-reviews-body">
+        <h2 class="section-title">Відгуки</h2>
+
+        @if (TempData["ReviewSuccess"] is string successMessage)
+        {
+            <div class="alert alert-success mt-3">@successMessage</div>
+        }
+
+        @if (TempData["ReviewError"] is string errorMessage)
+        {
+            <div class="alert alert-danger mt-3">@errorMessage</div>
+        }
+
+        @if (hasReviews)
+        {
+            <div class="@reviewsWrapperClass" data-reviews-wrapper>
+                <div class="@reviewsListClass" data-reviews-list>
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <article class="listing-review-item">
+                            <div class="listing-review-head">
+                                <strong>@review.AuthorName</strong>
+
+                                @if (review.Rating > 0)
+                                {
+                                    <span>★ @review.RatingFormatted</span>
+                                }
+                            </div>
+
+                            @if (review.HasText)
                             {
-                                <span>★ @review.RatingFormatted</span>
+                                <p>@review.Text</p>
                             }
-                        </div>
+                        </article>
+                    }
+                </div>
 
-                        @if (review.HasText)
-                        {
-                            <p>@review.Text</p>
-                        }
-                    </article>
+                @if (hasToggle)
+                {
+                    <div class="listing-reviews-actions">
+                        <button type="button"
+                                class="btn btn-app-outline btn-sm"
+                                data-reviews-toggle>
+                            Показати всі
+                        </button>
+                    </div>
                 }
             </div>
-        </div>
-    </section>
-}
+        }
+        else
+        {
+            <p class="section-description mb-4">Ще немає відгуків. Будьте першим, хто залишить відгук.</p>
+        }
+
+        @* <div class="review-form-wrap">
+            <h3 class="review-form-title">Залишити відгук</h3>
+
+            <form asp-controller="Listings"
+                  asp-action="CreateReview"
+                  method="post"
+                  class="review-form">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="ReviewForm.ListingId" />
+
+                <div class="review-form-grid">
+                    <div class="review-form-field">
+                        <label asp-for="ReviewForm.AuthorName" class="form-label"></label>
+                        <input asp-for="ReviewForm.AuthorName" class="form-control app-input" />
+                        <span asp-validation-for="ReviewForm.AuthorName" class="text-danger"></span>
+                    </div>
+
+                    <div class="review-form-field">
+                        <label asp-for="ReviewForm.Email" class="form-label"></label>
+                        <input asp-for="ReviewForm.Email" class="form-control app-input" />
+                        <span asp-validation-for="ReviewForm.Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="review-form-field">
+                    <label asp-for="ReviewForm.Rating" class="form-label"></label>
+                    <select asp-for="ReviewForm.Rating" class="form-select app-select">
+                        <option value="">Оберіть оцінку</option>
+                        <option value="5">5 — Відмінно</option>
+                        <option value="4">4 — Добре</option>
+                        <option value="3">3 — Нормально</option>
+                        <option value="2">2 — Слабо</option>
+                        <option value="1">1 — Погано</option>
+                    </select>
+                    <span asp-validation-for="ReviewForm.Rating" class="text-danger"></span>
+                </div>
+
+                <div class="review-form-field">
+                    <label asp-for="ReviewForm.Text" class="form-label"></label>
+                    <textarea asp-for="ReviewForm.Text"
+                              rows="5"
+                              class="form-control app-input"></textarea>
+                    <span asp-validation-for="ReviewForm.Text" class="text-danger"></span>
+                </div>
+
+                <div class="review-form-actions">
+                    <button type="submit" class="btn btn-app">Надіслати відгук</button>
+                </div>
+            </form>
+        </div> *@
+    </div>
+</section>
