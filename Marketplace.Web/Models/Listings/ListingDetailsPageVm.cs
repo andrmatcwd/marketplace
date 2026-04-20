@@ -55,7 +55,11 @@ public sealed class ListingDetailsPageVm
     public string RatingFormatted => Rating > 0 ? Rating.ToString("0.0") : string.Empty;
 
     public double? Latitude { get; set; }
-public double? Longitude { get; set; }
+    public double? Longitude { get; set; }
 
-public bool HasCoordinates => Latitude.HasValue && Longitude.HasValue;
+    public bool HasCoordinates => Latitude.HasValue && Longitude.HasValue;
+
+    public IReadOnlyCollection<string> ServiceFeatures { get; set; } = Array.Empty<string>();
+
+    public bool HasServiceFeatures => ServiceFeatures != null && ServiceFeatures.Any();
 }

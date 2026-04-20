@@ -84,7 +84,9 @@ public sealed class ListingVmMapper : IListingVmMapper
             ReviewForm = new CreateListingReviewVm
             {
                 ListingId = entity.Id
-            }
+            },
+
+            ServiceFeatures = BuildServiceFeatures(entity),
         };
     }
 
@@ -119,4 +121,51 @@ public sealed class ListingVmMapper : IListingVmMapper
             Rating = entity.Rating
         };
     }
+
+    private static IReadOnlyCollection<string> BuildServiceFeatures(Domain.Entities.Listing entity)
+{
+    var features = new List<string>();
+
+    if (!string.IsNullOrWhiteSpace(entity.Phone))
+    {
+        features.Add("Є телефон для звʼязку");
+    }
+
+    if (!string.IsNullOrWhiteSpace(entity.Email))
+    {
+        features.Add("Є email для звернення");
+    }
+
+    if (!string.IsNullOrWhiteSpace(entity.Website))
+    {
+        features.Add("Є сайт або сторінка компанії");
+    }
+
+    if (!string.IsNullOrWhiteSpace(entity.Address))
+    {
+        features.Add("Є фізична адреса");
+    }
+
+    if (entity.Latitude.HasValue && entity.Longitude.HasValue)
+    {
+        features.Add("Є точка на карті");
+    }
+
+    if (entity.Images != null && entity.Images.Any())
+    {
+        features.Add("Доступна галерея фото");
+    }
+
+    if (entity.Rating >= 4.5)
+    {
+        features.Add("Високий рейтинг");
+    }
+
+    if (entity.ReviewsCount >= 10)
+    {
+        features.Add("Достатньо відгуків для оцінки");
+    }
+
+    return features;
+}
 }

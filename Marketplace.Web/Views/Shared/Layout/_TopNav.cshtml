@@ -9,6 +9,11 @@
             Marketplace
         </a>
 
+        <!-- 🔥 Місто завжди видно -->
+        <div class="app-navbar-center">
+            @await Component.InvokeAsync("NavCities")
+        </div>
+
         <div class="app-navbar-mobile-actions d-lg-none">
             <partial name="~/Views/Shared/Layout/_LanguageSwitcher.cshtml" />
 
@@ -29,9 +34,11 @@
             <li class="nav-item">
                 <a class="nav-link app-nav-link" href="/@culture/catalog">Каталог</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link app-nav-link" href="/@culture#popular-cities">Міста</a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link app-nav-link" href="/@culture#popular-categories">Категорії</a>
             </li>
