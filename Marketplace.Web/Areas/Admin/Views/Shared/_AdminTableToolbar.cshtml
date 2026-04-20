@@ -1,0 +1,10 @@
+﻿@model string
+
+<div class="admin-toolbar">
+    <div class="admin-toolbar__left">
+        <h2 class="admin-page-title">@Model</h2>
+    </div>
+    <div class="admin-toolbar__right">
+        @RenderSection("ToolbarActions", required: false)
+    </div>
+</div>

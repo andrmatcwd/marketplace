@@ -1,0 +1,94 @@
+﻿@model Marketplace.Web.Areas.Admin.Models.Dashboard.DashboardVm
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Dashboard</h2>
+            <p class="admin-page-subtitle">Огляд основних сутностей та останніх змін у каталозі.</p>
+        </div>
+    </div>
+
+    <section class="admin-stats-grid">
+        <article class="admin-stat-card">
+            <div class="admin-stat-card__label">Regions</div>
+            <div class="admin-stat-card__value">@Model.RegionsCount</div>
+        </article>
+
+        <article class="admin-stat-card">
+            <div class="admin-stat-card__label">Cities</div>
+            <div class="admin-stat-card__value">@Model.CitiesCount</div>
+        </article>
+
+        <article class="admin-stat-card">
+            <div class="admin-stat-card__label">Categories</div>
+            <div class="admin-stat-card__value">@Model.CategoriesCount</div>
+        </article>
+
+        <article class="admin-stat-card">
+            <div class="admin-stat-card__label">SubCategories</div>
+            <div class="admin-stat-card__value">@Model.SubCategoriesCount</div>
+        </article>
+
+        <article class="admin-stat-card">
+            <div class="admin-stat-card__label">Listings</div>
+            <div class="admin-stat-card__value">@Model.ListingsCount</div>
+        </article>
+    </section>
+
+    <section class="admin-card">
+        <div class="admin-section-heading">
+            <h3 class="admin-section-heading__title">Останні listings</h3>
+            <p class="admin-section-heading__text">Останні додані або створені записи.</p>
+        </div>
+
+        @if (Model.RecentListings.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Підкатегорія</th>
+                            <th>Місто</th>
+                            <th>Створено</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RecentListings)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Title</td>
+                                <td>@item.Category</td>
+                                <td>@item.SubCategory</td>
+                                <td>@item.City</td>
+                                <td>@item.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td class="admin-table__actions">
+                                    <a asp-area="Admin"
+                                       asp-controller="Listings"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="admin-btn admin-btn--xs admin-btn--secondary">
+                                        Редагувати
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml"
+                     model='"Останніх listings поки немає."' />
+        }
+    </section>
+</div>

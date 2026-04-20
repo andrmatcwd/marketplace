@@ -23,12 +23,12 @@
     <Folder Include="Appointments/Filters/" />
     <Folder Include="Appointments/Mappings/" />
     <Folder Include="Appointments/Queries/" />
-    <Folder Include="Categories/" />
     <Folder Include="Categories/Commands/" />
     <Folder Include="Categories/Dtos/" />
     <Folder Include="Categories/Filters/" />
     <Folder Include="Categories/Mappings/" />
-    <Folder Include="Categories/Queries/" />
+    <Folder Include="Categories/Queries/GetCategoryBySlags/" />
+    <Folder Include="Cities/Queries/GetCityBySlags/" />
     <Folder Include="Common/" />
     <Folder Include="Common/Models/" />
     <Folder Include="Listings/Commands/" />
@@ -38,19 +38,12 @@
     <Folder Include="Listings/Dtos/" />
     <Folder Include="Listings/Filters/" />
     <Folder Include="Listings/Mappings/" />
+    <Folder Include="Listings/Queries/GetListingBySlags/" />
     <Folder Include="Listings/Queries/GetListingsByFilter/" />
-    <Folder Include="Locations/" />
-    <Folder Include="Locations/Commands/" />
-    <Folder Include="Locations/Dtos/" />
-    <Folder Include="Locations/Filters/" />
-    <Folder Include="Locations/Mappings/" />
-    <Folder Include="Locations/Queries/" />
-    <Folder Include="Regions/" />
     <Folder Include="Regions/Commands/" />
     <Folder Include="Regions/Dtos/" />
     <Folder Include="Regions/Filters/" />
     <Folder Include="Regions/Mappings/" />
-    <Folder Include="Regions/Queries/" />
     <Folder Include="Reviewers/" />
     <Folder Include="Reviewers/Commands/" />
     <Folder Include="Reviewers/Dtos/" />
@@ -63,14 +56,11 @@
     <Folder Include="Reviews/Filters/" />
     <Folder Include="Reviews/Mappings/" />
     <Folder Include="Reviews/Queries/" />
-    <Folder Include="Services/" />
-    <Folder Include="Services/Implementations/" />
-    <Folder Include="SubCategories/" />
     <Folder Include="SubCategories/Commands/" />
     <Folder Include="SubCategories/Dtos/" />
     <Folder Include="SubCategories/Filters/" />
     <Folder Include="SubCategories/Mappings/" />
-    <Folder Include="SubCategories/Queries/" />
+    <Folder Include="SubCategories/Queries/GetSubCategoryBySlags/" />
   </ItemGroup>
 
 </Project>

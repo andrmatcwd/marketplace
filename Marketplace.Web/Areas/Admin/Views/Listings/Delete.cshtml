@@ -1,0 +1,56 @@
+﻿@model ListingListItemVm
+@{
+    ViewData["Title"] = "Delete Listing";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити listing</h2>
+            <p class="admin-page-subtitle">Підтвердження видалення.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--danger">
+        <div class="admin-delete-summary">
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">ID</span>
+                <span>@Model.Id</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Назва</span>
+                <span>@Model.Title</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Категорія</span>
+                <span>@Model.CategoryName</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Підкатегорія</span>
+                <span>@Model.SubCategoryName</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Місто</span>
+                <span>@Model.CityName</span>
+            </div>
+            @* <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Ціна</span>
+                <span>@Model.Price @Model.Currency</span>
+            </div> *@
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Статус</span>
+                <span>@Model.Status</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Створено</span>
+                <span>@Model.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</span>
+            </div>
+        </div>
+
+        <form method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="admin-btn admin-btn--danger">Так, видалити</button>
+            <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+        </form>
+    </div>
+</div>

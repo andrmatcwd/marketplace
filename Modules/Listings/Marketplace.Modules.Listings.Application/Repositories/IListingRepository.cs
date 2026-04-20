@@ -5,7 +5,7 @@ namespace Marketplace.Modules.Listings.Application.Repositories;
 
 public interface IListingRepository : IBaseRepository<Listing, int>
 {
-    Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetListingsAsync(
+    Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetByFilterAsync(
         ListingFilter filter,
         CancellationToken cancellationToken = default);
 }

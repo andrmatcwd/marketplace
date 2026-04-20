@@ -1,33 +1,46 @@
-using System.Diagnostics;
+using Marketplace.Web.Services.Home;
+using Marketplace.Web.Services.Seo;
+using Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Marketplace.Web.Models;
-using Marketplace.Web.Services.Listing;
-using Marketplace.Web.Models.Listings;
 
 namespace Marketplace.Web.Controllers;
 
-public class HomeController(IListingCatalogService catalogService) : Controller
+public sealed class HomeController : Controller
 {
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    private readonly IHomeService _homeService;
+    private readonly ISeoService _seoService;
+
+    public HomeController(IHomeService homeService, ISeoService seoService)
     {
-        var result = await catalogService.GetListingsAsync(new ListingsFilterRequest
+        _homeService = homeService;
+        _seoService = seoService;
+    }
+
+    [HttpGet("/{culture:regex(^uk|en$)}")]
+    public async Task<IActionResult> Index(string culture, CancellationToken cancellationToken)
+    {
+        culture = CultureHelper.Normalize(culture);
+
+        var vm = await _homeService.GetHomePageAsync(culture, cancellationToken);
+        ViewData["Seo"] = _seoService.BuildHomePageSeo(vm, Request, culture);
+
+        return View(vm);
+    }
+
+    [HttpGet("/{culture:regex(^uk|en$)}/privacy")]
+    public IActionResult Privacy(string culture)
+    {
+        culture = CultureHelper.Normalize(culture);
+
+        ViewData["Seo"] = new Marketplace.Web.Seo.PageSeoData
         {
-            Page = 1,
-            PageSize = 6,
-            SortBy = "rating_desc"
-        }, cancellationToken);
+            Title = culture == "uk" ? "Політика конфіденційності" : "Privacy Policy",
+            Description = culture == "uk"
+                ? "Інформація про конфіденційність і обробку даних."
+                : "Information about privacy and data processing.",
+            Robots = "index, follow"
+        };
 
-        return View(result.Items);
-    }
-
-    public IActionResult Privacy()
-    {
         return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

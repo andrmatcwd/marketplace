@@ -1,0 +1,18 @@
+﻿@model Marketplace.Web.Models.Cards.CategoryCardVm
+
+<article class="taxonomy-card app-card h-100">
+    <a href="@Model.Url" class="taxonomy-card-link">
+        <div class="taxonomy-card-body">
+            <h3 class="taxonomy-card-title">@Model.Name</h3>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p class="taxonomy-card-description">@Model.Description</p>
+            }
+
+            <div class="taxonomy-card-meta">
+                @Model.ListingsCount services
+            </div>
+        </div>
+    </a>
+</article>

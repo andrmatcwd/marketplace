@@ -1,0 +1,9 @@
+﻿@model Marketplace.Web.Models.Shared.TaxonomySectionVm<Marketplace.Web.Models.Cards.CategoryCardVm>
+
+@if (Model.HasItems)
+{
+    <section class="app-section">
+        <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="Model.Header" />
+        <partial name="~/Views/Shared/Lists/_CategoriesGrid.cshtml" model="Model.Items" />
+    </section>
+}

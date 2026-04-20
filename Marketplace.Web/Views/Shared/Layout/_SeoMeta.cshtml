@@ -1,0 +1,14 @@
+﻿@using Marketplace.Web.Seo
+@{
+    var seo = ViewData.GetSeo();
+}
+
+@if (seo is not null)
+{
+    <title>@seo.Title</title>
+    <seo-meta model="seo"></seo-meta>
+}
+else
+{
+    <title>@ViewData["Title"]</title>
+}

@@ -1,0 +1,17 @@
+﻿@model Marketplace.Web.Models.Listings.ListingGalleryVm
+
+<section class="app-card listing-gallery-card">
+    <div class="listing-gallery-body">
+        <img src="@Model.GetPrimaryImageOrDefault()" alt="Gallery image" class="listing-gallery-main-image" />
+
+        @if (Model.HasImages && Model.Images.Count > 1)
+        {
+            <div class="listing-gallery-thumbs">
+                @foreach (var image in Model.Images)
+                {
+                    <img src="@image.Url" alt="@image.Alt" class="listing-gallery-thumb" />
+                }
+            </div>
+        }
+    </div>
+</section>

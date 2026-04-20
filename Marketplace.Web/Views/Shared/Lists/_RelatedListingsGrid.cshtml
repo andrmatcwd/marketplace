@@ -1,0 +1,11 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Listings.RelatedListingVm>
+
+@if (Model != null && Model.Any())
+{
+    <div class="listings-grid">
+        @foreach (var item in Model)
+        {
+            <partial name="~/Views/Shared/Cards/_RelatedListingCard.cshtml" model="item" />
+        }
+    </div>
+}

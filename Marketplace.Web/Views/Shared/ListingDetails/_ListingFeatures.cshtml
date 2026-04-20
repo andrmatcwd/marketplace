@@ -1,0 +1,45 @@
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+
+@if (Model.HasServiceFeatures)
+{
+    var hasToggle = Model.ServiceFeatures.Count > 6;
+    var wrapperClass = hasToggle
+        ? "listing-features-wrapper has-toggle"
+        : "listing-features-wrapper";
+    var listClass = hasToggle
+        ? "listing-features listing-features-collapsed"
+        : "listing-features";
+    
+    <section class="app-card listing-features-card">
+        <div class="listing-features-body">
+            <div class="section-header mb-3">
+                <div>
+                    <h2 class="section-title">Що доступно</h2>
+                    <p class="section-description">
+                        Короткий перелік основних характеристик пропозиції.
+                    </p>
+                </div>
+            </div>
+
+            <div class="@wrapperClass" data-features-wrapper>
+                <ul class="@listClass" data-features-list>
+                    @foreach (var feature in Model.ServiceFeatures)
+                    {
+                        <li class="listing-features-item">@feature</li>
+                    }
+                </ul>
+
+                @if (hasToggle)
+                {
+                    <div class="listing-features-actions">
+                        <button type="button"
+                                class="btn btn-app-outline btn-sm"
+                                data-features-toggle>
+                            Показати всі
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

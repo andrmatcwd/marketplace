@@ -1,0 +1,44 @@
+﻿@model CityListItemVm
+@{
+    ViewData["Title"] = "Delete City";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити місто</h2>
+            <p class="admin-page-subtitle">Підтвердження видалення.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--danger">
+        <div class="admin-delete-summary">
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">ID</span>
+                <span>@Model.Id</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Назва</span>
+                <span>@Model.Name</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Slug</span>
+                <span>@Model.Slug</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Регіон</span>
+                <span>@Model.RegionName</span>
+            </div>
+            <div class="admin-delete-summary__row">
+                <span class="admin-delete-summary__label">Listings</span>
+                <span>@Model.ListingsCount</span>
+            </div>
+        </div>
+
+        <form method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="admin-btn admin-btn--danger">Так, видалити</button>
+            <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+        </form>
+    </div>
+</div>

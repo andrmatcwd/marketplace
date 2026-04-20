@@ -1,0 +1,44 @@
+﻿@model Marketplace.Web.Models.Listings.ListingCardVm
+
+<article class="listing-card app-card h-100">
+    <a href="@Model.Url" class="listing-card-link" aria-label="@Model.Title">
+        <div class="listing-card-media">
+            <img src="@Model.GetImageOrDefault()"
+                 alt="@(string.IsNullOrWhiteSpace(Model.ImageAlt) ? Model.Title : Model.ImageAlt)"
+                 loading="lazy" />
+        </div>
+
+        <div class="listing-card-body">
+            <div class="listing-card-top">
+                @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+                {
+                    <span class="listing-card-category">@Model.CategoryName</span>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.CityName))
+                {
+                    <span class="listing-card-city">@Model.CityName</span>
+                }
+            </div>
+
+            <h3 class="listing-card-title">@Model.Title</h3>
+
+            @if (Model.HasDescription)
+            {
+                <p class="listing-card-description">@Model.ShortDescription</p>
+            }
+
+            <div class="listing-card-meta">
+                @if (!string.IsNullOrWhiteSpace(Model.SubCategoryName))
+                {
+                    <span>@Model.SubCategoryName</span>
+                }
+
+                @if (Model.HasRating)
+                {
+                    <span class="listing-card-rating">★ @Model.RatingFormatted</span>
+                }
+            </div>
+        </div>
+    </a>
+</article>

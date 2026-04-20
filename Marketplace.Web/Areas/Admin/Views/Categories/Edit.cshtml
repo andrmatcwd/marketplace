@@ -1,0 +1,53 @@
+﻿@model CategoryFormVm
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Редагувати категорію</h2>
+            <p class="admin-page-subtitle">Оновлення даних категорії.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="Name" class="admin-label"></label>
+                    <input asp-for="Name" class="admin-input" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Slug" class="admin-label"></label>
+                    <input asp-for="Slug" class="admin-input" />
+                    <span asp-validation-for="Slug" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Icon" class="admin-label"></label>
+                    <input asp-for="Icon" class="admin-input" />
+                    <span asp-validation-for="Icon" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Description" class="admin-label"></label>
+                    <textarea asp-for="Description" class="admin-textarea"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти зміни</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

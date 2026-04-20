@@ -1,33 +1,77 @@
-﻿@model Marketplace.Web.Models.Listings.ListingViewModel
-@using Marketplace.Web.Options
+﻿@using Marketplace.Web.Options
 @using Microsoft.Extensions.Options
+@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
 @inject IOptions<GoogleMapsOptions> GoogleMapsOptions
-
 @{
     ViewData["Title"] = Model.Title;
+    var structuredData = ViewData["StructuredData"] as string;
+    var breadcrumbsStructuredData = ViewData["BreadcrumbsStructuredData"] as string;
     var apiKey = GoogleMapsOptions.Value.ApiKey;
 }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/pages/listing-details.css" asp-append-version="true" />
+@section StructuredData {
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="structuredData" />
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="breadcrumbsStructuredData" />
 }
 
-<div class="container py-4 listing-details-page">
-    <div class="row g-4">
-        <partial name="DetailsSections/_ListingGallerySection" model="Model" />
-        <partial name="DetailsSections/_ListingInfoSection" model="Model" />
+@if (Model.Breadcrumbs.Any())
+{
+    <partial name="~/Views/Shared/Navigation/_Breadcrumbs.cshtml" model="Model.Breadcrumbs" />
+}
+
+<section class="listing-details-page">
+    <div class="listing-details-main">
+        <partial name="~/Views/Shared/ListingDetails/_ListingHeader.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingDescription.cshtml" model="Model" />
+
+        <section class="listing-details-gallery-meta">
+            <div class="listing-details-gallery-col">
+                <partial name="~/Views/Shared/ListingDetails/_ListingGallery.cshtml" model="Model.Gallery" />
+            </div>
+
+            <div class="listing-details-meta-col">
+                <partial name="~/Views/Shared/ListingDetails/_ListingContactCard.cshtml" model="Model" />
+                <partial name="~/Views/Shared/ListingDetails/_ListingMeta.cshtml" model="Model" />
+            </div>
+        </section>
+
+        @* <partial name="~/Views/Shared/ListingDetails/_ListingDescription.cshtml" model="Model" /> *@
+        @* <partial name="~/Views/Shared/ListingDetails/_ListingContactCard.cshtml" model="Model.Contact" /> *@
+        <partial name="~/Views/Shared/ListingDetails/_ListingMap.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingFeatures.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingReviews.cshtml" model="Model" />
+        <partial name="~/Views/Shared/ListingDetails/_ContactListingModal.cshtml" model="Model" />
     </div>
 
-    <partial name="DetailsSections/_ListingLocationSection" model="Model" />
-    <partial name="DetailsSections/_ListingReviewsSection" model="Model" />
-</div>
+    @* <aside class="listing-details-sidebar">
+        <partial name="~/Views/Shared/ListingDetails/_ListingContactCard.cshtml" model="Model.Contact" />
+        <partial name="~/Views/Shared/ListingDetails/_ListingMap.cshtml" model="Model" />
+    </aside> *@
+</section>
+
+@if (Model.HasRelatedListings)
+{
+    <section class="app-section">
+        @{
+            var header = new Marketplace.Web.Models.Shared.SectionHeaderVm
+            {
+                Title = "Related services"
+            };
+        }
+
+        <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="header" />
+        <partial name="~/Views/Shared/Lists/_RelatedListingsGrid.cshtml" model="Model.RelatedListings" />
+    </section>
+}
 
 @section Scripts {
     @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
     {
-        <script src="~/js/pages/listing-details.js" asp-append-version="true"></script>
         <script async
                 src="https://maps.googleapis.com/maps/api/js?key=@apiKey&loading=async&callback=initListingMap&libraries=marker">
         </script>
     }
+    <script src="~/js/pages/listing-contact-modal.js" asp-append-version="true"></script>
+    <script src="~/js/pages/listing-reviews-toggle.js" asp-append-version="true"></script>
+    <script src="~/js/pages/listing-features-toggle.js" asp-append-version="true"></script>
 }

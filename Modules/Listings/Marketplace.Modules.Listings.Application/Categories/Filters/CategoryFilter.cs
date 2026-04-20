@@ -1,9 +1,8 @@
+using Marketplace.Modules.Listings.Application.Common.Models;
+
 namespace Marketplace.Modules.Listings.Application.Categories.Filters;
 
-public sealed class CategoryFilter
+public sealed class CategoryFilter : PaginationFilter
 {
-    public string? Name { get; set; }
-    public string? Slug { get; set; }
-    public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 25;
+    public string? CitySlug { get; set; }
 }

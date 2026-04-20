@@ -1,0 +1,17 @@
+﻿@model Marketplace.Web.Models.Shared.SectionHeaderVm
+
+<div class="section-header">
+    <div>
+        <h2 class="section-title">@Model.Title</h2>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="section-description">@Model.Description</p>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Meta))
+    {
+        <div class="section-meta">@Model.Meta</div>
+    }
+</div>

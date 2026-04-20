@@ -12,6 +12,12 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.SubscriptionType)
+            .HasConversion<int>();
+
+        builder.Property(x => x.Status)
+            .HasConversion<int>();
+
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Listings)
             .HasForeignKey(x => x.CategoryId)
@@ -22,9 +28,9 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
             .HasForeignKey(x => x.SubCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Location)
+        builder.HasOne(x => x.City)
             .WithMany(x => x.Listings)
-            .HasForeignKey(x => x.LocationId)
+            .HasForeignKey(x => x.CityId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Images)

@@ -1,106 +1,48 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+::selection {
+    background: var(--app-primary-light);
+    color: var(--app-text);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
-
-
-
-
-
-.home-hero {
-    background: linear-gradient(135deg, #f8f9fa, #ffffff);
-}
-
-.hero-image {
-    height: 300px;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #dee2e6, #f1f3f5);
-}
-
-.category-card {
-    display: block;
+.empty-state {
     text-align: center;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    background: #fff;
-    border: 1px solid #e9ecef;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s ease;
 }
 
-.category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+.empty-state-body {
+    padding: 28px 20px;
 }
 
-.category-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+.empty-state-title {
+    margin: 0 0 10px;
+    color: var(--app-text);
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
-.category-title {
-    font-weight: 600;
+.empty-state-text {
+    margin: 0;
+    color: var(--app-text-muted);
 }
 
-.how-icon {
-    font-size: 2rem;
-}
+@media (max-width: 575.98px) {
+    .page-title {
+        font-size: 1.9rem;
+    }
 
-.home-cta {
-    background: #f8f9fa;
-}
+    .listing-card-body {
+        padding: 16px;
+    }
 
-@media (max-width: 991.98px) {
-    .hero-image {
-        height: 200px;
+    .taxonomy-card-body {
+        padding: 16px;
     }
 }
 
 
-
-
-.privacy-page {
-    background-color: #f8f9fa;
-}
-
-.privacy-card {
-    border-radius: 1rem;
-}
-
-.privacy-page h2 {
-    color: #212529;
-}
-
-.privacy-page p,
-.privacy-page li {
-    color: #495057;
-    line-height: 1.7;
+.anchor-section {
+    scroll-margin-top: 100px;
 }

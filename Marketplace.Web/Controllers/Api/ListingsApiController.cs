@@ -1,29 +1,79 @@
-using Marketplace.Web.Models.Category;
-using Marketplace.Web.Models.Common;
-using Marketplace.Web.Models.Listings;
-using Marketplace.Web.Services.Listing;
+using Marketplace.Web.Models.Catalog;
+using Marketplace.Web.Services.Catalog;
+using Marketplace.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Controllers.Api;
 
 [ApiController]
-[Route("api/listings")]
-public sealed class ListingsApiController(IListingCatalogService catalogService) : ControllerBase
+[Route("{culture:regex(^uk|en$)}/api/listings")]
+public sealed class ListingsApiController : ControllerBase
 {
-    [HttpGet]
-    public async Task<ActionResult<PagedResult<ListingViewModel>>> Get(
-        [FromQuery] ListingsFilterRequest request,
-        CancellationToken cancellationToken)
+    private readonly ICatalogService _catalogService;
+
+    public ListingsApiController(ICatalogService catalogService)
     {
-        var result = await catalogService.GetListingsAsync(request, cancellationToken);
-        return Ok(result);
+        _catalogService = catalogService;
     }
 
-    [HttpGet("categories")]
-    public async Task<ActionResult<IReadOnlyList<CategoryViewModel>>> GetCategories(
+    [HttpGet("search")]
+    public async Task<IActionResult> Search(
+        string culture,
+        [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        var categories = await catalogService.GetCategoriesAsync(cancellationToken);
-        return Ok(categories);
+        culture = CultureHelper.Normalize(culture);
+
+        var result = await _catalogService.GetCatalogIndexPageAsync(culture, filter, cancellationToken);
+
+        var payload = result.ListingsSection.Listings.Select(x => new
+        {
+            x.Id,
+            x.Title,
+            x.Url,
+            x.CityName,
+            x.CategoryName,
+            x.SubCategoryName,
+            x.ShortDescription,
+            x.Rating,
+            x.ReviewsCount
+        });
+
+        return Ok(payload);
+    }
+
+    [HttpGet("autocomplete")]
+    public async Task<IActionResult> AutoComplete(
+        string culture,
+        [FromQuery] string? search,
+        CancellationToken cancellationToken)
+    {
+        culture = CultureHelper.Normalize(culture);
+
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return Ok(Array.Empty<object>());
+        }
+
+        var result = await _catalogService.GetCatalogIndexPageAsync(
+            culture,
+            new CatalogFilterVm
+            {
+                Search = search,
+                Page = 1,
+                PageSize =3
+            },
+            cancellationToken);
+
+        var payload = result.ListingsSection.Listings
+            .Take(8)
+            .Select(x => new
+            {
+                label = x.Title,
+                url = x.Url,
+                city = x.CityName
+            });
+
+        return Ok(payload);
     }
 }

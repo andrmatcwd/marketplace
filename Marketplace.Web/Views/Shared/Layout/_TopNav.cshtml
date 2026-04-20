@@ -1,0 +1,55 @@
+﻿@using Marketplace.Web.Utils
+@{
+    var culture = CultureHelper.Current();
+}
+
+<nav class="navbar navbar-expand-lg app-navbar">
+    <div class="app-navbar-main">
+        <a class="navbar-brand app-brand" href="/@culture">
+            Marketplace
+        </a>
+
+        <!-- 🔥 Місто завжди видно -->
+        <div class="app-navbar-center">
+            @await Component.InvokeAsync("NavCities")
+        </div>
+
+        <div class="app-navbar-mobile-actions d-lg-none">
+            <partial name="~/Views/Shared/Layout/_LanguageSwitcher.cshtml" />
+
+            <button class="navbar-toggler app-navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNav"
+                    aria-controls="mainNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+
+    <div id="mainNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture/catalog">Каталог</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-cities">Міста</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-categories">Категорії</a>
+            </li>
+
+            <li class="nav-item d-none d-lg-block">
+                <partial name="~/Views/Shared/Layout/_LanguageSwitcher.cshtml" />
+            </li>
+
+            @* <li class="nav-item">
+                <partial name="~/Views/Shared/_LoginPartial.cshtml" />
+            </li> *@
+        </ul>
+    </div>
+</nav>

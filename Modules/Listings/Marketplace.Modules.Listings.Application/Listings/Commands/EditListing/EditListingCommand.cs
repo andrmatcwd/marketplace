@@ -1,11 +1,21 @@
+using Marketplace.Modules.Listings.Domain.Enums.Listing;
+using Marketplace.Modules.Listings.Domain.Enums.Subscription;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.Listings.Commands.EditListing;
 
 public sealed record EditListingCommand(
+    int Id,
     string Title,
     string Description,
-    decimal Price,
+    string Name,
     string SellerId,
-    bool IsService
-) : IRequest<Guid>;
+    string AddressLine,
+    double? Latitude,
+    double? Longitude,
+    SubscriptionType SubscriptionType,
+    ListingStatus Status,
+    int CategoryId,
+    int SubCategoryId,
+    int CityId
+) : IRequest<Unit>;

@@ -1,0 +1,25 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Shared.BreadcrumbItemVm>
+
+@if (Model != null && Model.Any())
+{
+    <nav aria-label="breadcrumb" class="app-breadcrumbs">
+        <ol class="breadcrumb mb-0">
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                var item = Model.ElementAt(i);
+                var isLast = i == Model.Count - 1;
+
+                if (isLast)
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@item.Title</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item">
+                        <a href="@item.Url">@item.Title</a>
+                    </li>
+                }
+            }
+        </ol>
+    </nav>
+}

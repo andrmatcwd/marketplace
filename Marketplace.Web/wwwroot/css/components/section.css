@@ -1,0 +1,28 @@
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--app-text);
+}
+
+.section-description {
+    margin: 6px 0 0;
+    color: var(--app-text-muted);
+}
+
+.seo-intro-body {
+    padding: 20px;
+}
+
+.seo-intro-text {
+    color: var(--app-text-muted);
+    line-height: 1.75;
+}

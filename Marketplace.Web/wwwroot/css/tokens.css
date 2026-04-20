@@ -1,0 +1,37 @@
+:root {
+    /* Base */
+    --app-bg: #f5f7fb;
+    --app-surface: #ffffff;
+    --app-surface-muted: #eef2f7;
+    --app-border: #e1e6ef;
+
+    /* Text */
+    --app-text: #1e293b;
+    --app-text-muted: #64748b;
+
+    /* Accent */
+    --app-primary: #3b82f6;
+    --app-primary-hover: #2563eb;
+    --app-primary-light: #dbeafe;
+
+    /* Radius */
+    --app-radius-sm: 10px;
+    --app-radius-md: 14px;
+    --app-radius-lg: 18px;
+
+    /* Shadows */
+    --app-shadow-sm: 0 4px 16px rgba(30, 41, 59, 0.05);
+    --app-shadow-md: 0 10px 30px rgba(30, 41, 59, 0.08);
+
+    /* Spacing */
+    --app-space-1: 4px;
+    --app-space-2: 8px;
+    --app-space-3: 12px;
+    --app-space-4: 16px;
+    --app-space-5: 20px;
+    --app-space-6: 24px;
+    --app-space-7: 32px;
+    --app-space-8: 40px;
+
+    --app-container: 1240px;
+}

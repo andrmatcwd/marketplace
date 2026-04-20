@@ -1,0 +1,9 @@
+﻿@model Marketplace.Web.Models.Catalog.SubCategoryPageVm
+
+@{
+    ViewData["Title"] = Model.Hero.Title;
+}
+
+<partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
+<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
+<partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.ListingsSection" />

@@ -1,0 +1,30 @@
+﻿@model IReadOnlyCollection<Marketplace.Web.Models.Cards.CategoryCardVm>
+
+@if (Model != null && Model.Any())
+{
+    var hasToggle = Model.Count > 4;
+    var wrapperClass = hasToggle ? "taxonomy-grid-wrapper has-toggle" : "taxonomy-grid-wrapper";
+    var gridClass = hasToggle ? "taxonomy-grid taxonomy-grid-collapsed" : "taxonomy-grid";
+
+    <div class="@wrapperClass"
+         data-taxonomy-wrapper
+         data-collapsible="true">
+        <div class="@gridClass" data-taxonomy-grid>
+            @foreach (var item in Model)
+            {
+                <partial name="~/Views/Shared/Cards/_CategoryCard.cshtml" model="item" />
+            }
+        </div>
+
+        @if (hasToggle)
+        {
+            <div class="taxonomy-grid-actions">
+                <button type="button"
+                        class="btn btn-app-outline btn-sm"
+                        data-taxonomy-toggle>
+                    Показати всі
+                </button>
+            </div>
+        }
+    </div>
+}

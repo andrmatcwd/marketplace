@@ -1,0 +1,34 @@
+.mobile-filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.32);
+    display: none;
+    align-items: end;
+    justify-content: center;
+    z-index: 1060;
+    padding: 0;
+}
+
+.mobile-filter-backdrop.is-open {
+    display: flex;
+}
+
+.mobile-filter-panel {
+    width: 100%;
+    max-width: 720px;
+    background: var(--app-surface);
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-top: 1px solid var(--app-border);
+    box-shadow: 0 -12px 32px rgba(30, 41, 59, 0.12);
+}
+
+.mobile-filter-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
