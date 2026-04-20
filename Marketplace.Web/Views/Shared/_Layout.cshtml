@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="~/css/components/listing-details.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/mobile-drawer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/components/cookie-consent.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
@@ -48,6 +49,8 @@
         <partial name="~/Views/Shared/Layout/_MobileBottomBar.cshtml" />
     </div>
 
+    <partial name="~/Views/Shared/Cookie/_CookieConsent.cshtml" />
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -57,6 +60,7 @@
     <script src="~/js/google-maps.js" asp-append-version="true"></script>
     <script src="~/js/search-autocomplete.js" asp-append-version="true"></script>
     <script src="~/js/categories-toggle.js" asp-append-version="true"></script>
+    <script src="~/js/cookie-consent.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

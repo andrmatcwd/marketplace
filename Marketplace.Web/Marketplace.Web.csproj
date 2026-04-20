@@ -73,6 +73,7 @@
     <Folder Include="Views/Shared/Components/FeaturedListings/" />
     <Folder Include="Views/Shared/Components/NavCities/" />
     <Folder Include="Views/Shared/Components/PopularCities/" />
+    <Folder Include="Views/Shared/Cookie/" />
     <Folder Include="Views/Shared/Layout/" />
     <Folder Include="Views/Shared/ListingDetails/" />
     <Folder Include="Views/Shared/Lists/" />
