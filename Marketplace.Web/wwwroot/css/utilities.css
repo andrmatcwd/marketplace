@@ -16,17 +16,6 @@ img {
     margin-bottom: var(--app-space-7);
 }
 
-.app-card {
-    background: var(--app-surface);
-    border: 1px solid var(--app-border);
-    border-radius: var(--app-radius-lg);
-    box-shadow: var(--app-shadow-sm);
-}
-
-.app-card-body {
-    padding: 20px;
-}
-
 .page-title {
     margin: 0 0 12px;
     font-size: clamp(2rem, 3vw, 3.2rem);

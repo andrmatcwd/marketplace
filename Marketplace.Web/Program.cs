@@ -73,6 +73,12 @@ builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddScoped<ICatalogFilterEnricher, CatalogFilterEnricher>();
+
+builder.Services.AddScoped<ICatalogLookupService, CatalogLookupService>();
+
+builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>();
+
 builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
 
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();

@@ -141,10 +141,11 @@
 
 .how-card,
 .trust-card {
-    background: #fff;
-    border: 1px solid #e9ecef;
-    border-radius: 1rem;
-    padding: 1.5rem;
+    background: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-md);
+    padding: var(--app-space-6);
+    box-shadow: var(--app-shadow-sm);
 }
 
 .how-icon {
@@ -152,8 +153,8 @@
     height: 3rem;
     margin: 0 auto;
     border-radius: 50%;
-    background: rgba(13, 110, 253, 0.1);
-    color: #0d6efd;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
     display: inline-flex;
     align-items: center;
     justify-content: center;
