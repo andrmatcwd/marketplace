@@ -1,10 +1,262 @@
-﻿<section class="app-section">
-    <div class="app-card">
-        <div class="app-card-body">
-            <h1 class="page-title">Privacy Policy</h1>
-            <p class="page-intro">
-                This page contains information about privacy and data processing.
-            </p>
+﻿@using Marketplace.Web.Utils
+@{
+    var culture = CultureHelper.Current();
+    var isUk = culture == "uk";
+
+    ViewData["Title"] = isUk ? "Політика конфіденційності" : "Privacy Policy";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/privacy.css" asp-append-version="true" />
+}
+
+<section class="app-section">
+    <div class="container app-container">
+        <div class="app-card">
+            <div class="app-card-body privacy-page">
+                <h1 class="page-title">
+                    @(isUk ? "Політика конфіденційності" : "Privacy Policy")
+                </h1>
+
+                <p class="page-intro">
+                    @(isUk
+                        ? "Ця Політика конфіденційності пояснює, які дані ми можемо збирати під час використання сайту, як ми їх використовуємо, зберігаємо та захищаємо."
+                        : "This Privacy Policy explains what data we may collect when you use the website, how we use, store, and protect it.")
+                </p>
+
+                <div class="privacy-content">
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "1. Загальна інформація" : "1. General Information")</h2>
+                        <p>
+                            @(isUk
+                                ? "Marketplace — це онлайн-каталог локальних послуг і компаній. Ми прагнемо забезпечити прозоре та відповідальне ставлення до персональних даних користувачів, власників бізнесів і відвідувачів сайту."
+                                : "Marketplace is an online directory of local services and businesses. We aim to provide transparent and responsible handling of personal data of users, business owners, and website visitors.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Користуючись сайтом, ви погоджуєтесь із положеннями цієї Політики конфіденційності."
+                                : "By using the website, you agree to the terms of this Privacy Policy.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "2. Які дані ми можемо збирати" : "2. What Data We May Collect")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми можемо збирати та обробляти такі категорії даних:"
+                                : "We may collect and process the following categories of data:")
+                        </p>
+                        <ul class="privacy-list">
+                            <li>
+                                @(isUk
+                                    ? "технічні дані: IP-адреса, тип браузера, тип пристрою, мова браузера, операційна система;"
+                                    : "technical data: IP address, browser type, device type, browser language, operating system;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "дані використання сайту: переглянуті сторінки, джерело переходу, взаємодія з елементами інтерфейсу;"
+                                    : "usage data: visited pages, referral source, interaction with interface elements;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "дані про вибране місто або геолокацію, якщо ви явно використовуєте функцію визначення міста;"
+                                    : "selected city or geolocation data if you explicitly use the city detection feature;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "дані, які ви добровільно надсилаєте через форми, наприклад ім’я, телефон, email або текст повідомлення;"
+                                    : "data you voluntarily submit through forms, such as name, phone number, email, or message text;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "дані, пов’язані з розміщенням бізнес-профілів, якщо ви є власником або представником компанії."
+                                    : "data related to business profile listings if you are an owner or representative of a company.")
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "3. Як ми використовуємо дані" : "3. How We Use Data")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми можемо використовувати зібрані дані для таких цілей:"
+                                : "We may use collected data for the following purposes:")
+                        </p>
+                        <ul class="privacy-list">
+                            <li>
+                                @(isUk
+                                    ? "забезпечення роботи сайту, каталогу, пошуку, фільтрів і навігації;"
+                                    : "to operate the website, directory, search, filters, and navigation;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "визначення або збереження вибраного міста для покращення користувацького досвіду;"
+                                    : "to detect or store the selected city in order to improve user experience;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "опрацювання звернень, заявок і повідомлень, надісланих через сайт;"
+                                    : "to process requests, applications, and messages submitted through the website;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "захисту від зловживань, шахрайства або технічних атак;"
+                                    : "to protect against abuse, fraud, or technical attacks;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "аналізу використання сайту та покращення функціональності, контенту й UX;"
+                                    : "to analyze website usage and improve functionality, content, and UX;")
+                            </li>
+                            <li>
+                                @(isUk
+                                    ? "підтримки актуальності та якості бізнес-профілів у каталозі."
+                                    : "to maintain the relevance and quality of business profiles in the directory.")
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "4. Cookies та локальне збереження" : "4. Cookies and Local Storage")</h2>
+                        <p>
+                            @(isUk
+                                ? "Сайт може використовувати cookies та подібні технології для збереження вибраного міста, мовної версії, базових налаштувань інтерфейсу та покращення стабільності роботи сайту."
+                                : "The website may use cookies and similar technologies to store the selected city, language version, basic interface preferences, and improve website stability.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Ви можете змінити налаштування cookies у своєму браузері. Однак вимкнення cookies може вплинути на роботу окремих функцій сайту."
+                                : "You can change cookie settings in your browser. However, disabling cookies may affect the operation of certain website features.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "5. Геолокація" : "5. Geolocation")</h2>
+                        <p>
+                            @(isUk
+                                ? "Функція визначення міста працює лише після вашої явної дії або дозволу в браузері. Ми не отримуємо доступ до геолокації без вашої взаємодії."
+                                : "The city detection feature works only after your explicit action or permission in the browser. We do not access geolocation without your interaction.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Геолокація може використовуватися лише для визначення релевантного міста та покращення локального пошуку послуг."
+                                : "Geolocation may be used only to determine a relevant city and improve local service search.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "6. Форми зв’язку та заявки" : "6. Contact Forms and Requests")</h2>
+                        <p>
+                            @(isUk
+                                ? "Якщо ви надсилаєте повідомлення через форму зв’язку, ми можемо обробляти дані, які ви вказуєте у формі, наприклад ім’я, телефон, email та текст звернення."
+                                : "If you submit a message through a contact form, we may process the data you provide in the form, such as your name, phone number, email, and message text.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Такі дані використовуються виключно для обробки вашого звернення, комунікації щодо нього та забезпечення коректної роботи сервісу."
+                                : "Such data is used solely to process your request, communicate regarding it, and ensure proper service operation.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "7. Дані бізнес-профілів" : "7. Business Listing Data")</h2>
+                        <p>
+                            @(isUk
+                                ? "Каталог може містити публічні дані про компанії, бізнеси та спеціалістів, зокрема назву, опис, адресу, телефон, вебсайт, категорію послуг, графік роботи та іншу інформацію, пов’язану з діяльністю компанії."
+                                : "The directory may contain public data about companies, businesses, and specialists, including name, description, address, phone number, website, service category, business hours, and other business-related information.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Якщо ви є представником компанії та бажаєте оновити, виправити або видалити відповідну інформацію, ви можете звернутися через контактні канали, зазначені на сайті."
+                                : "If you represent a company and wish to update, correct, or remove relevant information, you may contact us through the contact channels indicated on the website.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "8. Передача даних третім сторонам" : "8. Sharing Data with Third Parties")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми не продаємо персональні дані користувачів. Передача даних третім сторонам можлива лише у випадках, коли це необхідно для роботи сайту, виконання технічних функцій, виконання вимог закону або захисту наших законних інтересів."
+                                : "We do not sell users’ personal data. Data may be shared with third parties only when necessary for website operation, technical functionality, legal compliance, or protection of our legitimate interests.")
+                        </p>
+                        <p>
+                            @(isUk
+                                ? "Сайт також може використовувати сторонні сервіси, наприклад карти, хостинг, аналітику або інші інфраструктурні інструменти. Такі сервіси можуть обробляти технічні дані відповідно до власних політик конфіденційності."
+                                : "The website may also use third-party services such as maps, hosting, analytics, or other infrastructure tools. Such services may process technical data in accordance with their own privacy policies.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "9. Зберігання даних" : "9. Data Retention")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми зберігаємо дані не довше, ніж це необхідно для цілей, для яких вони були зібрані, якщо довший строк не вимагається законом, безпекою, бухгалтерським або технічним обліком."
+                                : "We retain data no longer than necessary for the purposes for which it was collected, unless a longer retention period is required by law, security, accounting, or technical records.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "10. Захист даних" : "10. Data Security")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми вживаємо розумних організаційних і технічних заходів для захисту даних від несанкціонованого доступу, зміни, розкриття або знищення. Водночас жоден спосіб передавання даних через Інтернет або електронного зберігання не може гарантувати абсолютну безпеку."
+                                : "We take reasonable organizational and technical measures to protect data from unauthorized access, alteration, disclosure, or destruction. However, no method of transmitting data over the Internet or electronic storage can guarantee absolute security.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "11. Ваші права" : "11. Your Rights")</h2>
+                        <p>
+                            @(isUk
+                                ? "Залежно від застосовного законодавства, ви можете мати право:"
+                                : "Depending on applicable law, you may have the right to:")
+                        </p>
+                        <ul class="privacy-list">
+                            <li>@(isUk ? "отримати інформацію про обробку ваших даних;" : "receive information about the processing of your data;")</li>
+                            <li>@(isUk ? "запросити виправлення або оновлення неточних даних;" : "request correction or update of inaccurate data;")</li>
+                            <li>@(isUk ? "запросити видалення даних у передбачених законом випадках;" : "request deletion of data where provided by law;")</li>
+                            <li>@(isUk ? "заперечити проти окремих видів обробки;" : "object to certain types of processing;")</li>
+                            <li>@(isUk ? "відкликати згоду, якщо обробка базується на згоді." : "withdraw consent where processing is based on consent.")</li>
+                        </ul>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "12. Дані дітей" : "12. Children’s Privacy")</h2>
+                        <p>
+                            @(isUk
+                                ? "Сайт не призначений для цілеспрямованого збору персональних даних дітей. Якщо ви вважаєте, що такі дані були надані помилково, будь ласка, зв’яжіться з нами для їх видалення."
+                                : "The website is not intended for the intentional collection of children’s personal data. If you believe such data has been provided by mistake, please contact us so it can be removed.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "13. Зміни до цієї Політики" : "13. Changes to This Policy")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ми можемо періодично оновлювати цю Політику конфіденційності. Актуальна версія завжди публікується на цій сторінці."
+                                : "We may update this Privacy Policy from time to time. The current version will always be published on this page.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "14. Контакти" : "14. Contact")</h2>
+                        <p>
+                            @(isUk
+                                ? "Якщо у вас є питання щодо цієї Політики конфіденційності, обробки даних або інформації, розміщеної в каталозі, зверніться через контактні канали, доступні на сайті."
+                                : "If you have questions about this Privacy Policy, data processing, or information published in the directory, please contact us through the contact channels available on the website.")
+                        </p>
+                    </section>
+
+                    <section class="privacy-block">
+                        <h2>@(isUk ? "15. Дата набрання чинності" : "15. Effective Date")</h2>
+                        <p>
+                            @(isUk
+                                ? "Ця редакція Політики конфіденційності набирає чинності з моменту її публікації на сайті."
+                                : "This version of the Privacy Policy is effective from the date it is published on the website.")
+                        </p>
+                    </section>
+                </div>
+            </div>
         </div>
     </div>
 </section>

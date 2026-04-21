@@ -1,5 +1,6 @@
-.catalog-hub-actions {
-    margin-top: 16px;
-    display: flex;
-    justify-content: center;
+.catalog-detected-city {
+    margin-top: 4px;
+    color: var(--app-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
 }

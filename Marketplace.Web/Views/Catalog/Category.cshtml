@@ -4,6 +4,13 @@
     ViewData["Title"] = Model.Hero.Title;
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/filter-bar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/taxonomy-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/pagination.css" asp-append-version="true" />
+}
+
 <partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
 
 @if (Model.HasSubCategories)
@@ -30,3 +37,7 @@
 }
 
 <partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
+
+@section Scripts {
+    <script src="~/js/categories-toggle.js" asp-append-version="true"></script>
+}
