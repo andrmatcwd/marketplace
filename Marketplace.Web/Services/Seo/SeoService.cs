@@ -28,6 +28,44 @@ public sealed class SeoService : ISeoService
         _hreflangBuilder = hreflangBuilder;
     }
 
+    public PageSeoData BuildCatalogGatewaySeo(CatalogGatewayPageVm model, HttpRequest request, string culture)
+
+    {
+
+        var relative = _canonicalUrlBuilder.BuildCatalog(culture);
+
+        var canonical = _absoluteUrlBuilder.Build(request, relative);
+
+
+
+        return new PageSeoData
+
+        {
+
+            Title = "Каталог послуг по містах — Marketplace",
+
+            Description = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
+
+            CanonicalUrl = canonical,
+
+            H1 = model.Hero.Title,
+
+            SeoText = model.SeoIntro.Text,
+
+            OgTitle = "Каталог послуг по містах — Marketplace",
+
+            OgDescription = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
+
+            OgUrl = canonical,
+
+            Robots = "index, follow",
+
+            Hreflangs = _hreflangBuilder.Build(request, relative)
+
+        };
+
+    }
+
     public PageSeoData BuildHomePageSeo(HomePageVm model, HttpRequest request, string culture)
     {
         var relative = _canonicalUrlBuilder.BuildHome(culture);
@@ -51,7 +89,7 @@ public sealed class SeoService : ISeoService
 
     public PageSeoData BuildCatalogIndexSeo(CatalogIndexPageVm model, HttpRequest request, string culture)
     {
-        var relative = _canonicalUrlBuilder.BuildCatalog(culture);
+        var relative = _canonicalUrlBuilder.BuildCatalog(culture, model.ListingsSection.Filter.Page);
         var canonical = _absoluteUrlBuilder.Build(request, relative);
         var robots = _seoIndexingPolicy.GetRobots(model.ListingsSection.Filter);
 

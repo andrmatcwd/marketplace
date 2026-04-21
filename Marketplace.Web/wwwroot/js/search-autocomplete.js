@@ -15,6 +15,11 @@
             return pathSegments.length ? pathSegments[0] : 'uk';
         }
 
+        function getCurrentCity() {
+            var pathSegments = window.location.pathname.split('/').filter(Boolean);
+            return pathSegments.length >= 2 ? pathSegments[1] : '';
+        }
+
         $input.on("input", function () {
             var query = $(this).val();
 
@@ -27,8 +32,12 @@
 
             timer = setTimeout(function () {
                 var culture = getCulture();
+                var city = getCurrentCity();
 
-                $.get('/' + culture + '/api/listings/autocomplete', { search: query })
+                $.get('/' + culture + '/api/listings/autocomplete', {
+                    search: query,
+                    city: city
+                })
                     .done(function (items) {
                         if (!items || !items.length) {
                             $box.empty().removeClass("is-visible");
@@ -36,13 +45,13 @@
                         }
 
                         var html = items.map(function (item) {
-                            var city = item.city
-                                ? '<span class="search-autocomplete-city">' + item.city + '</span>'
+                            var badge = item.category
+                                ? '<span class="search-autocomplete-city">' + item.category + '</span>'
                                 : '';
 
                             return '<a class="search-autocomplete-item" href="' + item.url + '">' +
                                 '<span class="search-autocomplete-title">' + item.label + '</span>' +
-                                city +
+                                badge +
                                 '</a>';
                         }).join("");
 

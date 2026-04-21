@@ -7,21 +7,21 @@ public sealed class SeoPaginationBuilder
 {
     public string? BuildPrev(HttpRequest request, PaginationVm pagination)
     {
-        if (!pagination.HasPrevious)
+        if (string.IsNullOrWhiteSpace(pagination.PrevUrl))
         {
             return null;
         }
 
-        return $"{request.Scheme}://{request.Host}{pagination.BuildUrl(pagination.PreviousPage)}";
+        return $"{request.Scheme}://{request.Host}{pagination.PrevUrl}";
     }
 
     public string? BuildNext(HttpRequest request, PaginationVm pagination)
     {
-        if (!pagination.HasNext)
+        if (string.IsNullOrWhiteSpace(pagination.NextUrl))
         {
             return null;
         }
 
-        return $"{request.Scheme}://{request.Host}{pagination.BuildUrl(pagination.NextPage)}";
+        return $"{request.Scheme}://{request.Host}{pagination.NextUrl}";
     }
 }

@@ -1,23 +1,38 @@
 ﻿@model Marketplace.Web.Models.Shared.PaginationVm
 
-@if (Model != null && Model.TotalPages > 1)
+@if (Model.HasPagination)
 {
     <nav class="app-pagination" aria-label="Pagination">
-        <ul class="pagination mb-0">
-            <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
-                <a class="page-link" href="@Model.BuildUrl(Model.PreviousPage)">Previous</a>
-            </li>
-
-            @foreach (var page in Model.GetPages())
+        <ul class="pagination">
+            @if (!string.IsNullOrWhiteSpace(Model.PrevUrl))
             {
-                <li class="page-item @(page == Model.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="@Model.BuildUrl(page)">@(@page)</a>
+                <li class="page-item">
+                    <a class="page-link" href="@Model.PrevUrl">Previous</a>
                 </li>
             }
 
-            <li class="page-item @(Model.HasNext ? "" : "disabled")">
-                <a class="page-link" href="@Model.BuildUrl(Model.NextPage)">Next</a>
-            </li>
+            @foreach (var item in Model.Items)
+            {
+                if (item.IsEllipsis)
+                {
+                    <li class="page-item disabled" aria-disabled="true">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+                else if (item.Page.HasValue && !string.IsNullOrWhiteSpace(item.Url))
+                {
+                    <li class="page-item @(item.IsActive ? "active" : null)">
+                        <a class="page-link" href="@item.Url">@item.Page</a>
+                    </li>
+                }
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.NextUrl))
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Model.NextUrl">Next</a>
+                </li>
+            }
         </ul>
     </nav>
 }

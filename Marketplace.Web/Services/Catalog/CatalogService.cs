@@ -1,3 +1,4 @@
+using System.Text;
 using Marketplace.Web.Data;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Catalog;
@@ -24,6 +25,85 @@ public sealed class CatalogService : ICatalogService
         _mapper = mapper;
         _breadcrumbBuilder = breadcrumbBuilder;
         _urlBuilder = urlBuilder;
+    }
+
+    public async Task<CatalogGatewayPageVm> GetCatalogGatewayPageAsync(
+    string culture,
+    string? selectedCitySlug,
+    CancellationToken cancellationToken)
+    {
+        var cities = await _dbContext.Cities
+            .AsNoTracking()
+            .Where(x => x.IsPublished)
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.Name)
+            .Select(x => new
+            {
+                Entity = x,
+                ListingsCount = _dbContext.Listings.Count(l => l.CityId == x.Id && l.IsPublished)
+            })
+            .ToListAsync(cancellationToken);
+
+        var featuredListings = await _dbContext.Listings
+            .AsNoTracking()
+            .Published()
+            .WithCatalogIncludes()
+            .ApplySorting("rating")
+            .Take(8)
+            .ToListAsync(cancellationToken);
+
+        var selectedCity = !string.IsNullOrWhiteSpace(selectedCitySlug)
+            ? cities.FirstOrDefault(x => string.Equals(x.Entity.Slug, selectedCitySlug, StringComparison.OrdinalIgnoreCase))
+            : null;
+
+        return new CatalogGatewayPageVm
+        {
+            Culture = culture,
+            SelectedCitySlug = string.IsNullOrWhiteSpace(selectedCitySlug)
+                ? null
+                : selectedCitySlug.Trim(),
+            ContinueToCityUrl = selectedCity is null
+                ? null
+                : _urlBuilder.BuildCityUrl(culture, selectedCity.Entity.Slug),
+            Hero = new()
+            {
+                Title = "Choose a city to find services",
+                Description = "Select a city first to browse relevant categories, subcategories, and providers.",
+                Breadcrumbs = _breadcrumbBuilder.BuildCatalog(culture)
+            },
+            SeoIntro = new()
+            {
+                Title = "How the catalog works",
+                Text = "<p>Choose a city first to see relevant services, categories, and specialists. After selecting a city, you can browse local categories and open the most relevant listings.</p>"
+            },
+            CityOptions = cities
+                .Select(x => _mapper.MapFilterOption(x.Entity.Slug, x.Entity.Name))
+                .ToList(),
+            CitiesSection = new()
+            {
+                Header = new SectionHeaderVm
+                {
+                    Title = "Popular cities",
+                    Description = "Choose a city to enter the local service catalog."
+                },
+                Items = cities
+                    .Take(12)
+                    .Select(x => _mapper.MapCityCard(x.Entity, x.ListingsCount, culture))
+                    .ToList()
+            },
+            FeaturedListingsSection = new()
+            {
+                Header = new SectionHeaderVm
+                {
+                    Title = "Popular listings",
+                    Description = "Examples of services available in the directory."
+                },
+                ShowMobileFilterButton = false,
+                Listings = featuredListings
+                    .Select(x => _mapper.MapListingCard(x, culture))
+                    .ToList()
+            }
+        };
     }
 
     public async Task<CatalogIndexPageVm> GetCatalogIndexPageAsync(string culture, CatalogFilterVm filter, CancellationToken cancellationToken)
@@ -114,7 +194,10 @@ public sealed class CatalogService : ICatalogService
                 },
                 Filter = filter,
                 Listings = listings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
-                Pagination = BuildPagination(filter, totalCount, _urlBuilder.BuildCatalogUrl(culture))
+                Pagination = BuildPagination(
+                    filter,
+                    totalCount,
+                    page => _urlBuilder.BuildCatalogUrl(culture, page))
             }
         };
     }
@@ -162,6 +245,25 @@ public sealed class CatalogService : ICatalogService
             })
             .ToListAsync(cancellationToken);
 
+    var popularSubCategories = await _dbContext.SubCategories
+        .AsNoTracking()
+        .Include(x => x.Category)
+        .Where(x =>
+            x.IsPublished &&
+            x.Category != null &&
+            x.Category.IsPublished &&
+            x.Listings.Any(l => l.CityId == city.Id && l.IsPublished))
+        .OrderByDescending(x => x.Listings.Count(l => l.CityId == city.Id && l.IsPublished))
+        .ThenBy(x => x.SortOrder)
+        .ThenBy(x => x.Name)
+        .Select(x => new
+        {
+            Entity = x,
+            ListingsCount = x.Listings.Count(l => l.CityId == city.Id && l.IsPublished)
+        })
+        .Take(12)
+        .ToListAsync(cancellationToken);
+
         return new CityPageVm
         {
             Culture = culture,
@@ -187,6 +289,17 @@ public sealed class CatalogService : ICatalogService
                 },
                 Items = categories.Select(x => _mapper.MapCategoryCard(x.Entity, x.ListingsCount, culture, city.Slug)).ToList()
             },
+            PopularSubCategoriesSection = new()
+            {
+                Header = new SectionHeaderVm
+                {
+                    Title = "Popular services",
+                    Description = $"Go directly to the most popular service directions in {city.Name}."
+                },
+                Items = popularSubCategories
+                    .Select(x => _mapper.MapSubCategoryCard(x.Entity, x.ListingsCount, culture, city.Slug))
+                    .ToList()
+            },
             ListingsSection = new()
             {
                 Header = new SectionHeaderVm
@@ -196,7 +309,10 @@ public sealed class CatalogService : ICatalogService
                 },
                 Filter = filter,
                 Listings = listings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
-                Pagination = BuildPagination(filter, totalCount, _urlBuilder.BuildCityUrl(culture, city.Slug))
+                Pagination = BuildPagination(
+                    filter,
+                    totalCount,
+                    page => _urlBuilder.BuildCityUrl(culture, city.Slug, page))
             }
         };
     }
@@ -226,21 +342,6 @@ public sealed class CatalogService : ICatalogService
         filter = await EnrichFilterAsync(culture, filter, cancellationToken);
         filter.ResetUrl = _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug);
 
-        var query = _dbContext.Listings
-            .AsNoTracking()
-            .Published()
-            .WithCatalogIncludes()
-            .Where(x => x.CityId == city.Id && x.CategoryId == category.Id)
-            .ApplySearch(filter.Search);
-
-        var totalCount = await query.CountAsync(cancellationToken);
-
-        var listings = await query
-            .ApplySorting(filter.Sort)
-            .Skip((filter.Page - 1) * filter.PageSize)
-            .Take(filter.PageSize)
-            .ToListAsync(cancellationToken);
-
         var subCategories = await _dbContext.SubCategories
             .AsNoTracking()
             .Include(x => x.Category)
@@ -254,6 +355,23 @@ public sealed class CatalogService : ICatalogService
             })
             .ToListAsync(cancellationToken);
 
+        var topListings = await _dbContext.Listings
+            .AsNoTracking()
+            .Published()
+            .WithCatalogIncludes()
+            .Where(x => x.CityId == city.Id && x.CategoryId == category.Id)
+            .ApplySearch(filter.Search)
+            .ApplySorting("rating")
+            .Take(6)
+            .ToListAsync(cancellationToken);
+
+        var totalCount = await _dbContext.Listings
+            .AsNoTracking()
+            .Published()
+            .Where(x => x.CityId == city.Id && x.CategoryId == category.Id)
+            .ApplySearch(filter.Search)
+            .CountAsync(cancellationToken);
+
         return new CategoryPageVm
         {
             Culture = culture,
@@ -264,20 +382,20 @@ public sealed class CatalogService : ICatalogService
             Hero = new()
             {
                 Title = $"{category.Name} in {city.Name}",
-                Description = $"Browse services in category {category.Name} in {city.Name}.",
+                Description = $"Choose a specific service direction in {category.Name} for {city.Name}.",
                 Breadcrumbs = _breadcrumbBuilder.BuildCategory(culture, category.Name, category.Slug, city.Name, city.Slug)
             },
             SeoIntro = new()
             {
                 Title = $"{category.Name} in {city.Name}",
-                Text = $"<p>Browse available services in category {category.Name} for {city.Name}.</p>"
+                Text = $"<p>Browse the main service directions in category {category.Name} for {city.Name}. Choose a subcategory to see more relevant listings and offers.</p>"
             },
             SubCategoriesSection = new()
             {
                 Header = new SectionHeaderVm
                 {
-                    Title = "Subcategories",
-                    Description = "Choose a more specific service direction."
+                    Title = "Choose a service direction",
+                    Description = $"Popular subcategories in {category.Name} for {city.Name}."
                 },
                 Items = subCategories
                     .Where(x => x.ListingsCount > 0)
@@ -288,12 +406,17 @@ public sealed class CatalogService : ICatalogService
             {
                 Header = new SectionHeaderVm
                 {
-                    Title = "Listings and services",
+                    Title = "Top listings in this category",
+                    Description = $"A short selection of popular services in {category.Name}.",
                     Meta = $"Found: {totalCount}"
                 },
                 Filter = filter,
-                Listings = listings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
-                Pagination = BuildPagination(filter, totalCount, _urlBuilder.BuildCategoryUrl(culture, city.Slug, category.Slug))
+                Listings = topListings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
+                Pagination = new PaginationVm
+                {
+                    CurrentPage = 1,
+                    TotalPages = 1
+                }
             }
         };
     }
@@ -383,7 +506,7 @@ public sealed class CatalogService : ICatalogService
                 Pagination = BuildPagination(
                     filter,
                     totalCount,
-                    _urlBuilder.BuildSubCategoryUrl(culture, city.Slug, subCategory.Category.Slug, subCategory.Slug))
+                    page => _urlBuilder.BuildSubCategoryUrl(culture, city.Slug, subCategory.Category.Slug, subCategory.Slug, page))
             }
         };
     }
@@ -429,23 +552,143 @@ public sealed class CatalogService : ICatalogService
         return filter;
     }
 
-    private static PaginationVm BuildPagination(CatalogFilterVm filter, int totalItems, string baseUrl)
+    private static PaginationVm BuildPagination(
+    CatalogFilterVm filter,
+    int totalItems,
+    Func<int, string> buildPath)
     {
         var totalPages = (int)Math.Ceiling(totalItems / (double)filter.PageSize);
+
+        if (totalPages <= 1)
+        {
+            return new PaginationVm
+            {
+                CurrentPage = filter.Page,
+                TotalPages = totalPages
+            };
+        }
+
+        var pages = BuildPageWindow(filter.Page, totalPages);
+
+        var items = pages.Select(page =>
+        {
+            if (page is null)
+            {
+                return new PaginationItemVm
+                {
+                    IsEllipsis = true
+                };
+            }
+
+            return new PaginationItemVm
+            {
+                Page = page.Value,
+                Url = AppendQuery(buildPath(page.Value), filter),
+                IsActive = page.Value == filter.Page,
+                IsEllipsis = false
+            };
+        }).ToList();
 
         return new PaginationVm
         {
             CurrentPage = filter.Page,
             TotalPages = totalPages,
-            BaseUrl = baseUrl,
-            Query = new Dictionary<string, string?>
-            {
-                ["search"] = filter.Search,
-                ["city"] = filter.City,
-                ["category"] = filter.Category,
-                ["sort"] = filter.Sort,
-                ["pageSize"] = filter.PageSize.ToString()
-            }
+            PrevUrl = filter.Page > 1
+                ? AppendQuery(buildPath(filter.Page - 1), filter)
+                : null,
+            NextUrl = filter.Page < totalPages
+                ? AppendQuery(buildPath(filter.Page + 1), filter)
+                : null,
+            Items = items
         };
+    }
+
+    private static IReadOnlyCollection<int?> BuildPageWindow(int currentPage, int totalPages)
+    {
+        var pages = new List<int?>();
+
+        if (totalPages <= 7)
+        {
+            for (var i = 1; i <= totalPages; i++)
+            {
+                pages.Add(i);
+            }
+
+            return pages;
+        }
+
+        pages.Add(1);
+
+        var start = Math.Max(2, currentPage - 1);
+        var end = Math.Min(totalPages - 1, currentPage + 1);
+
+        if (start > 2)
+        {
+            pages.Add(null);
+        }
+
+        for (var i = start; i <= end; i++)
+        {
+            pages.Add(i);
+        }
+
+        if (end < totalPages - 1)
+        {
+            pages.Add(null);
+        }
+
+        pages.Add(totalPages);
+
+        return pages;
+    }
+
+    private static string AppendQuery(string basePath, CatalogFilterVm filter)
+    {
+        var query = new Dictionary<string, string?>();
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            query["search"] = filter.Search;
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Sort))
+        {
+            query["sort"] = filter.Sort;
+        }
+
+        if (filter.PageSize > 0 && filter.PageSize != 12)
+        {
+            query["pageSize"] = filter.PageSize.ToString();
+        }
+
+        if (query.Count == 0)
+        {
+            return basePath;
+        }
+
+        var builder = new StringBuilder(basePath);
+        builder.Append('?');
+
+        var isFirst = true;
+        foreach (var pair in query)
+        {
+            if (string.IsNullOrWhiteSpace(pair.Value))
+            {
+                continue;
+            }
+
+            if (!isFirst)
+            {
+                builder.Append('&');
+            }
+
+            builder.Append(Uri.EscapeDataString(pair.Key));
+            builder.Append('=');
+            builder.Append(Uri.EscapeDataString(pair.Value));
+
+            isFirst = false;
+        }
+
+        return builder.ToString();
     }
 }

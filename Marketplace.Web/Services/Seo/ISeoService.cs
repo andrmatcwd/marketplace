@@ -9,6 +9,7 @@ namespace Marketplace.Web.Services.Seo;
 public interface ISeoService
 {
     PageSeoData BuildHomePageSeo(HomePageVm model, HttpRequest request, string culture);
+    PageSeoData BuildCatalogGatewaySeo(CatalogGatewayPageVm model, HttpRequest request, string culture);
     PageSeoData BuildCatalogIndexSeo(CatalogIndexPageVm model, HttpRequest request, string culture);
     PageSeoData BuildCityPageSeo(CityPageVm model, HttpRequest request, string culture);
     PageSeoData BuildCategoryPageSeo(CategoryPageVm model, HttpRequest request, string culture);

@@ -34,40 +34,6 @@
             "; path=/; SameSite=Lax";
     }
 
-    function buildFallbackUrl(culture, city, search) {
-        var trimmedSearch = (search || "").trim();
-        var trimmedCity = (city || "").trim();
-
-        if (!trimmedCity) {
-            return null;
-        }
-
-        if (trimmedSearch) {
-            return "/" + culture + "/" +
-                encodeURIComponent(trimmedCity) +
-                "?search=" +
-                encodeURIComponent(trimmedSearch);
-        }
-
-        return "/" + culture + "/" + encodeURIComponent(trimmedCity);
-    }
-
-    function resolveDirectRoute(culture, city, search) {
-        var url = "/" + culture + "/api/listings/resolve-route?city=" +
-            encodeURIComponent(city) +
-            "&search=" +
-            encodeURIComponent(search);
-
-        return fetch(url, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            }
-        }).then(function (response) {
-            return response.json();
-        });
-    }
-
     function resolveCityFromCoords(culture, lat, lng) {
         var url = "/" + culture + "/api/geo/resolve-city?lat=" +
             encodeURIComponent(lat) +
@@ -96,8 +62,8 @@
     }
 
     function initPreferredCityBootstrap() {
-        var citySelect = document.getElementById("homeCitySelect");
-        var message = document.getElementById("detectedCityMessage");
+        var citySelect = document.getElementById("catalogGatewayCity");
+        var message = document.getElementById("catalogDetectedCityMessage");
 
         if (!citySelect) {
             return;
@@ -167,73 +133,38 @@
         });
     }
 
-    function initHomeSearchForm() {
-        var form = document.getElementById("homeSearchForm");
-        if (!form) {
+    function initGatewayForm() {
+        var form = document.getElementById("catalogGatewayForm");
+        var citySelect = document.getElementById("catalogGatewayCity");
+
+        if (!form || !citySelect) {
             return;
         }
 
-        var citySelect = document.getElementById("homeCitySelect");
-        if (citySelect) {
-            citySelect.addEventListener("change", function () {
-                setPreferredCity(citySelect.value || "");
-            });
-        }
+        citySelect.addEventListener("change", function () {
+            setPreferredCity(citySelect.value || "");
+        });
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
             var culture = getCulture();
-            var searchInput = document.getElementById("homeSearchInput");
-            var citySelect = document.getElementById("homeCitySelect");
-            var message = document.getElementById("detectedCityMessage");
-
-            var search = searchInput ? searchInput.value.trim() : "";
-            var city = citySelect ? citySelect.value.trim() : "";
+            var city = (citySelect.value || "").trim();
 
             if (!city) {
-                alert("Please select a city first");
-                if (citySelect) {
-                    citySelect.focus();
-                }
+                citySelect.focus();
                 return;
             }
 
             setPreferredCity(city);
-
-            if (!search) {
-                window.location.href = "/" + culture + "/" + encodeURIComponent(city);
-                return;
-            }
-
-            resolveDirectRoute(culture, city, search)
-                .then(function (data) {
-                    if (data && data.canRouteDirect && data.url) {
-                        window.location.href = data.url;
-                        return;
-                    }
-
-                    var fallbackUrl = buildFallbackUrl(culture, city, search);
-                    if (fallbackUrl) {
-                        window.location.href = fallbackUrl;
-                    }
-                })
-                .catch(function () {
-                    var fallbackUrl = buildFallbackUrl(culture, city, search);
-                    if (fallbackUrl) {
-                        window.location.href = fallbackUrl;
-                    } else if (message) {
-                        message.hidden = false;
-                        message.textContent = "Unable to process search route.";
-                    }
-                });
+            window.location.href = "/" + culture + "/" + encodeURIComponent(city);
         });
     }
 
     function initGeoDetection() {
-        var button = document.getElementById("detectLocationBtn");
-        var citySelect = document.getElementById("homeCitySelect");
-        var message = document.getElementById("detectedCityMessage");
+        var button = document.getElementById("catalogDetectLocationBtn");
+        var citySelect = document.getElementById("catalogGatewayCity");
+        var message = document.getElementById("catalogDetectedCityMessage");
 
         if (!button || !citySelect || !message) {
             return;
@@ -245,7 +176,6 @@
             }
 
             button.disabled = true;
-            button.textContent = "Detecting...";
 
             navigator.geolocation.getCurrentPosition(function (position) {
                 var culture = getCulture();
@@ -268,11 +198,9 @@
                     })
                     .finally(function () {
                         button.disabled = false;
-                        button.textContent = "Detect my city";
                     });
             }, function () {
                 button.disabled = false;
-                button.textContent = "Detect my city";
                 message.hidden = false;
                 message.textContent = "Location access was denied.";
             });
@@ -281,7 +209,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         initPreferredCityBootstrap();
-        initHomeSearchForm();
+        initGatewayForm();
         initGeoDetection();
     });
 })();

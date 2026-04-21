@@ -5,7 +5,28 @@
 }
 
 <partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
+
+@if (Model.HasSubCategories)
+{
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="Model.SubCategoriesSection.Header" />
+        <partial name="~/Views/Shared/Lists/_SubCategoriesGrid.cshtml" model="Model.SubCategoriesSection.Items" />
+    </section>
+}
+
+@if (Model.HasListings)
+{
+    <section class="catalog-page__block app-section">
+        <partial name="~/Views/Shared/Sections/_SectionHeader.cshtml" model="Model.ListingsSection.Header" />
+        <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="Model.ListingsSection.Listings" />
+
+        @if (Model.ListingsSection.Pagination is not null)
+        {
+            <div class="mt-4">
+                <partial name="~/Views/Shared/Sections/_Pagination.cshtml" model="Model.ListingsSection.Pagination" />
+            </div>
+        }
+    </section>
+}
+
 <partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
-<partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.ListingsSection" />
-<partial name="~/Views/Shared/Sections/_SubCategoriesSection.cshtml" model="Model.SubCategoriesSection" />
-@* <partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.ListingsSection" /> *@

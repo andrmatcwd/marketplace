@@ -46,7 +46,14 @@
                                 <option value="">@Model.Hero.CityPlaceholder</option>
                                 @foreach (var option in Model.CityOptions)
                                 {
-                                    <option value="@option.Value">@option.Text</option>
+                                    if (string.Equals(option.Value, Model.SelectedCitySlug, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <option value="@option.Value" selected>@option.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@option.Value">@option.Text</option>
+                                    }
                                 }
                             </select>
                         </div>

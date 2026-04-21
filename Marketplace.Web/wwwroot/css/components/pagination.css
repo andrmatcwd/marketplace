@@ -1,28 +1,49 @@
 .app-pagination {
-    margin-top: 24px;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
 }
 
 .app-pagination .pagination {
-    gap: 4px;
+    display: flex;
+    flex-wrap: wrap; /* 🔥 ключ */
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 0;
+    max-width: 100%;
+}
+
+.app-pagination .page-item {
+    margin: 0;
 }
 
 .app-pagination .page-link {
-    color: var(--app-text);
-    border-color: var(--app-border);
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
     border-radius: 10px;
-    background: var(--app-surface);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
-.app-pagination .page-link:hover {
-    color: var(--app-primary);
-    background: var(--app-primary-light);
-    border-color: var(--app-primary-light);
-}
+@media (max-width: 575.98px) {
+    .app-pagination {
+        justify-content: center;
+    }
 
-.app-pagination .page-item.active .page-link {
-    background: var(--app-primary);
-    border-color: var(--app-primary);
-    color: #ffffff;
+    .app-pagination .pagination {
+        gap: 4px;
+    }
+
+    .app-pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        padding: 0 8px;
+        font-size: 0.85rem;
+    }
 }
