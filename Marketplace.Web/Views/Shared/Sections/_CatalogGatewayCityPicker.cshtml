@@ -1,0 +1,46 @@
+﻿@model Marketplace.Web.Models.Catalog.CatalogGatewayPageVm
+
+<section class="app-section">
+    <div class="app-card p-3 p-lg-4">
+        <div class="mb-3">
+            <h2 class="section-title mb-1">Choose your city</h2>
+            <p class="text-muted mb-0">
+                Select a city first to browse relevant categories, subcategories, and local providers.
+            </p>
+        </div>
+
+        <form id="catalogGatewayForm" class="row g-3 align-items-end">
+            <div class="col-12 col-lg-7">
+                <label for="catalogGatewayCity" class="filter-label">City</label>
+                <select id="catalogGatewayCity" class="form-select app-select">
+                    <option value="">Choose a city</option>
+                    @foreach (var option in Model.CityOptions)
+                    {
+                        if (string.Equals(option.Value, Model.SelectedCitySlug, StringComparison.OrdinalIgnoreCase))
+                        {
+                            <option value="@option.Value" selected>@option.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-auto">
+                <button type="button" id="catalogDetectLocationBtn" class="btn btn-app-outline w-100">
+                    Detect my city
+                </button>
+            </div>
+
+            <div class="col-12 col-lg-auto">
+                <button type="submit" class="btn btn-app w-100">
+                    Go to services
+                </button>
+            </div>
+        </form>
+
+        <div id="catalogDetectedCityMessage" class="catalog-detected-city form-text mt-3" hidden></div>
+    </div>
+</section>

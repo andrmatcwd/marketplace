@@ -23,7 +23,7 @@ public sealed class HomeService : IHomeService
         _urlBuilder = urlBuilder;
     }
 
-    public async Task<HomePageVm> GetHomePageAsync(string culture, CancellationToken cancellationToken)
+    public async Task<HomePageVm> GetHomePageAsync(string culture, string? selectedCitySlug, CancellationToken cancellationToken)
     {
         var cities = await _dbContext.Cities
             .AsNoTracking()
@@ -66,6 +66,9 @@ public sealed class HomeService : IHomeService
         return new HomePageVm
         {
             Culture = culture,
+            SelectedCitySlug = string.IsNullOrWhiteSpace(selectedCitySlug)
+                ? null
+                : selectedCitySlug.Trim(),
             Hero = new HomeHeroVm
             {
                 Title = "Знайдіть перевірені послуги у своєму місті",
@@ -115,9 +118,9 @@ public sealed class HomeService : IHomeService
             {
                 Title = "Про каталог послуг",
                 Text = """
-                       <p>Marketplace допомагає швидко знайти послуги у потрібному місті: від медицини та краси до побутових і локальних сервісів.</p>
-                       <p>Оберіть місто, перегляньте категорії або скористайтеся пошуком, щоб знайти потрібну компанію чи спеціаліста.</p>
-                       """
+                    <p>Marketplace допомагає швидко знайти послуги у потрібному місті: від медицини та краси до побутових і локальних сервісів.</p>
+                    <p>Оберіть місто, перегляньте категорії або скористайтеся пошуком, щоб знайти потрібну компанію чи спеціаліста.</p>
+                    """
             }
         };
     }

@@ -16,22 +16,16 @@
     <link rel="stylesheet" href="~/css/tokens.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/css/components/topnav.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/buttons.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/forms.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/breadcrumbs.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/hero.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/cards.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/filter-bar.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/pagination.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/hero.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/section.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/taxonomy-card.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/listing-details.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/components/mobile-drawer.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
-    <link rel="stylesheet" href="/css/components/cookie-consent.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/cookie-consent.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -53,14 +47,11 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/catalog-filters.js" asp-append-version="true"></script>
-    <script src="~/js/mobile-filters.js" asp-append-version="true"></script>
-    <script src="~/js/listing-gallery.js" asp-append-version="true"></script>
-    <script src="~/js/google-maps.js" asp-append-version="true"></script>
-    <script src="~/js/search-autocomplete.js" asp-append-version="true"></script>
-    <script src="~/js/categories-toggle.js" asp-append-version="true"></script>
     <script src="~/js/cookie-consent.js" asp-append-version="true"></script>
+    <script src="~/js/preferred-city.js" asp-append-version="true"></script>
+    
+    <script src="~/js/core/toggle-collapsible.js" asp-append-version="true"></script>
+    <script src="~/js/core/location-context.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

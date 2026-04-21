@@ -1,12 +1,46 @@
-﻿@model Marketplace.Web.Models.Catalog.CatalogIndexPageVm
+﻿@model Marketplace.Web.Models.Catalog.CatalogGatewayPageVm
 
 @{
     ViewData["Title"] = Model.Hero.Title;
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/filter-bar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/mobile-drawer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/catalog.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/taxonomy-card.css" asp-append-version="true" />
+}
+
 <partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
-<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
-<partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.ListingsSection" />
+<partial name="~/Views/Shared/Sections/_CatalogGatewayCityPicker.cshtml" model="Model" />
+
+@if (!string.IsNullOrWhiteSpace(Model.ContinueToCityUrl))
+{
+    <section class="app-section">
+        <div class="app-card p-3 p-lg-4">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                <div>
+                    <h2 class="section-title mb-1">Continue in your selected city</h2>
+                    <p class="text-muted mb-0">You already have a selected city. Open the local catalog directly.</p>
+                </div>
+
+                <a href="@Model.ContinueToCityUrl" class="btn btn-app">
+                    Continue to city catalog
+                </a>
+            </div>
+        </div>
+    </section>
+}
+
 <partial name="~/Views/Shared/Sections/_CitiesSection.cshtml" model="Model.CitiesSection" />
-<partial name="~/Views/Shared/Sections/_CategoriesSection.cshtml" model="Model.CategoriesSection" />
-@* <partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.ListingsSection" /> *@
+<partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.FeaturedListingsSection" />
+<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
+
+@section Scripts {
+    <script src="~/js/catalog-filters.js" asp-append-version="true"></script>
+    <script src="~/js/mobile-filters.js" asp-append-version="true"></script>
+    <script src="~/js/search-autocomplete.js" asp-append-version="true"></script>
+    <script src="~/js/categories-toggle.js" asp-append-version="true"></script>
+    <script src="~/js/pages/catalog-gateway.js" asp-append-version="true"></script>
+}

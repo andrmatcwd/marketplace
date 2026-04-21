@@ -25,7 +25,8 @@
         {
             <li>
                 <a class="dropdown-item @(city.Slug == currentCitySlug ? "active" : "")"
-                   href="@city.Url">
+                href="@city.Url"
+                data-city-slug="@city.Slug">
                     @city.Name
                 </a>
             </li>

@@ -1,3 +1,4 @@
+using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Seo;
 using Marketplace.Web.Utils;
@@ -7,6 +8,8 @@ namespace Marketplace.Web.Controllers;
 
 public sealed class HomeController : Controller
 {
+    private const string PreferredCityCookieName = "preferred_city";
+
     private readonly IHomeService _homeService;
     private readonly ISeoService _seoService;
 
@@ -21,7 +24,9 @@ public sealed class HomeController : Controller
     {
         culture = CultureHelper.Normalize(culture);
 
-        var vm = await _homeService.GetHomePageAsync(culture, cancellationToken);
+        Request.Cookies.TryGetValue(PreferredCityCookieName, out var selectedCitySlug);
+
+        var vm = await _homeService.GetHomePageAsync(culture, selectedCitySlug, cancellationToken);
         ViewData["Seo"] = _seoService.BuildHomePageSeo(vm, Request, culture);
 
         return View(vm);
@@ -32,7 +37,7 @@ public sealed class HomeController : Controller
     {
         culture = CultureHelper.Normalize(culture);
 
-        ViewData["Seo"] = new Marketplace.Web.Seo.PageSeoData
+        ViewData["Seo"] = new PageSeoData
         {
             Title = culture == "uk" ? "Політика конфіденційності" : "Privacy Policy",
             Description = culture == "uk"

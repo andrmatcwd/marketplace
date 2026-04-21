@@ -1,7 +1,7 @@
 (function () {
     function initPreferredCityBootstrap() {
-        var citySelect = document.getElementById("homeCitySelect");
-        var message = document.getElementById("detectedCityMessage");
+        var citySelect = document.getElementById("catalogGatewayCity");
+        var message = document.getElementById("catalogDetectedCityMessage");
 
         if (!citySelect || !window.locationContext) {
             return;
@@ -75,71 +75,40 @@
         });
     }
 
-    function initHomeSearchForm() {
-        var form = document.getElementById("homeSearchForm");
-        if (!form || !window.locationContext) {
+    function initGatewayForm() {
+        var form = document.getElementById("catalogGatewayForm");
+        var citySelect = document.getElementById("catalogGatewayCity");
+
+        if (!form || !citySelect || !window.locationContext) {
             return;
         }
 
-        var citySelect = document.getElementById("homeCitySelect");
-        if (citySelect) {
-            citySelect.addEventListener("change", function () {
-                window.locationContext.setPreferredCity(citySelect.value || "");
-            });
-        }
+        citySelect.addEventListener("change", function () {
+            window.locationContext.setPreferredCity(citySelect.value || "");
+        });
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
             var culture = window.locationContext.getCulture();
-            var searchInput = document.getElementById("homeSearchInput");
-            var citySelect = document.getElementById("homeCitySelect");
-
-            var search = searchInput ? searchInput.value.trim() : "";
-            var city = citySelect ? citySelect.value.trim() : "";
+            var city = (citySelect.value || "").trim();
 
             if (!city) {
-                alert("Please select a city first");
-                if (citySelect) {
-                    citySelect.focus();
-                }
+                citySelect.focus();
                 return;
             }
 
             window.locationContext.setPreferredCity(city);
-
-            if (!search) {
-                window.location.href = "/" + culture + "/" + encodeURIComponent(city);
-                return;
-            }
-
-            window.locationContext.resolveDirectRoute(culture, city, search)
-                .then(function (data) {
-                    if (data && data.canRouteDirect && data.url) {
-                        window.location.href = data.url;
-                        return;
-                    }
-
-                    var fallbackUrl = window.locationContext.buildFallbackUrl(culture, city, search);
-                    if (fallbackUrl) {
-                        window.location.href = fallbackUrl;
-                    }
-                })
-                .catch(function () {
-                    var fallbackUrl = window.locationContext.buildFallbackUrl(culture, city, search);
-                    if (fallbackUrl) {
-                        window.location.href = fallbackUrl;
-                    }
-                });
+            window.location.href = "/" + culture + "/" + encodeURIComponent(city);
         });
     }
 
     function initGeoDetection() {
-        var button = document.getElementById("detectLocationBtn");
-        var citySelect = document.getElementById("homeCitySelect");
-        var message = document.getElementById("detectedCityMessage");
+        var button = document.getElementById("catalogDetectLocationBtn");
+        var citySelect = document.getElementById("catalogGatewayCity");
+        var message = document.getElementById("catalogDetectedCityMessage");
 
-        if (!button || !citySelect || !window.locationContext) {
+        if (!button || !citySelect || !message || !window.locationContext) {
             return;
         }
 
@@ -162,39 +131,31 @@
                         if (data && data.city) {
                             citySelect.value = data.city;
                             window.locationContext.setPreferredCity(data.city);
-
-                            if (message) {
-                                message.hidden = false;
-                                message.textContent = "Detected city: " + (data.cityName || data.city);
-                            }
-                        } else if (message) {
+                            message.hidden = false;
+                            message.textContent = "Detected city: " + (data.cityName || data.city);
+                        } else {
                             message.hidden = false;
                             message.textContent = "Could not detect a supported city.";
                         }
                     })
                     .catch(function () {
-                        if (message) {
-                            message.hidden = false;
-                            message.textContent = "Unable to detect city.";
-                        }
+                        message.hidden = false;
+                        message.textContent = "Unable to detect city.";
                     })
                     .finally(function () {
                         button.disabled = false;
                     });
             }, function () {
                 button.disabled = false;
-
-                if (message) {
-                    message.hidden = false;
-                    message.textContent = "Location access was denied.";
-                }
+                message.hidden = false;
+                message.textContent = "Location access was denied.";
             });
         });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
         initPreferredCityBootstrap();
-        initHomeSearchForm();
+        initGatewayForm();
         initGeoDetection();
     });
 })();

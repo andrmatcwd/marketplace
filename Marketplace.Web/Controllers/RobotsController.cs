@@ -9,11 +9,11 @@ public sealed class RobotsController : Controller
     {
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var content = $"""
-User-agent: *
-Disallow: /error/
-Disallow: /admin/
-Sitemap: {baseUrl}/sitemap.xml
-""";
+        User-agent: *
+        Disallow: /error/
+        Disallow: /admin/
+        Sitemap: {baseUrl}/sitemap.xml
+        """;
 
         return Content(content, "text/plain");
     }

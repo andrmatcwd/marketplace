@@ -14,45 +14,35 @@ public sealed class CanonicalUrlBuilder
     }
 
     public string BuildHome(string culture)
-    {
-        return _urlBuilder.BuildHomeUrl(culture);
-    }
+        => _urlBuilder.BuildHomeUrl(culture);
 
-    public string BuildCatalog(string culture)
-    {
-        return _urlBuilder.BuildCatalogUrl(culture);
-    }
+    public string BuildCatalog(string culture, int page = 1)
+        => _urlBuilder.BuildCatalogUrl(culture, page);
 
     public string BuildCity(CityPageVm model)
-    {
-        return _urlBuilder.BuildCityUrl(model.Culture, model.CitySlug);
-    }
+        => _urlBuilder.BuildCityUrl(model.Culture, model.CitySlug, model.ListingsSection.Filter.Page);
 
     public string BuildCategory(CategoryPageVm model)
-    {
-        return _urlBuilder.BuildCategoryUrl(model.Culture, model.CitySlug!, model.CategorySlug);
-    }
+        => _urlBuilder.BuildCategoryUrl(
+            model.Culture,
+            model.CitySlug,
+            model.CategorySlug,
+            model.ListingsSection.Filter.Page);
 
     public string BuildSubCategory(SubCategoryPageVm model)
-    {
-        return _urlBuilder.BuildSubCategoryUrl(model.Culture, model.CitySlug!, model.CategorySlug!, model.SubCategorySlug);
-    }
-
-    public string BuildListing(ListingDetailsPageVm model)
-    {
-        if (string.IsNullOrWhiteSpace(model.CitySlug) ||
-            string.IsNullOrWhiteSpace(model.CategorySlug) ||
-            string.IsNullOrWhiteSpace(model.SubCategorySlug))
-        {
-            return model.Url;
-        }
-
-        return _urlBuilder.BuildListingUrl(
+        => _urlBuilder.BuildSubCategoryUrl(
             model.Culture,
             model.CitySlug,
             model.CategorySlug,
             model.SubCategorySlug,
+            model.ListingsSection.Filter.Page);
+
+    public string BuildListing(ListingDetailsPageVm model)
+        => _urlBuilder.BuildListingUrl(
+            model.Culture,
+            model.CitySlug!,
+            model.CategorySlug!,
+            model.SubCategorySlug!,
             model.Slug,
             model.Id);
-    }
 }

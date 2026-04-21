@@ -17,7 +17,7 @@ public sealed class CategoryTreeViewComponent : ViewComponent
     {
         culture ??= CultureHelper.Current();
 
-        var vm = await _homeService.GetHomePageAsync(culture, cancellationToken);
+        var vm = await _homeService.GetHomePageAsync(culture, null, cancellationToken);
         return View(vm.PopularCategoriesSection.Items);
     }
 }

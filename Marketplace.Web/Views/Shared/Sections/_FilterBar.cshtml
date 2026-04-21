@@ -54,27 +54,6 @@
             </div>
         }
 
-        @if (Model.Categories != null && Model.Categories.Any())
-        {
-            <div class="filter-bar-group">
-                <label class="filter-label" for="category">SubCategory</label>
-                <select id="category" name="category" class="form-select app-select">
-                    <option value="">All categories</option>
-                    @foreach (var option in Model.Categories)
-                    {
-                        if (string.Equals(option.Value, Model.Category, StringComparison.OrdinalIgnoreCase))
-                        {
-                            <option value="@option.Value" selected>@option.Text</option>
-                        }
-                        else
-                        {
-                            <option value="@option.Value">@option.Text</option>
-                        }
-                    }
-                </select>
-            </div>
-        }
-
         <div class="filter-bar-group">
             <label class="filter-label" for="sort">Sort</label>
             <select id="sort" name="sort" class="form-select app-select">
