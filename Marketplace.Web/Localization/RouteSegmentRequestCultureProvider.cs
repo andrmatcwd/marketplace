@@ -20,13 +20,17 @@ public sealed class RouteSegmentRequestCultureProvider : RequestCultureProvider
             return Task.FromResult<ProviderCultureResult?>(null);
         }
 
-        var culture = segments[0].Trim().ToLowerInvariant();
+        var cultureSegment = segments[0].Trim().ToLowerInvariant();
 
-        if (culture is "uk" or "en")
+        var culture = cultureSegment switch
         {
-            return Task.FromResult<ProviderCultureResult?>(new ProviderCultureResult(culture, culture));
-        }
+            "uk" => "uk-UA",
+            "ru" => "ru-RU",
+            _ => null
+        };
 
-        return Task.FromResult<ProviderCultureResult?>(null);
+        return culture is null
+            ? Task.FromResult<ProviderCultureResult?>(null)
+            : Task.FromResult<ProviderCultureResult?>(new ProviderCultureResult(culture, culture));
     }
 }

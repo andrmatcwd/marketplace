@@ -21,15 +21,15 @@ public sealed class CatalogController : Controller
         _seoService = seoService;
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/catalog")]
-    [HttpGet("/{culture:regex(^uk|en$)}/catalog/page-{page:int}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/catalog")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/catalog/page-{page:int}")]
     public async Task<IActionResult> Index(
         string culture,
         int? page,
         [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         if (Request.Path.Value?.Contains("/page-1", StringComparison.OrdinalIgnoreCase) == true)
         {
@@ -44,8 +44,8 @@ public sealed class CatalogController : Controller
         return View(vm);
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}")]
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/page-{page:int}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/page-{page:int}")]
     public async Task<IActionResult> City(
         string culture,
         string citySlug,
@@ -53,7 +53,7 @@ public sealed class CatalogController : Controller
         [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
         filter.Page = page ?? 1;
 
         if (Request.Path.Value?.Contains("/page-1", StringComparison.OrdinalIgnoreCase) == true)
@@ -73,8 +73,8 @@ public sealed class CatalogController : Controller
         return View(vm);
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}")]
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/page-{page:int}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/{categorySlug}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/{categorySlug}/page-{page:int}")]
     public async Task<IActionResult> Category(
         string culture,
         string citySlug,
@@ -83,7 +83,7 @@ public sealed class CatalogController : Controller
         [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
         filter.Page = page ?? 1;
 
         if (Request.Path.Value?.Contains("/page-1", StringComparison.OrdinalIgnoreCase) == true)
@@ -103,8 +103,8 @@ public sealed class CatalogController : Controller
         return View(vm);
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}")]
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}/page-{page:int}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/{categorySlug}/{subCategorySlug}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/{categorySlug}/{subCategorySlug}/page-{page:int}")]
     public async Task<IActionResult> SubCategory(
         string culture,
         string citySlug,
@@ -114,7 +114,7 @@ public sealed class CatalogController : Controller
         [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
         filter.Page = page ?? 1;
 
         if (Request.Path.Value?.Contains("/page-1", StringComparison.OrdinalIgnoreCase) == true)

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter</value>
+  </resheader>
+
+  <data name="Catalog"><value>Залупа</value></data>
+  <data name="Cities"><value>Города</value></data>
+  <data name="Categories"><value>Категории</value></data>
+
+  <data name="PopularCities"><value>Популярные города</value></data>
+  <data name="PopularCategories"><value>Популярные категории</value></data>
+  <data name="PopularListings"><value>Популярные предложения</value></data>
+
+  <data name="ShowAll"><value>Показать все</value></data>
+  <data name="Collapse"><value>Свернуть</value></data>
+
+  <data name="Filters"><value>Фильтры</value></data>
+  <data name="Search"><value>Поиск</value></data>
+  <data name="SearchPlaceholder"><value>Например: стоматолог, клининг, мастер ремонта</value></data>
+
+  <data name="ChooseCity"><value>Выберите город</value></data>
+  <data name="City"><value>Город</value></data>
+
+  <data name="Write"><value>Написать</value></data>
+  <data name="Contacts"><value>Контакты</value></data>
+
+  <data name="Reviews"><value>Отзывы</value></data>
+  <data name="NoReviewsYet"><value>Отзывов пока нет. Будьте первым.</value></data>
+  <data name="LeaveReview"><value>Оставить отзыв</value></data>
+  <data name="SubmitReview"><value>Отправить отзыв</value></data>
+
+  <data name="Name"><value>Имя</value></data>
+  <data name="Phone"><value>Телефон</value></data>
+  <data name="Message"><value>Сообщение</value></data>
+
+  <data name="Send"><value>Отправить</value></data>
+  <data name="Cancel"><value>Отмена</value></data>
+
+  <data name="PrivacyPolicy"><value>Политика конфиденциальности</value></data>
+
+  <data name="CookieMessage"><value>Мы используем cookies для улучшения работы сайта.</value></data>
+  <data name="CookieAgreement"><value>Продолжая использование, вы соглашаетесь с политикой.</value></data>
+  <data name="LearnMore"><value>Подробнее</value></data>
+
+  <data name="DetectedCity"><value>Определённый город: {0}</value></data>
+  <data name="SelectedCity"><value>Выбранный город: {0}</value></data>
+
+  <data name="LocationDenied"><value>Доступ к геолокации запрещён</value></data>
+  <data name="LocationFailed"><value>Не удалось определить город</value></data>
+
+  <data name="SelectCityFirst"><value>Сначала выберите город</value></data>
+  <data name="Found"><value>Найдено: {0}</value></data>
+
+  <!-- SEO / common -->
+  <data name="ServicesInCity"><value>Услуги в {0}</value></data>
+  <data name="CategoryInCity"><value>{0} в {1}</value></data>
+  <data name="SubCategoryInCity"><value>{0} в {1}</value></data>
+
+</root>

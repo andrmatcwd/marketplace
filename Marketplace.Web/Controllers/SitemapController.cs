@@ -21,9 +21,9 @@ public sealed class SitemapController : Controller
         var urls = new List<string>
         {
             $"{baseUrl}/uk",
-            $"{baseUrl}/en",
+            $"{baseUrl}/ru",
             $"{baseUrl}/uk/catalog",
-            $"{baseUrl}/en/catalog"
+            $"{baseUrl}/ru/catalog"
         };
 
         var cities = await _dbContext.Cities
@@ -34,7 +34,7 @@ public sealed class SitemapController : Controller
         foreach (var city in cities)
         {
             urls.Add($"{baseUrl}/uk/{city.Slug}");
-            urls.Add($"{baseUrl}/en/{city.Slug}");
+            urls.Add($"{baseUrl}/ru/{city.Slug}");
         }
 
         var categories = await _dbContext.Categories
@@ -47,7 +47,7 @@ public sealed class SitemapController : Controller
             foreach (var category in categories)
             {
                 urls.Add($"{baseUrl}/uk/{city.Slug}/{category.Slug}");
-                urls.Add($"{baseUrl}/en/{city.Slug}/{category.Slug}");
+                urls.Add($"{baseUrl}/ru/{city.Slug}/{category.Slug}");
             }
         }
 
@@ -62,7 +62,7 @@ public sealed class SitemapController : Controller
             foreach (var subCategory in subCategories.Where(x => x.Category != null))
             {
                 urls.Add($"{baseUrl}/uk/{city.Slug}/{subCategory.Category!.Slug}/{subCategory.Slug}");
-                urls.Add($"{baseUrl}/en/{city.Slug}/{subCategory.Category!.Slug}/{subCategory.Slug}");
+                urls.Add($"{baseUrl}/ru/{city.Slug}/{subCategory.Category!.Slug}/{subCategory.Slug}");
             }
         }
 
@@ -77,7 +77,7 @@ public sealed class SitemapController : Controller
         foreach (var listing in listings)
         {
             urls.Add($"{baseUrl}/uk/{listing.City!.Slug}/{listing.Category!.Slug}/{listing.SubCategory!.Slug}/{listing.Slug}-{listing.Id}");
-            urls.Add($"{baseUrl}/en/{listing.City!.Slug}/{listing.Category!.Slug}/{listing.SubCategory!.Slug}/{listing.Slug}-{listing.Id}");
+            urls.Add($"{baseUrl}/ru/{listing.City!.Slug}/{listing.Category!.Slug}/{listing.SubCategory!.Slug}/{listing.Slug}-{listing.Id}");
         }
 
         var sb = new StringBuilder();

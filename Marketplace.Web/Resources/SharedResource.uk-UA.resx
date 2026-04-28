@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter</value>
+  </resheader>
+
+  <data name="Catalog"><value>Каталог</value></data>
+  <data name="Cities"><value>Міста</value></data>
+  <data name="Categories"><value>Категорії</value></data>
+
+  <data name="PopularCities"><value>Популярні міста</value></data>
+  <data name="PopularCategories"><value>Популярні категорії</value></data>
+  <data name="PopularListings"><value>Популярні пропозиції</value></data>
+
+  <data name="ShowAll"><value>Показати всі</value></data>
+  <data name="Collapse"><value>Згорнути</value></data>
+
+  <data name="Filters"><value>Фільтри</value></data>
+  <data name="Search"><value>Пошук</value></data>
+  <data name="SearchPlaceholder"><value>Наприклад: стоматолог, клінінг, майстер ремонту</value></data>
+
+  <data name="ChooseCity"><value>Оберіть місто</value></data>
+  <data name="City"><value>Місто</value></data>
+
+  <data name="Write"><value>Написати</value></data>
+  <data name="Contacts"><value>Контакти</value></data>
+
+  <data name="Reviews"><value>Відгуки</value></data>
+  <data name="NoReviewsYet"><value>Ще немає відгуків. Будьте першим.</value></data>
+  <data name="LeaveReview"><value>Залишити відгук</value></data>
+  <data name="SubmitReview"><value>Надіслати відгук</value></data>
+
+  <data name="Name"><value>Ім’я</value></data>
+  <data name="Phone"><value>Телефон</value></data>
+  <data name="Message"><value>Повідомлення</value></data>
+
+  <data name="Send"><value>Надіслати</value></data>
+  <data name="Cancel"><value>Скасувати</value></data>
+
+  <data name="PrivacyPolicy"><value>Політика конфіденційності</value></data>
+
+  <data name="CookieMessage"><value>Ми використовуємо cookies для покращення роботи сайту.</value></data>
+  <data name="CookieAgreement"><value>Продовжуючи користування, ви погоджуєтесь з політикою.</value></data>
+  <data name="LearnMore"><value>Детальніше</value></data>
+
+  <data name="DetectedCity"><value>Визначене місто: {0}</value></data>
+  <data name="SelectedCity"><value>Обране місто: {0}</value></data>
+
+  <data name="LocationDenied"><value>Доступ до геолокації заборонено</value></data>
+  <data name="LocationFailed"><value>Не вдалося визначити місто</value></data>
+
+  <data name="SelectCityFirst"><value>Спочатку оберіть місто</value></data>
+  <data name="Found"><value>Знайдено: {0}</value></data>
+
+  <!-- SEO / common -->
+  <data name="ServicesInCity"><value>Послуги у {0}</value></data>
+  <data name="CategoryInCity"><value>{0} у {1}</value></data>
+  <data name="SubCategoryInCity"><value>{0} у {1}</value></data>
+
+</root>

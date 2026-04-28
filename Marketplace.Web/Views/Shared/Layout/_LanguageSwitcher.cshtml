@@ -10,7 +10,7 @@
     {
         var copy = segments.ToList();
 
-        if (copy.Count > 0 && (copy[0] == "uk" || copy[0] == "en"))
+        if (copy.Count > 0 && (copy[0] == "uk" || copy[0] == "ru"))
         {
             copy[0] = targetCulture;
         }
@@ -29,8 +29,8 @@
         UK
     </a>
 
-    <a href="@BuildSwitchUrl("en")"
-       class="btn @(currentCulture == "en" ? "btn-app" : "btn-app-outline") btn-sm">
-        EN
+    <a href="@BuildSwitchUrl("ru")"
+       class="btn @(currentCulture == "ru" ? "btn-app" : "btn-app-outline") btn-sm">
+        RU
     </a>
 </div>
