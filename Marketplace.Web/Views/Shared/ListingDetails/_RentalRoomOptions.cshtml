@@ -1,0 +1,109 @@
+@model IReadOnlyCollection<Marketplace.Web.Models.Listings.RentalRoomVm>
+
+@if (Model != null && Model.Any())
+{
+    <div class="rental-block">
+        <div class="rental-block-header">
+            <h3 class="rental-block-title">Номери та варіанти розміщення</h3>
+            <p class="rental-block-text">
+                Перегляньте доступні номери, фото, характеристики та зручності.
+            </p>
+        </div>
+
+        <div class="rental-room-list">
+            @foreach (var room in Model)
+            {
+                var images = room.ImageUrls?
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Take(4)
+                    .ToList() ?? [];
+
+                <article class="rental-room app-card">
+                    <div class="rental-room-gallery">
+                        @if (images.Any())
+                        {
+                            <div class="rental-room-main-image">
+                                <img src="@images[0]"
+                                     alt="@room.Title"
+                                     loading="lazy" />
+                            </div>
+
+                            @if (images.Count > 1)
+                            {
+                                <div class="rental-room-thumbs">
+                                    @foreach (var image in images.Skip(1).Take(3))
+                                    {
+                                        <img src="@image"
+                                             alt="@room.Title"
+                                             loading="lazy" />
+                                    }
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="rental-room-placeholder">
+                                Без фото
+                            </div>
+                        }
+                    </div>
+
+                    <div class="rental-room-content">
+                        <div class="rental-room-top">
+                            <div>
+                                <h4 class="rental-room-title">@room.Title</h4>
+
+                                @if (!string.IsNullOrWhiteSpace(room.Description))
+                                {
+                                    <p class="rental-room-description">@room.Description</p>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(room.Price))
+                            {
+                                <div class="rental-room-price">@room.Price</div>
+                            }
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(room.Area) ||
+                             !string.IsNullOrWhiteSpace(room.Guests) ||
+                             !string.IsNullOrWhiteSpace(room.Beds))
+                        {
+                            <div class="rental-room-meta">
+                                @if (!string.IsNullOrWhiteSpace(room.Area))
+                                {
+                                    <span>@room.Area</span>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(room.Guests))
+                                {
+                                    <span>@room.Guests</span>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(room.Beds))
+                                {
+                                    <span>@room.Beds</span>
+                                }
+                            </div>
+                        }
+
+                        @if (room.Amenities.Any())
+                        {
+                            <ul class="rental-room-amenities">
+                                @foreach (var amenity in room.Amenities.Take(6))
+                                {
+                                    <li>@amenity</li>
+                                }
+
+                                @if (room.Amenities.Count > 6)
+                                {
+                                    <li>+@(room.Amenities.Count - 6)</li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+}

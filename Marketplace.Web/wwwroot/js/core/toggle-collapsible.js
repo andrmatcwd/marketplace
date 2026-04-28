@@ -71,3 +71,20 @@
 
     document.addEventListener("DOMContentLoaded", initCollapsibles);
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("[data-collapsible]").forEach(function (wrapper) {
+        const content = wrapper.querySelector("[data-collapsible-content]");
+        const button = wrapper.querySelector("[data-collapsible-toggle]");
+
+        if (!content || !button) return;
+
+        button.addEventListener("click", function () {
+            const isOpen = wrapper.classList.toggle("is-open");
+
+            button.textContent = isOpen
+                ? button.dataset.collapseText || "Згорнути"
+                : button.dataset.expandText || "Показати більше";
+        });
+    });
+});

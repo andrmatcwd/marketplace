@@ -1,0 +1,12 @@
+.seo-bottom {
+    margin-top: var(--app-space-6);
+}
+
+.seo-bottom-body {
+    padding: var(--app-space-5);
+}
+
+.seo-bottom-text {
+    color: var(--app-text-muted);
+    line-height: 1.7;
+}

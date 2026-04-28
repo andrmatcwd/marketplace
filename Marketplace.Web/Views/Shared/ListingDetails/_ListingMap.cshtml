@@ -1,12 +1,7 @@
-﻿@using Marketplace.Web.Options
-@using Microsoft.Extensions.Options
-@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
-@inject IOptions<GoogleMapsOptions> GoogleMapsOptions
+﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
 
 @{
     ViewData["Title"] = Model.Title;
-
-    var apiKey = GoogleMapsOptions.Value.ApiKey;
 }
 
 @if (Model.HasCoordinates)

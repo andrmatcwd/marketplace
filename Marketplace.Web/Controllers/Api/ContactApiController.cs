@@ -22,7 +22,7 @@ public sealed class ContactApiController : ControllerBase
         [FromBody] ListingContactRequestDto request,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         if (!ModelState.IsValid)
         {

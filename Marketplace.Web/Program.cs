@@ -19,7 +19,6 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<UiOptions>(builder.Configuration.GetSection("Ui"));
-builder.Services.Configure<GoogleMapsOptions>(builder.Configuration.GetSection("GoogleMaps"));
 
 builder.Services.Configure<LocationDefaultsOptions>(
     builder.Configuration.GetSection("LocationDefaults"));
@@ -30,11 +29,11 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     var supportedCultures = new[]
     {
-        new CultureInfo("uk"),
-        new CultureInfo("en")
+        new CultureInfo("uk-UA"),
+        new CultureInfo("ru-RU")
     };
 
-    options.DefaultRequestCulture = new RequestCulture("uk");
+    options.DefaultRequestCulture = new RequestCulture("uk-UA");
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 

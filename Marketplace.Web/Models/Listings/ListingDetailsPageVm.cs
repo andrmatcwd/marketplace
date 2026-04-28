@@ -46,6 +46,8 @@ public sealed class ListingDetailsPageVm
 
     public CreateListingReviewVm ReviewForm { get; set; } = new();
 
+    public RentalDetailsVm? Rental { get; set; }
+
     public bool HasRating => Rating > 0;
     public bool HasReviews => Reviews.Count > 0;
     public bool HasRelatedListings => RelatedListings.Count > 0;

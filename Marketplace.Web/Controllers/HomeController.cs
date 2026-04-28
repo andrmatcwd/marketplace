@@ -19,10 +19,10 @@ public sealed class HomeController : Controller
         _seoService = seoService;
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}")]
     public async Task<IActionResult> Index(string culture, CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         Request.Cookies.TryGetValue(PreferredCityCookieName, out var selectedCitySlug);
 
@@ -32,10 +32,10 @@ public sealed class HomeController : Controller
         return View(vm);
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/privacy")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/privacy")]
     public IActionResult Privacy(string culture)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         ViewData["Seo"] = new PageSeoData
         {
@@ -46,6 +46,18 @@ public sealed class HomeController : Controller
             Robots = "index, follow"
         };
 
+        return View();
+    }
+
+    [HttpGet("/{culture:regex(^uk|ru$)}/articles")]
+    public IActionResult Articles(string culture)
+    {
+        return View();
+    }
+
+    [HttpGet("/{culture:regex(^uk|ru$)}/about")]
+    public IActionResult About(string culture)
+    {
         return View();
     }
 }

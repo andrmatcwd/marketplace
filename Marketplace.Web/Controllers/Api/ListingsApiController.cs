@@ -28,7 +28,7 @@ public sealed class ListingsApiController : ControllerBase
         [FromQuery] CatalogFilterVm filter,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         var result = await _catalogService.GetCatalogIndexPageAsync(culture, filter, cancellationToken);
 
@@ -55,7 +55,7 @@ public sealed class ListingsApiController : ControllerBase
         [FromQuery] string? city,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         if (string.IsNullOrWhiteSpace(search))
         {
@@ -169,7 +169,7 @@ public sealed class ListingsApiController : ControllerBase
         [FromQuery] string? search,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(search))
         {

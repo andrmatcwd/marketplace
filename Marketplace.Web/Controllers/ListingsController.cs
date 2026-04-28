@@ -30,7 +30,7 @@ public sealed class ListingsController : Controller
         _structuredDataBuilder = structuredDataBuilder;
     }
 
-    [HttpGet("/{culture:regex(^uk|en$)}/{citySlug}/{categorySlug}/{subCategorySlug}/{serviceSlug}/{id:guid}")]
+    [HttpGet("/{culture:regex(^uk|ru$)}/{citySlug}/{categorySlug}/{subCategorySlug}/{serviceSlug}/{id:guid}")]
     public async Task<IActionResult> Details(
         string culture,
         string citySlug,
@@ -40,7 +40,7 @@ public sealed class ListingsController : Controller
         Guid id,
         CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         var vm = await _listingService.GetDetailsPageAsync(
             culture,
@@ -103,7 +103,7 @@ public sealed class ListingsController : Controller
     CreateListingReviewVm model,
     CancellationToken cancellationToken)
 {
-    culture = CultureHelper.Normalize(culture);
+    culture = CultureHelper.NormalizeRouteCulture(culture);
 
     if (!ModelState.IsValid)
     {

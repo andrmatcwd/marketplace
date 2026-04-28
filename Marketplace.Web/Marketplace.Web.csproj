@@ -50,7 +50,6 @@
     <Folder Include="Models/Common/" />
     <Folder Include="Models/Home/" />
     <Folder Include="Models/Listings/Forms/" />
-    <Folder Include="Models/Shared/" />
     <Folder Include="Navigation/" />
     <Folder Include="Options/" />
     <Folder Include="Seo/" />
@@ -75,10 +74,8 @@
     <Folder Include="Views/Shared/Components/PopularCities/" />
     <Folder Include="Views/Shared/Cookie/" />
     <Folder Include="Views/Shared/Layout/" />
-    <Folder Include="Views/Shared/ListingDetails/" />
     <Folder Include="Views/Shared/Lists/" />
     <Folder Include="Views/Shared/Navigation/" />
-    <Folder Include="Views/Shared/Sections/" />
   </ItemGroup>
 
 </Project>

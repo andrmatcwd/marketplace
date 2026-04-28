@@ -1,4 +1,7 @@
 ﻿@using Marketplace.Web.Utils
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IHtmlLocalizer<SharedResource> T
 @{
     var culture = CultureHelper.Current();
     var path = Context.Request.Path.Value ?? string.Empty;
@@ -41,11 +44,19 @@
     <div id="mainNav" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
             <li class="nav-item">
-                <a class="nav-link app-nav-link" href="@catalogUrl">Каталог</a>
+                <a class="nav-link app-nav-link" href="@catalogUrl">@T["Catalog"]</a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link app-nav-link" href="/@culture#popular-cities">Міста</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-categories">Категорії</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link app-nav-link" href="/@culture#popular-categories">Категорії</a>
             </li>
 
             <li class="nav-item">

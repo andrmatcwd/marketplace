@@ -82,6 +82,71 @@ public sealed class ListingService : IListingService
             entity.SubCategory.Name,
             entity.SubCategory.Slug);
 
+        vm.Rental = new RentalDetailsVm
+        {
+            Price = "від 1 200 ₴ / доба",
+            Rooms = "4 номери",
+            Area = "від 18 м²",
+            Floor = "2 поверхи",
+            Features =
+            [
+                "Wi-Fi",
+                "Паркінг",
+                "Можна з тваринами",
+                "Кондиціонер",
+                "Кухня"
+            ],
+            RoomOptions =
+            [
+                new RentalRoomVm
+                {
+                    Title = "Стандартний номер",
+                    Description = "Затишний номер для короткострокового проживання.",
+                    ImageUrls =
+                    [
+                        "/uploads/rooms/standard-1.jpg",
+                        "/uploads/rooms/standard-2.jpg",
+                        "/uploads/rooms/standard-3.jpg",
+                        "/uploads/rooms/standard-4.jpg"
+                    ],
+                    Price = "1 200 ₴ / доба",
+                    Area = "18 м²",
+                    Guests = "2 гості",
+                    Beds = "1 двоспальне ліжко",
+                    Amenities =
+                    [
+                        "Wi-Fi",
+                        "Душ",
+                        "Телевізор",
+                        "Кондиціонер"
+                    ]
+                },
+                new RentalRoomVm
+                {
+                    Title = "Стандартний номер",
+                    Description = "Затишний номер для короткострокового проживання.",
+                    ImageUrls =
+                    [
+                        "/uploads/rooms/standard-1.jpg",
+                        "/uploads/rooms/standard-2.jpg",
+                        "/uploads/rooms/standard-3.jpg",
+                        "/uploads/rooms/standard-4.jpg"
+                    ],
+                    Price = "1 200 ₴ / доба",
+                    Area = "18 м²",
+                    Guests = "2 гості",
+                    Beds = "1 двоспальне ліжко",
+                    Amenities =
+                    [
+                        "Wi-Fi",
+                        "Душ",
+                        "Телевізор",
+                        "Кондиціонер"
+                    ]
+                }
+            ]
+        };
+
         return vm;
     }
 }

@@ -25,7 +25,7 @@ public sealed class LocationApiController : ControllerBase
     [HttpGet("bootstrap")]
     public async Task<IActionResult> Bootstrap(string culture, CancellationToken cancellationToken)
     {
-        culture = CultureHelper.Normalize(culture);
+        culture = CultureHelper.NormalizeRouteCulture(culture);
 
         var defaultCity = await _dbContext.Cities
             .AsNoTracking()

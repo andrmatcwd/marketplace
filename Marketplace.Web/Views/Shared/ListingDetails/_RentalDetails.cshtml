@@ -1,0 +1,99 @@
+@model Marketplace.Web.Models.Listings.RentalDetailsVm
+
+@if (Model != null)
+{
+    <section class="app-card rental-details">
+        <div class="rental-details-body">
+            <div class="rental-details-head">
+                <div>
+                    <h2 class="section-title">Інформація про помешкання</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Price))
+                    {
+                        <div class="rental-main-price">@Model.Price</div>
+                    }
+                </div>
+            </div>
+
+            <div class="rental-preview">
+                @if (!string.IsNullOrWhiteSpace(Model.Rooms) ||
+                     !string.IsNullOrWhiteSpace(Model.Area) ||
+                     !string.IsNullOrWhiteSpace(Model.Floor))
+                {
+                    <div class="rental-stats">
+                        @if (!string.IsNullOrWhiteSpace(Model.Rooms))
+                        {
+                            <div class="rental-stat">
+                                <span>Кімнати</span>
+                                <strong>@Model.Rooms</strong>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Area))
+                        {
+                            <div class="rental-stat">
+                                <span>Площа</span>
+                                <strong>@Model.Area</strong>
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Floor))
+                        {
+                            <div class="rental-stat">
+                                <span>Поверх</span>
+                                <strong>@Model.Floor</strong>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (Model.Features.Any())
+                {
+                    <ul class="rental-feature-list">
+                        @foreach (var feature in Model.Features.Take(4))
+                        {
+                            <li>@feature</li>
+                        }
+
+                        @if (Model.Features.Count > 4)
+                        {
+                            <li>+@(Model.Features.Count - 4)</li>
+                        }
+                    </ul>
+                }
+            </div>
+
+            <div class="rental-collapsible" data-collapsible>
+                <div class="rental-collapsible-content" data-collapsible-content>
+                    @if (Model.Features.Any())
+                    {
+                        <div class="rental-block">
+                            <h3 class="rental-block-title">Усі зручності</h3>
+
+                            <ul class="rental-feature-list">
+                                @foreach (var feature in Model.Features)
+                                {
+                                    <li>@feature</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <partial name="~/Views/Shared/ListingDetails/_RentalRoomOptions.cshtml"
+                             model="Model.RoomOptions" />
+                </div>
+
+                @if (Model.Features.Count > 4 || Model.RoomOptions.Any())
+                {
+                    <button type="button"
+                            class="rental-toggle btn btn-app-outline btn-sm"
+                            data-collapsible-toggle
+                            data-expand-text="Показати більше"
+                            data-collapse-text="Згорнути">
+                        Показати більше
+                    </button>
+                }
+            </div>
+        </div>
+    </section>
+}

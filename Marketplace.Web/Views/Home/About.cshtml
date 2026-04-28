@@ -1,0 +1,33 @@
+@using Marketplace.Web
+@using Marketplace.Web.Utils
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResource> T
+
+@{
+    ViewData["Title"] = T["AboutUs"];
+}
+
+<section class="app-section">
+    <div class="container app-container">
+        <div class="app-card">
+            <div class="app-card-body">
+                <h1 class="page-title">@T["AboutUs"]</h1>
+
+                <div class="content-page">
+                    <p class="page-intro">
+                        @T["AboutIntro"]
+                    </p>
+
+                    <h2>@T["AboutMissionTitle"]</h2>
+                    <p>@T["AboutMissionText"]</p>
+
+                    <h2>@T["AboutHowItWorksTitle"]</h2>
+                    <p>@T["AboutHowItWorksText"]</p>
+
+                    <h2>@T["AboutForBusinessesTitle"]</h2>
+                    <p>@T["AboutForBusinessesText"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

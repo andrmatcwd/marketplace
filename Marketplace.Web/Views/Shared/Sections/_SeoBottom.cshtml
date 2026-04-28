@@ -1,0 +1,22 @@
+@model Marketplace.Web.Models.Shared.SeoBottomVm
+
+@if (Model != null && Model.HasContent)
+{
+    <section class="seo-bottom app-section">
+        <div class="app-card">
+            <div class="seo-bottom-body">
+                @if (!string.IsNullOrWhiteSpace(Model.Title))
+                {
+                    <h2 class="section-title">@Model.Title</h2>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Text))
+                {
+                    <div class="seo-bottom-text">
+                        @Model.Text
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
