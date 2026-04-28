@@ -19,7 +19,6 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<UiOptions>(builder.Configuration.GetSection("Ui"));
-builder.Services.Configure<GoogleMapsOptions>(builder.Configuration.GetSection("GoogleMaps"));
 
 builder.Services.Configure<LocationDefaultsOptions>(
     builder.Configuration.GetSection("LocationDefaults"));
