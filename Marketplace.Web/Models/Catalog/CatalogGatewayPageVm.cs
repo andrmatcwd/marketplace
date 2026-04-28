@@ -11,6 +11,7 @@ public sealed class CatalogGatewayPageVm
 
     public PageHeroVm Hero { get; set; } = new();
     public SeoIntroVm SeoIntro { get; set; } = new();
+    public SeoBottomVm? SeoBottom { get; set; } = new();
 
     public IReadOnlyCollection<FilterOptionVm> CityOptions { get; set; } = Array.Empty<FilterOptionVm>();
     public TaxonomySectionVm<CityCardVm> CitiesSection { get; set; } = new();

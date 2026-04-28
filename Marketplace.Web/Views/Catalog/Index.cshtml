@@ -13,6 +13,7 @@
 }
 
 <partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
+<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
 <partial name="~/Views/Shared/Sections/_CatalogGatewayCityPicker.cshtml" model="Model" />
 
 @if (!string.IsNullOrWhiteSpace(Model.ContinueToCityUrl))
@@ -35,7 +36,7 @@
 
 <partial name="~/Views/Shared/Sections/_CitiesSection.cshtml" model="Model.CitiesSection" />
 <partial name="~/Views/Shared/Sections/_ListingsSection.cshtml" model="Model.FeaturedListingsSection" />
-<partial name="~/Views/Shared/Sections/_SeoIntro.cshtml" model="Model.SeoIntro" />
+<partial name="~/Views/Shared/Seo/_SeoBottom.cshtml" model="Model.SeoBottom" />
 
 @section Scripts {
     <script src="~/js/catalog-filters.js" asp-append-version="true"></script>

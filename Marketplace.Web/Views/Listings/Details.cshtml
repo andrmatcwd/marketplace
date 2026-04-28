@@ -8,6 +8,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/components/listing-details.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/rental-details.css" asp-append-version="true" />
 }
 
 @section StructuredData {
@@ -35,6 +36,11 @@
                 <partial name="~/Views/Shared/ListingDetails/_ListingMeta.cshtml" model="Model" />
             </div>
         </section>
+
+        @if (Model.Rental != null)
+        {
+            <partial name="~/Views/Shared/ListingDetails/_RentalDetails.cshtml" model="Model.Rental" />
+        }
 
         @* <partial name="~/Views/Shared/ListingDetails/_ListingDescription.cshtml" model="Model" /> *@
         @* <partial name="~/Views/Shared/ListingDetails/_ListingContactCard.cshtml" model="Model.Contact" /> *@

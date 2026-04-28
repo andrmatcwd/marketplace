@@ -1,0 +1,255 @@
+.rental-details {
+    overflow: hidden;
+}
+
+.rental-details-body {
+    padding: var(--app-space-5);
+}
+
+.rental-details-head {
+    margin-bottom: var(--app-space-5);
+}
+
+.rental-main-price {
+    display: inline-flex;
+    margin-top: var(--app-space-2);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--app-radius-md);
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.rental-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--app-space-3);
+    margin-bottom: var(--app-space-5);
+}
+
+.rental-stat {
+    padding: var(--app-space-4);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface-muted);
+}
+
+.rental-stat span {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--app-text-muted);
+    font-size: 0.85rem;
+}
+
+.rental-stat strong {
+    color: var(--app-text);
+    font-size: 1rem;
+}
+
+.rental-block + .rental-block {
+    margin-top: var(--app-space-6);
+}
+
+.rental-block-header {
+    margin-bottom: var(--app-space-4);
+}
+
+.rental-block-title {
+    margin: 0 0 var(--app-space-2);
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.rental-block-text {
+    margin: 0;
+    color: var(--app-text-muted);
+    line-height: 1.6;
+}
+
+.rental-feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--app-space-2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.rental-feature-list li,
+.rental-room-amenities li {
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: var(--app-surface-muted);
+    color: var(--app-text-muted);
+    font-size: 0.9rem;
+}
+
+.rental-room-list {
+    display: grid;
+    gap: var(--app-space-4);
+}
+
+.rental-room {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: var(--app-space-4);
+    padding: var(--app-space-4);
+    box-shadow: none;
+}
+
+.rental-room:hover {
+    transform: none;
+}
+
+.rental-room-gallery {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--app-space-2);
+    min-width: 0;
+}
+
+.rental-room-main-image img,
+.rental-room-thumbs img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface-muted);
+}
+
+.rental-room-main-image img {
+    height: 160px;
+}
+
+.rental-room-thumbs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--app-space-2);
+}
+
+.rental-room-thumbs img {
+    height: 58px;
+}
+
+.rental-room-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    border: 1px dashed var(--app-border);
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface-muted);
+    color: var(--app-text-muted);
+}
+
+.rental-room-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.rental-room-top {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--app-space-4);
+    margin-bottom: var(--app-space-3);
+}
+
+.rental-room-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.rental-room-description {
+    margin: var(--app-space-2) 0 0;
+    color: var(--app-text-muted);
+    line-height: 1.6;
+}
+
+.rental-room-price {
+    flex-shrink: 0;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    background: var(--app-primary-light);
+    color: var(--app-primary);
+    font-weight: 700;
+    white-space: nowrap;
+    align-self: flex-start;
+}
+
+.rental-room-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--app-space-2);
+    margin-bottom: var(--app-space-3);
+    color: var(--app-text-muted);
+    font-size: 0.95rem;
+}
+
+.rental-room-meta span:not(:last-child)::after {
+    content: "•";
+    margin-left: var(--app-space-2);
+    color: var(--app-border);
+}
+
+.rental-room-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--app-space-2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    .rental-details-body {
+        padding: var(--app-space-4);
+    }
+
+    .rental-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .rental-room {
+        grid-template-columns: 1fr;
+        padding: var(--app-space-3);
+    }
+
+    .rental-room-main-image img {
+        height: 220px;
+    }
+
+    .rental-room-top {
+        flex-direction: column;
+        gap: var(--app-space-2);
+    }
+
+    .rental-room-price {
+        white-space: normal;
+    }
+}
+
+
+
+
+.rental-preview {
+    margin-bottom: var(--app-space-4);
+}
+
+.rental-collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.rental-collapsible.is-open .rental-collapsible-content {
+    max-height: 4000px;
+}
+
+.rental-toggle {
+    margin-top: var(--app-space-4);
+    width: 100%;
+}

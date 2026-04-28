@@ -48,4 +48,16 @@ public sealed class HomeController : Controller
 
         return View();
     }
+
+    [HttpGet("/{culture:regex(^uk|ru$)}/articles")]
+    public IActionResult Articles(string culture)
+    {
+        return View();
+    }
+
+    [HttpGet("/{culture:regex(^uk|ru$)}/about")]
+    public IActionResult About(string culture)
+    {
+        return View();
+    }
 }

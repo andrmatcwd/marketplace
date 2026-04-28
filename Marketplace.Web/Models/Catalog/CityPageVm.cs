@@ -12,6 +12,7 @@ public sealed class CityPageVm
 
     public PageHeroVm Hero { get; set; } = new();
     public SeoIntroVm SeoIntro { get; set; } = new();
+    public SeoBottomVm? SeoBottom { get; set; } = new();
 
     public TaxonomySectionVm<CategoryCardVm> CategoriesSection { get; set; } = new();
     public TaxonomySectionVm<SubCategoryCardVm> PopularSubCategoriesSection { get; set; } = new();

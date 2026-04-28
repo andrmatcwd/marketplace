@@ -9,6 +9,7 @@ public sealed class CatalogIndexPageVm
 
     public PageHeroVm Hero { get; set; } = new();
     public SeoIntroVm SeoIntro { get; set; } = new();
+    public SeoBottomVm? SeoBottom { get; set; } = new();
 
     public TaxonomySectionVm<CityCardVm> CitiesSection { get; set; } = new();
     public TaxonomySectionVm<CategoryCardVm> CategoriesSection { get; set; } = new();

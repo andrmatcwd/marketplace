@@ -17,6 +17,7 @@ public sealed class SubCategoryPageVm
 
     public PageHeroVm Hero { get; set; } = new();
     public SeoIntroVm SeoIntro { get; set; } = new();
+    public SeoBottomVm? SeoBottom { get; set; } = new();
 
     public ListingsSectionVm ListingsSection { get; set; } = new();
 }
