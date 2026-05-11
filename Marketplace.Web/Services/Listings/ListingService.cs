@@ -1,23 +1,23 @@
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Listings;
 using Marketplace.Web.Navigation;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace Marketplace.Web.Services.Listings;
 
 public sealed class ListingService : IListingService
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
     private readonly IListingVmMapper _mapper;
     private readonly ICatalogBreadcrumbBuilder _breadcrumbBuilder;
 
     public ListingService(
-        ApplicationDbContext dbContext,
+        IMediator mediator,
         IListingVmMapper mapper,
         ICatalogBreadcrumbBuilder breadcrumbBuilder)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
         _mapper = mapper;
         _breadcrumbBuilder = breadcrumbBuilder;
     }
@@ -28,59 +28,28 @@ public sealed class ListingService : IListingService
         string categorySlug,
         string subCategorySlug,
         string serviceSlug,
-        Guid id,
+        int id,
         CancellationToken cancellationToken)
     {
-        var entity = await _dbContext.Listings
-            .AsNoTracking()
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Include(x => x.City)
-            .Include(x => x.Images)
-            .Include(x => x.Reviews)
-            .FirstOrDefaultAsync(x => x.IsPublished && x.Id == id, cancellationToken);
+        var dto = await _mediator.Send(new GetListingDetailsQuery(id), cancellationToken);
+        if (dto is null) return null;
 
-        if (entity is null)
-        {
-            return null;
-        }
+        var related = await _mediator.Send(
+            new GetRelatedListingsQuery(dto.Id, dto.CityId, dto.SubCategoryId), cancellationToken);
 
-        if (entity.City is null || entity.Category is null || entity.SubCategory is null)
-        {
-            return null;
-        }
+        var relatedListings = related.Select(x => _mapper.MapRelatedListing(x, culture)).ToList();
 
-        var relatedEntities = await _dbContext.Listings
-            .AsNoTracking()
-            .Include(x => x.City)
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Include(x => x.Images)
-            .Where(x =>
-                x.IsPublished &&
-                x.Id != entity.Id &&
-                x.CityId == entity.CityId &&
-                x.SubCategoryId == entity.SubCategoryId)
-            .OrderByDescending(x => x.Rating)
-            .ThenByDescending(x => x.ReviewsCount)
-            .Take(6)
-            .ToListAsync(cancellationToken);
-
-        var relatedListings = relatedEntities
-            .Select(x => _mapper.MapRelatedListing(x, culture))
-            .ToList();
-
-        var vm = _mapper.MapDetails(entity, culture, relatedListings);
+        var vm = _mapper.MapDetails(dto, culture, relatedListings);
 
         vm.Breadcrumbs = _breadcrumbBuilder.BuildListing(
             culture,
-            entity.Title,
-            entity.City.Name,
-            entity.City.Slug,
-            entity.Category.Name,
-            entity.Category.Slug,
-            entity.SubCategory.Name,
-            entity.SubCategory.Slug);
+            dto.Title,
+            dto.CityName,
+            dto.CitySlug,
+            dto.CategoryName,
+            dto.CategorySlug,
+            dto.SubCategoryName,
+            dto.SubCategorySlug);
 
         vm.Rental = new RentalDetailsVm
         {
@@ -88,14 +57,7 @@ public sealed class ListingService : IListingService
             Rooms = "4 номери",
             Area = "від 18 м²",
             Floor = "2 поверхи",
-            Features =
-            [
-                "Wi-Fi",
-                "Паркінг",
-                "Можна з тваринами",
-                "Кондиціонер",
-                "Кухня"
-            ],
+            Features = ["Wi-Fi", "Паркінг", "Можна з тваринами", "Кондиціонер", "Кухня"],
             RoomOptions =
             [
                 new RentalRoomVm
@@ -113,67 +75,30 @@ public sealed class ListingService : IListingService
                     Area = "18 м²",
                     Guests = "2 гості",
                     Beds = "1 двоспальне ліжко",
-                    Amenities =
-                    [
-                        "Wi-Fi",
-                        "Душ",
-                        "Телевізор",
-                        "Кондиціонер"
-                    ]
-                },
-                new RentalRoomVm
-                {
-                    Title = "Стандартний номер",
-                    Description = "Затишний номер для короткострокового проживання.",
-                    ImageUrls =
-                    [
-                        "/uploads/rooms/standard-1.jpg",
-                        "/uploads/rooms/standard-2.jpg",
-                        "/uploads/rooms/standard-3.jpg",
-                        "/uploads/rooms/standard-4.jpg"
-                    ],
-                    Price = "1 200 ₴ / доба",
-                    Area = "18 м²",
-                    Guests = "2 гості",
-                    Beds = "1 двоспальне ліжко",
-                    Amenities =
-                    [
-                        "Wi-Fi",
-                        "Душ",
-                        "Телевізор",
-                        "Кондиціонер"
-                    ]
+                    Amenities = ["Wi-Fi", "Душ", "Телевізор", "Кондиціонер"]
                 }
             ]
         };
 
-        vm.Vacancies = new List<ListingVacancyVm>
-        {
-            new()
+        vm.Vacancies =
+        [
+            new ListingVacancyVm
             {
                 Title = "Адміністратор рецепції",
                 Description = "Прийом гостей, бронювання номерів, робота з клієнтами.",
                 EmploymentType = "Повна зайнятість",
                 SalaryText = "від 15 000 грн",
-                LocationText = "listing.CityName" // або просто "Коломия"
+                LocationText = dto.CityName
             },
-            new()
+            new ListingVacancyVm
             {
                 Title = "Покоївка",
                 Description = "Прибирання номерів, підтримка чистоти та порядку.",
                 EmploymentType = "Позмінно",
                 SalaryText = "від 10 000 грн",
-                LocationText = "e.CityName"
-            },
-            new()
-            {
-                Title = "Менеджер з бронювань",
-                Description = "Обробка заявок, комунікація з клієнтами, онлайн-бронювання.",
-                EmploymentType = "Remote / Часткова зайнятість",
-                SalaryText = "договірна",
-                LocationText = "Віддалено"
+                LocationText = dto.CityName
             }
-        };
+        ];
 
         return vm;
     }

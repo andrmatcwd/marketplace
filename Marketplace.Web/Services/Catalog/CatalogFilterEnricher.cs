@@ -1,24 +1,24 @@
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Catalog;
 using Marketplace.Web.Models.Shared;
 using Marketplace.Web.Navigation;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace Marketplace.Web.Services.Catalog;
 
 public sealed class CatalogFilterEnricher : ICatalogFilterEnricher
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
     private readonly ICatalogVmMapper _mapper;
     private readonly ICatalogUrlBuilder _urlBuilder;
 
     public CatalogFilterEnricher(
-        ApplicationDbContext dbContext,
+        IMediator mediator,
         ICatalogVmMapper mapper,
         ICatalogUrlBuilder urlBuilder)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
         _mapper = mapper;
         _urlBuilder = urlBuilder;
     }
@@ -31,21 +31,8 @@ public sealed class CatalogFilterEnricher : ICatalogFilterEnricher
         filter.Page = filter.Page < 1 ? 1 : filter.Page;
         filter.PageSize = filter.PageSize <= 0 ? 12 : Math.Min(filter.PageSize, 60);
 
-        var cities = await _dbContext.Cities
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
-            .Select(x => new { x.Slug, x.Name })
-            .ToListAsync(cancellationToken);
-
-        var categories = await _dbContext.Categories
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
-            .Select(x => new { x.Slug, x.Name })
-            .ToListAsync(cancellationToken);
+        var cities = await _mediator.Send(new GetCatalogCitiesQuery(), cancellationToken);
+        var categories = await _mediator.Send(new GetCatalogCategoriesQuery(), cancellationToken);
 
         filter.Cities = cities
             .Select(x => _mapper.MapFilterOption(x.Slug, x.Name))

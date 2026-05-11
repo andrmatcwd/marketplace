@@ -1,4 +1,6 @@
 using System.Globalization;
+using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
+using Marketplace.Modules.Listings.Infrastructure.Persistence;
 using Marketplace.Web.Data;
 using Marketplace.Web.Localization;
 using Marketplace.Web.Mappings;
@@ -57,6 +59,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddListingsModule(builder.Configuration);
+
 builder.Services
     .AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>(options =>
     {
@@ -79,8 +83,6 @@ builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddScoped<ICatalogFilterEnricher, CatalogFilterEnricher>();
-
-builder.Services.AddScoped<ICatalogLookupService, CatalogLookupService>();
 
 builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>();
 
@@ -114,6 +116,10 @@ if (!app.Environment.IsDevelopment())
 else
 {
     using var scope = app.Services.CreateScope();
+
+    var listingsDb = scope.ServiceProvider.GetRequiredService<ListingsDbContext>();
+    await listingsDb.Database.MigrateAsync();
+
     var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
     await seeder.SeedAsync();
 }

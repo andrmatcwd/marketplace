@@ -1,13 +1,15 @@
-using Marketplace.Web.Domain.Entities;
+using Marketplace.Modules.Listings.Domain.Entities;
+using Marketplace.Modules.Listings.Domain.Enums.Listing;
+using Marketplace.Modules.Listings.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Data;
 
 public sealed class DbSeeder
 {
-    private readonly ApplicationDbContext _db;
+    private readonly ListingsDbContext _db;
 
-    public DbSeeder(ApplicationDbContext db)
+    public DbSeeder(ListingsDbContext db)
     {
         _db = db;
     }
@@ -41,7 +43,6 @@ public sealed class DbSeeder
         var cities = citySeeds
             .Select((x, index) => new City
             {
-                Id = Guid.NewGuid(),
                 Name = x.Name,
                 Slug = x.Slug,
                 Description = $"Services and specialists in {x.Name}.",
@@ -59,7 +60,6 @@ public sealed class DbSeeder
         {
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Medicine",
                 Slug = "medicine",
                 Description = "Clinics, doctors, diagnostics, therapy, and healthcare services.",
@@ -68,7 +68,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Beauty",
                 Slug = "beauty",
                 Description = "Salons, cosmetology, barbershops, and wellness services.",
@@ -77,7 +76,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Home Services",
                 Slug = "home-services",
                 Description = "Cleaning, plumbing, repairs, moving, and home maintenance.",
@@ -86,7 +84,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Education",
                 Slug = "education",
                 Description = "Tutors, language schools, courses, and child development services.",
@@ -95,7 +92,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Legal",
                 Slug = "legal",
                 Description = "Lawyers, legal consultations, and business support.",
@@ -104,7 +100,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Auto Services",
                 Slug = "auto-services",
                 Description = "Repair, diagnostics, detailing, tires, and roadside help.",
@@ -113,7 +108,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Event Services",
                 Slug = "event-services",
                 Description = "Photographers, catering, decorators, and event planning.",
@@ -122,7 +116,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Name = "Fitness",
                 Slug = "fitness",
                 Description = "Gyms, yoga studios, personal trainers, and wellness programs.",
@@ -144,7 +137,6 @@ public sealed class DbSeeder
 
             subCategories.Add(new SubCategory
             {
-                Id = Guid.NewGuid(),
                 Name = name,
                 Slug = slug,
                 Description = description ?? $"{name} services.",
@@ -312,9 +304,10 @@ public sealed class DbSeeder
             var latOffset = (random.NextDouble() - 0.5) * 0.18;
             var lngOffset = (random.NextDouble() - 0.5) * 0.18;
 
+            var created = DateTime.UtcNow.AddDays(-random.Next(0, 500));
+
             var listing = new Listing
             {
-                Id = Guid.NewGuid(),
                 Title = title,
                 Slug = slug,
                 ShortDescription = categoryDescriptions[category.Slug][random.Next(categoryDescriptions[category.Slug].Length)],
@@ -327,11 +320,11 @@ public sealed class DbSeeder
                 ReviewsCount = reviewsCount,
                 Latitude = Math.Round(citySeed.Latitude + latOffset, 6),
                 Longitude = Math.Round(citySeed.Longitude + lngOffset, 6),
-                IsPublished = true,
-                CreatedAtUtc = DateTime.UtcNow.AddDays(-random.Next(0, 500)),
+                Status = ListingStatus.Active,
+                CreatedAtUtc = created,
                 UpdatedAtUtc = random.NextDouble() > 0.45
                     ? DateTime.UtcNow.AddDays(-random.Next(0, 120))
-                    : null,
+                    : created,
                 City = city,
                 Category = category,
                 SubCategory = subCategory
@@ -348,13 +341,12 @@ public sealed class DbSeeder
         await _db.SaveChangesAsync();
     }
 
-    private static List<ListingImage> BuildImages(Listing listing)
+    private static List<Image> BuildImages(Listing listing)
     {
-        return new List<ListingImage>
+        return new List<Image>
         {
             new()
             {
-                Id = Guid.NewGuid(),
                 Listing = listing,
                 Url = "/img/placeholders/listing-default.jpg",
                 Alt = listing.Title,
@@ -363,7 +355,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Listing = listing,
                 Url = "/img/placeholders/listing-default.jpg",
                 Alt = $"{listing.Title} gallery 2",
@@ -372,7 +363,6 @@ public sealed class DbSeeder
             },
             new()
             {
-                Id = Guid.NewGuid(),
                 Listing = listing,
                 Url = "/img/placeholders/listing-default.jpg",
                 Alt = $"{listing.Title} gallery 3",
@@ -382,27 +372,26 @@ public sealed class DbSeeder
         };
     }
 
-    private static List<ListingReview> BuildReviews(
+    private static List<Review> BuildReviews(
         Listing listing,
         Random random,
         string[] firstNames,
         string[] reviewPhrases)
     {
         var count = random.Next(2, 10);
-        var reviews = new List<ListingReview>();
+        var reviews = new List<Review>();
 
         for (int i = 0; i < count; i++)
         {
-            reviews.Add(new ListingReview
+            var created = DateTime.UtcNow.AddDays(-random.Next(0, 180));
+            reviews.Add(new Review
             {
-                Id = Guid.NewGuid(),
                 Listing = listing,
                 AuthorName = firstNames[random.Next(firstNames.Length)],
-                //Email = $"user{random.Next(1000, 9999)}@mail.com",
                 Rating = Math.Round(3.0 + random.NextDouble() * 2.0, 1),
                 Text = reviewPhrases[random.Next(reviewPhrases.Length)],
-                //IsApproved = true,
-                CreatedAtUtc = DateTime.UtcNow.AddDays(-random.Next(0, 180))
+                CreatedAtUtc = created,
+                UpdatedAtUtc = created
             });
         }
 

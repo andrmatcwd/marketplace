@@ -1,5 +1,7 @@
+using Marketplace.Modules.Listings.Application.Catalog.Services;
 using Marketplace.Modules.Listings.Application.Services;
 using Marketplace.Modules.Listings.Application.Services.Implementations;
+using Marketplace.Modules.Listings.Infrastructure.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
@@ -18,6 +20,7 @@ public static class ServiceInjection
         services.AddScoped<ICityService, CityService>();
 
         services.AddScoped<ISlugService, SlugService>();
+        services.AddScoped<ICatalogDataService, CatalogDataService>();
 
         return services;
     }

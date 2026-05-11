@@ -1,4 +1,4 @@
-using Marketplace.Web.Domain.Entities;
+using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Web.Models.Api;
 
 namespace Marketplace.Web.Services.Notifications;
@@ -6,7 +6,7 @@ namespace Marketplace.Web.Services.Notifications;
 public interface IContactNotificationService
 {
     Task NotifyContactRequestAsync(
-        Listing listing,
+        ListingDetailsDto listing,
         ListingContactRequestDto request,
         CancellationToken cancellationToken);
 }

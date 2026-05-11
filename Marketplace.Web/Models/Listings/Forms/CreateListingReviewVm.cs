@@ -5,7 +5,7 @@ namespace Marketplace.Web.Models.Listings.Forms;
 public sealed class CreateListingReviewVm
 {
     [Required]
-    public Guid ListingId { get; set; }
+    public int ListingId { get; set; }
 
     [Required(ErrorMessage = "Вкажіть ім’я")]
     [StringLength(120)]

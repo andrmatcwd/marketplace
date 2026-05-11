@@ -2,7 +2,7 @@ namespace Marketplace.Web.Models.Listings;
 
 public sealed class RelatedListingVm
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     public string Title { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;

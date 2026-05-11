@@ -1,23 +1,25 @@
 using System.Text;
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Controllers;
 
 public sealed class SitemapController : Controller
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
 
-    public SitemapController(ApplicationDbContext dbContext)
+    public SitemapController(IMediator mediator)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
     }
 
     [HttpGet("/sitemap.xml")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
+        var data = await _mediator.Send(new GetSitemapDataQuery(), cancellationToken);
+
         var urls = new List<string>
         {
             $"{baseUrl}/uk",
@@ -26,58 +28,34 @@ public sealed class SitemapController : Controller
             $"{baseUrl}/ru/catalog"
         };
 
-        var cities = await _dbContext.Cities
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .ToListAsync(cancellationToken);
-
-        foreach (var city in cities)
+        foreach (var city in data.Cities)
         {
             urls.Add($"{baseUrl}/uk/{city.Slug}");
             urls.Add($"{baseUrl}/ru/{city.Slug}");
         }
 
-        var categories = await _dbContext.Categories
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .ToListAsync(cancellationToken);
-
-        foreach (var city in cities)
+        foreach (var city in data.Cities)
         {
-            foreach (var category in categories)
+            foreach (var cat in data.Categories)
             {
-                urls.Add($"{baseUrl}/uk/{city.Slug}/{category.Slug}");
-                urls.Add($"{baseUrl}/ru/{city.Slug}/{category.Slug}");
+                urls.Add($"{baseUrl}/uk/{city.Slug}/{cat.Slug}");
+                urls.Add($"{baseUrl}/ru/{city.Slug}/{cat.Slug}");
             }
         }
 
-        var subCategories = await _dbContext.SubCategories
-            .AsNoTracking()
-            .Include(x => x.Category)
-            .Where(x => x.IsPublished)
-            .ToListAsync(cancellationToken);
-
-        foreach (var city in cities)
+        foreach (var city in data.Cities)
         {
-            foreach (var subCategory in subCategories.Where(x => x.Category != null))
+            foreach (var sub in data.SubCategories)
             {
-                urls.Add($"{baseUrl}/uk/{city.Slug}/{subCategory.Category!.Slug}/{subCategory.Slug}");
-                urls.Add($"{baseUrl}/ru/{city.Slug}/{subCategory.Category!.Slug}/{subCategory.Slug}");
+                urls.Add($"{baseUrl}/uk/{city.Slug}/{sub.CategorySlug}/{sub.Slug}");
+                urls.Add($"{baseUrl}/ru/{city.Slug}/{sub.CategorySlug}/{sub.Slug}");
             }
         }
 
-        var listings = await _dbContext.Listings
-            .AsNoTracking()
-            .Include(x => x.City)
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Where(x => x.IsPublished && x.City != null && x.Category != null && x.SubCategory != null)
-            .ToListAsync(cancellationToken);
-
-        foreach (var listing in listings)
+        foreach (var listing in data.Listings)
         {
-            urls.Add($"{baseUrl}/uk/{listing.City!.Slug}/{listing.Category!.Slug}/{listing.SubCategory!.Slug}/{listing.Slug}-{listing.Id}");
-            urls.Add($"{baseUrl}/ru/{listing.City!.Slug}/{listing.Category!.Slug}/{listing.SubCategory!.Slug}/{listing.Slug}-{listing.Id}");
+            urls.Add($"{baseUrl}/uk/{listing.CitySlug}/{listing.CategorySlug}/{listing.SubCategorySlug}/{listing.Slug}/{listing.Id}");
+            urls.Add($"{baseUrl}/ru/{listing.CitySlug}/{listing.CategorySlug}/{listing.SubCategorySlug}/{listing.Slug}/{listing.Id}");
         }
 
         var sb = new StringBuilder();

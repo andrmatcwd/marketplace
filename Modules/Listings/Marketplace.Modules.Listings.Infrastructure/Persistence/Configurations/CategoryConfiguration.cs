@@ -12,6 +12,13 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Name).HasMaxLength(120).IsRequired();
+        builder.Property(x => x.Slug).HasMaxLength(140).IsRequired();
+        builder.Property(x => x.Description).HasMaxLength(2000);
+        builder.Property(x => x.Icon).HasMaxLength(255);
+
+        builder.HasIndex(x => x.Slug).IsUnique();
+
         builder.HasMany(x => x.SubCategories)
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)

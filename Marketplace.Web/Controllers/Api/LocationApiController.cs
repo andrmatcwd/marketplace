@@ -1,8 +1,7 @@
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Options;
-using Marketplace.Web.Utils;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Marketplace.Web.Controllers.Api;
@@ -11,47 +10,31 @@ namespace Marketplace.Web.Controllers.Api;
 [Route("{culture:regex(^uk|en$)}/api/location")]
 public sealed class LocationApiController : ControllerBase
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
     private readonly LocationDefaultsOptions _defaults;
 
     public LocationApiController(
-        ApplicationDbContext dbContext,
+        IMediator mediator,
         IOptions<LocationDefaultsOptions> defaults)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
         _defaults = defaults.Value;
     }
 
     [HttpGet("bootstrap")]
-    public async Task<IActionResult> Bootstrap(string culture, CancellationToken cancellationToken)
+    public async Task<IActionResult> Bootstrap(CancellationToken cancellationToken)
     {
-        culture = CultureHelper.NormalizeRouteCulture(culture);
+        var defaultCity = await _mediator.Send(
+            new GetCatalogCityBySlugQuery(_defaults.DefaultCitySlug), cancellationToken);
 
-        var defaultCity = await _dbContext.Cities
-            .AsNoTracking()
-            .Where(x => x.IsPublished && x.Slug == _defaults.DefaultCitySlug)
-            .Select(x => new
-            {
-                city = x.Slug,
-                cityName = x.Name
-            })
-            .FirstOrDefaultAsync(cancellationToken);
+        if (defaultCity is not null)
+            return Ok(new { city = defaultCity.Slug, cityName = defaultCity.Name });
 
-        if (defaultCity is null)
-        {
-            defaultCity = await _dbContext.Cities
-                .AsNoTracking()
-                .Where(x => x.IsPublished)
-                .OrderBy(x => x.SortOrder)
-                .ThenBy(x => x.Name)
-                .Select(x => new
-                {
-                    city = x.Slug,
-                    cityName = x.Name
-                })
-                .FirstOrDefaultAsync(cancellationToken);
-        }
+        var cities = await _mediator.Send(new GetCatalogCitiesQuery(), cancellationToken);
 
-        return Ok(defaultCity ?? new { city = "kyiv", cityName = "Kyiv" });
+        if (cities.Count > 0)
+            return Ok(new { city = cities[0].Slug, cityName = cities[0].Name });
+
+        return Ok(new { city = "kyiv", cityName = "Kyiv" });
     }
 }

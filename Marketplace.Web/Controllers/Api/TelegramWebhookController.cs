@@ -1,10 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
-using Marketplace.Web.Data;
-using Marketplace.Web.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Marketplace.Web.Controllers.Api;
 
@@ -12,18 +8,15 @@ namespace Marketplace.Web.Controllers.Api;
 [Route("api/telegram")]
 public sealed class TelegramWebhookController : ControllerBase
 {
-    private readonly ApplicationDbContext _dbContext;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _botToken;
     private readonly ILogger<TelegramWebhookController> _logger;
 
     public TelegramWebhookController(
-        ApplicationDbContext dbContext,
         IHttpClientFactory httpClientFactory,
         IConfiguration configuration,
         ILogger<TelegramWebhookController> logger)
     {
-        _dbContext = dbContext;
         _httpClientFactory = httpClientFactory;
         _botToken = configuration["Telegram:BotToken"]!;
         _logger = logger;

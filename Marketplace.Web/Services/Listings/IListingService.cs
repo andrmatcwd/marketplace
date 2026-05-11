@@ -10,6 +10,6 @@ public interface IListingService
         string categorySlug,
         string subCategorySlug,
         string serviceSlug,
-        Guid id,
+        int id,
         CancellationToken cancellationToken);
 }

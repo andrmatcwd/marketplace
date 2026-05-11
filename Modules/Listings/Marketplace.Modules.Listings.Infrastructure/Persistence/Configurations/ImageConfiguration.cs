@@ -12,6 +12,9 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Url).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.Alt).HasMaxLength(250);
+
         builder.HasOne(x => x.Listing)
             .WithMany(x => x.Images)
             .HasForeignKey(x => x.ListingId)

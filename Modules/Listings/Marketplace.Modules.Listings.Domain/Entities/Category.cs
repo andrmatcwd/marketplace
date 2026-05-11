@@ -8,21 +8,21 @@ public class Category : ISlugEntity
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(150)]
+    [MaxLength(120)]
     public string Name { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(150)]
+    [MaxLength(140)]
     public string Slug { get; set; } = string.Empty;
 
-    [MaxLength(255)]
+    [MaxLength(2000)]
     public string? Description { get; set; }
 
     [MaxLength(255)]
     public string? Icon { get; set; }
 
-    public int CityId { get; set; }
-    public City City { get; set; } = null!;
+    public bool IsPublished { get; set; }
+    public int SortOrder { get; set; }
 
     public ICollection<Listing> Listings { get; set; } = new List<Listing>();
     public ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();

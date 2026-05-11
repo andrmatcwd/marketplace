@@ -1,4 +1,4 @@
-using Marketplace.Web.Domain.Entities;
+using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Web.Models.Listings;
 using Marketplace.Web.Models.Listings.Forms;
 
@@ -6,166 +6,118 @@ namespace Marketplace.Web.Mappings;
 
 public sealed class ListingVmMapper : IListingVmMapper
 {
-    public ListingDetailsPageVm MapDetails(Listing entity, string culture, IReadOnlyCollection<RelatedListingVm>? relatedListings = null)
+    public ListingDetailsPageVm MapDetails(ListingDetailsDto dto, string culture, IReadOnlyCollection<RelatedListingVm>? relatedListings = null)
     {
-        var citySlug = entity.City?.Slug;
-        var categorySlug = entity.Category?.Slug;
-        var subCategorySlug = entity.SubCategory?.Slug;
-
-        var canonicalUrl =
-            !string.IsNullOrWhiteSpace(citySlug) &&
-            !string.IsNullOrWhiteSpace(categorySlug) &&
-            !string.IsNullOrWhiteSpace(subCategorySlug)
-                ? $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}-{entity.Id}"
-                : $"/{culture}/listing/{entity.Slug}-{entity.Id}";
-
         return new ListingDetailsPageVm
         {
             Culture = culture,
-            Id = entity.Id,
-            Title = entity.Title,
-            Slug = entity.Slug,
-            Url = canonicalUrl,
+            Id = dto.Id,
+            Title = dto.Title,
+            Slug = dto.Slug,
+            Url = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}/{dto.Slug}/{dto.Id}",
 
-            ShortDescription = entity.ShortDescription,
-            Description = entity.Description,
+            ShortDescription = dto.ShortDescription,
+            Description = dto.Description,
 
-            CategoryName = entity.Category?.Name,
-            CategorySlug = entity.Category?.Slug,
-            CategoryUrl = entity.Category is null || entity.City is null
-                ? null
-                : $"/{culture}/{entity.City.Slug}/{entity.Category.Slug}",
+            CategoryName = dto.CategoryName,
+            CategorySlug = dto.CategorySlug,
+            CategoryUrl = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}",
 
-            SubCategoryName = entity.SubCategory?.Name,
-            SubCategorySlug = entity.SubCategory?.Slug,
-            SubCategoryUrl = entity.SubCategory is null || entity.Category is null || entity.City is null
-                ? null
-                : $"/{culture}/{entity.City.Slug}/{entity.Category.Slug}/{entity.SubCategory.Slug}",
+            SubCategoryName = dto.SubCategoryName,
+            SubCategorySlug = dto.SubCategorySlug,
+            SubCategoryUrl = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}",
 
-            CityName = entity.City?.Name,
-            CitySlug = entity.City?.Slug,
-            CityUrl = entity.City is null ? null : $"/{culture}/{entity.City.Slug}",
+            CityName = dto.CityName,
+            CitySlug = dto.CitySlug,
+            CityUrl = $"/{culture}/{dto.CitySlug}",
 
-            Address = entity.Address,
-            Rating = entity.Rating,
-            ReviewsCount = entity.ReviewsCount,
+            Address = dto.Address,
+            Rating = dto.Rating,
+            ReviewsCount = dto.ReviewsCount,
 
-            Latitude = entity.Latitude,
-            Longitude = entity.Longitude,
+            Latitude = dto.Latitude,
+            Longitude = dto.Longitude,
 
             Contact = new ListingContactVm
             {
-                ContactName = entity.Title,
-                Phone = entity.Phone,
-                Email = entity.Email,
-                Website = entity.Website
+                ContactName = dto.Title,
+                Phone = dto.Phone,
+                Email = dto.Email,
+                Website = dto.Website
             },
 
             Gallery = new ListingGalleryVm
             {
-                Images = entity.Images
-                    .OrderBy(x => x.SortOrder)
+                Images = dto.Images
                     .Select(x => new ListingImageVm
                     {
                         Url = x.Url,
-                        Alt = string.IsNullOrWhiteSpace(x.Alt) ? entity.Title : x.Alt!,
+                        Alt = string.IsNullOrWhiteSpace(x.Alt) ? dto.Title : x.Alt!,
                         IsPrimary = x.IsPrimary,
                         SortOrder = x.SortOrder
                     })
                     .ToList()
             },
 
-            Reviews = entity.Reviews
-                .OrderByDescending(x => x.CreatedAtUtc)
-                .Select(MapReview)
+            Reviews = dto.Reviews
+                .Select(x => new ListingReviewVm
+                {
+                    AuthorName = x.AuthorName,
+                    Text = x.Text,
+                    Rating = x.Rating,
+                    CreatedAtUtc = new DateTimeOffset(x.CreatedAtUtc, TimeSpan.Zero)
+                })
                 .ToList(),
 
             RelatedListings = relatedListings ?? Array.Empty<RelatedListingVm>(),
-            ReviewForm = new CreateListingReviewVm
-            {
-                ListingId = entity.Id
-            },
+            ReviewForm = new CreateListingReviewVm { ListingId = dto.Id },
 
-            ServiceFeatures = BuildServiceFeatures(entity),
+            ServiceFeatures = BuildServiceFeatures(dto),
         };
     }
 
-    public ListingReviewVm MapReview(ListingReview entity)
+    public RelatedListingVm MapRelatedListing(ListingCardDto dto, string culture)
     {
-        return new ListingReviewVm
-        {
-            AuthorName = entity.AuthorName,
-            Text = entity.Text,
-            Rating = entity.Rating,
-            CreatedAtUtc = entity.CreatedAtUtc
-        };
-    }
-
-    public RelatedListingVm MapRelatedListing(Listing entity, string culture)
-    {
-        var citySlug = entity.City?.Slug ?? string.Empty;
-        var categorySlug = entity.Category?.Slug ?? string.Empty;
-        var subCategorySlug = entity.SubCategory?.Slug ?? string.Empty;
-
         return new RelatedListingVm
         {
-            Id = entity.Id,
-            Title = entity.Title,
-            Url = $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{entity.Slug}/{entity.Id}",
-            ImageUrl = entity.Images
-                .OrderBy(x => x.SortOrder)
-                .FirstOrDefault(x => x.IsPrimary)?.Url
-                ?? entity.Images.OrderBy(x => x.SortOrder).FirstOrDefault()?.Url,
-            CityName = entity.City?.Name,
-            SubCategoryName = entity.SubCategory?.Name,
-            Rating = entity.Rating
+            Id = dto.Id,
+            Title = dto.Title,
+            Url = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}/{dto.Slug}/{dto.Id}",
+            ImageUrl = dto.PrimaryImageUrl,
+            CityName = dto.CityName,
+            SubCategoryName = dto.SubCategoryName,
+            Rating = dto.Rating
         };
     }
 
-    private static IReadOnlyCollection<string> BuildServiceFeatures(Domain.Entities.Listing entity)
-{
-    var features = new List<string>();
-
-    if (!string.IsNullOrWhiteSpace(entity.Phone))
+    private static IReadOnlyCollection<string> BuildServiceFeatures(ListingDetailsDto dto)
     {
-        features.Add("Є телефон для звʼязку");
-    }
+        var features = new List<string>();
 
-    if (!string.IsNullOrWhiteSpace(entity.Email))
-    {
-        features.Add("Є email для звернення");
-    }
+        if (!string.IsNullOrWhiteSpace(dto.Phone))
+            features.Add("Є телефон для звʼязку");
 
-    if (!string.IsNullOrWhiteSpace(entity.Website))
-    {
-        features.Add("Є сайт або сторінка компанії");
-    }
+        if (!string.IsNullOrWhiteSpace(dto.Email))
+            features.Add("Є email для звернення");
 
-    if (!string.IsNullOrWhiteSpace(entity.Address))
-    {
-        features.Add("Є фізична адреса");
-    }
+        if (!string.IsNullOrWhiteSpace(dto.Website))
+            features.Add("Є сайт або сторінка компанії");
 
-    if (entity.Latitude.HasValue && entity.Longitude.HasValue)
-    {
-        features.Add("Є точка на карті");
-    }
+        if (!string.IsNullOrWhiteSpace(dto.Address))
+            features.Add("Є фізична адреса");
 
-    if (entity.Images != null && entity.Images.Any())
-    {
-        features.Add("Доступна галерея фото");
-    }
+        if (dto.Latitude.HasValue && dto.Longitude.HasValue)
+            features.Add("Є точка на карті");
 
-    if (entity.Rating >= 4.5)
-    {
-        features.Add("Високий рейтинг");
-    }
+        if (dto.Images.Count > 0)
+            features.Add("Доступна галерея фото");
 
-    if (entity.ReviewsCount >= 10)
-    {
-        features.Add("Достатньо відгуків для оцінки");
-    }
+        if (dto.Rating >= 4.5)
+            features.Add("Високий рейтинг");
 
-    return features;
-}
+        if (dto.ReviewsCount >= 10)
+            features.Add("Достатньо відгуків для оцінки");
+
+        return features;
+    }
 }

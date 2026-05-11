@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using Marketplace.Modules.Listings.Domain.Contracts;
 using Marketplace.Modules.Listings.Domain.Enums.Listing;
 using Marketplace.Modules.Listings.Domain.Enums.Subscription;
 
 namespace Marketplace.Modules.Listings.Domain.Entities;
 
-public class Listing : AuditedEntity, ISlugEntity
+public class Listing : AuditedEntity
 {
     public int Id { get; set; }
 
@@ -14,25 +13,34 @@ public class Listing : AuditedEntity, ISlugEntity
     public string Title { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(4000)]
-    public string Description { get; set; } = string.Empty;
-
-    [Required]
-    [MaxLength(150)]
-
-    public string Name { get; set; } = string.Empty;
-
-    [Required]
-    [MaxLength(150)]
+    [MaxLength(220)]
     public string Slug { get; set; } = string.Empty;
 
-    [MaxLength(150)]
-    public string? SellerId { get; set; } = string.Empty;
+    [MaxLength(500)]
+    public string? ShortDescription { get; set; }
+
+    public string? Description { get; set; }
 
     [MaxLength(300)]
-    public string? AddressLine { get; set; }
+    public string? Address { get; set; }
+
+    [MaxLength(50)]
+    public string? Phone { get; set; }
+
+    [MaxLength(120)]
+    public string? Email { get; set; }
+
+    [MaxLength(300)]
+    public string? Website { get; set; }
+
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
+
+    public double Rating { get; set; }
+    public int ReviewsCount { get; set; }
+
+    [MaxLength(150)]
+    public string? SellerId { get; set; }
 
     public SubscriptionType SubscriptionType { get; set; } = SubscriptionType.Free;
 

@@ -12,17 +12,19 @@ public sealed class CityConfiguration : IEntityTypeConfiguration<City>
 
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Name).HasMaxLength(120).IsRequired();
+        builder.Property(x => x.Slug).HasMaxLength(140).IsRequired();
+        builder.Property(x => x.Description).HasMaxLength(2000);
+
+        builder.HasIndex(x => x.Slug).IsUnique();
+
         builder.HasOne(x => x.Region)
             .WithMany(x => x.Cities)
             .HasForeignKey(x => x.RegionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(x => x.Listings)
-            .WithOne(x => x.City)
-            .HasForeignKey(x => x.CityId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasMany(x => x.Categories)
             .WithOne(x => x.City)
             .HasForeignKey(x => x.CityId)
             .OnDelete(DeleteBehavior.Restrict);

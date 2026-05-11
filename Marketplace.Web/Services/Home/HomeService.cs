@@ -1,74 +1,38 @@
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Home;
 using Marketplace.Web.Models.Shared;
 using Marketplace.Web.Navigation;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 
 namespace Marketplace.Web.Services.Home;
 
 public sealed class HomeService : IHomeService
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
     private readonly ICatalogVmMapper _catalogVmMapper;
     private readonly ICatalogUrlBuilder _urlBuilder;
 
     public HomeService(
-        ApplicationDbContext dbContext,
+        IMediator mediator,
         ICatalogVmMapper catalogVmMapper,
         ICatalogUrlBuilder urlBuilder)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
         _catalogVmMapper = catalogVmMapper;
         _urlBuilder = urlBuilder;
     }
 
     public async Task<HomePageVm> GetHomePageAsync(string culture, string? selectedCitySlug, CancellationToken cancellationToken)
     {
-        var cities = await _dbContext.Cities
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
-            .Select(x => new
-            {
-                Entity = x,
-                ListingsCount = _dbContext.Listings.Count(l => l.CityId == x.Id && l.IsPublished)
-            })
-            .Take(8)
-            .ToListAsync(cancellationToken);
-
-        var categories = await _dbContext.Categories
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
-            .Select(x => new
-            {
-                Entity = x,
-                ListingsCount = _dbContext.Listings.Count(l => l.CategoryId == x.Id && l.IsPublished)
-            })
-            .Take(8)
-            .ToListAsync(cancellationToken);
-
-        var featuredListings = await _dbContext.Listings
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .Include(x => x.City)
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
-            .Include(x => x.Images)
-            .OrderByDescending(x => x.ReviewsCount)
-            .ThenByDescending(x => x.Rating)
-            .Take(8)
-            .ToListAsync(cancellationToken);
+        var cities = await _mediator.Send(new GetCatalogCitiesQuery(Take: 8), cancellationToken);
+        var categories = await _mediator.Send(new GetCatalogCategoriesQuery(Take: 8), cancellationToken);
+        var featuredListings = await _mediator.Send(new GetFeaturedListingsQuery(8), cancellationToken);
 
         return new HomePageVm
         {
             Culture = culture,
-            SelectedCitySlug = string.IsNullOrWhiteSpace(selectedCitySlug)
-                ? null
-                : selectedCitySlug.Trim(),
+            SelectedCitySlug = string.IsNullOrWhiteSpace(selectedCitySlug) ? null : selectedCitySlug.Trim(),
             Hero = new HomeHeroVm
             {
                 Title = "Знайдіть перевірені послуги у своєму місті",
@@ -78,40 +42,22 @@ public sealed class HomeService : IHomeService
                 CityPlaceholder = "Оберіть місто"
             },
             CityOptions = cities
-                .Select(x => _catalogVmMapper.MapFilterOption(x.Entity.Slug, x.Entity.Name))
+                .Select(x => _catalogVmMapper.MapFilterOption(x.Slug, x.Name))
                 .ToList(),
             PopularCitiesSection = new()
             {
-                Header = new SectionHeaderVm
-                {
-                    Title = "Популярні міста",
-                    Description = "Оберіть місто та перегляньте доступні послуги."
-                },
-                Items = cities
-                    .Select(x => _catalogVmMapper.MapCityCard(x.Entity, x.ListingsCount, culture))
-                    .ToList()
+                Header = new SectionHeaderVm { Title = "Популярні міста", Description = "Оберіть місто та перегляньте доступні послуги." },
+                Items = cities.Select(x => _catalogVmMapper.MapCityCard(x, culture)).ToList()
             },
             PopularCategoriesSection = new()
             {
-                Header = new SectionHeaderVm
-                {
-                    Title = "Популярні категорії",
-                    Description = "Швидкий доступ до основних напрямків послуг."
-                },
-                Items = categories
-                    .Select(x => _catalogVmMapper.MapCategoryCard(x.Entity, x.ListingsCount, culture))
-                    .ToList()
+                Header = new SectionHeaderVm { Title = "Популярні категорії", Description = "Швидкий доступ до основних напрямків послуг." },
+                Items = categories.Select(x => _catalogVmMapper.MapCategoryCard(x, culture)).ToList()
             },
             FeaturedListingsSection = new()
             {
-                Header = new SectionHeaderVm
-                {
-                    Title = "Популярні пропозиції",
-                    Description = "Добірка актуальних і популярних послуг."
-                },
-                Listings = featuredListings
-                    .Select(x => _catalogVmMapper.MapListingCard(x, culture))
-                    .ToList(),
+                Header = new SectionHeaderVm { Title = "Популярні пропозиції", Description = "Добірка актуальних і популярних послуг." },
+                Listings = featuredListings.Select(x => _catalogVmMapper.MapListingCard(x, culture)).ToList(),
                 ShowMobileFilterButton = false
             },
             SeoIntro = new SeoIntroVm

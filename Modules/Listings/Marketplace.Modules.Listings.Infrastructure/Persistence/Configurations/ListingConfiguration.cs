@@ -12,11 +12,21 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.SubscriptionType)
-            .HasConversion<int>();
+        builder.Property(x => x.Title).HasMaxLength(200).IsRequired();
+        builder.Property(x => x.Slug).HasMaxLength(220).IsRequired();
+        builder.Property(x => x.ShortDescription).HasMaxLength(500);
+        builder.Property(x => x.Address).HasMaxLength(300);
+        builder.Property(x => x.Phone).HasMaxLength(50);
+        builder.Property(x => x.Email).HasMaxLength(120);
+        builder.Property(x => x.Website).HasMaxLength(300);
+        builder.Property(x => x.SellerId).HasMaxLength(150);
+        builder.Property(x => x.Rating).HasPrecision(10, 2);
 
-        builder.Property(x => x.Status)
-            .HasConversion<int>();
+        builder.HasIndex(x => x.Slug).IsUnique();
+        builder.HasIndex(x => x.Status);
+
+        builder.Property(x => x.SubscriptionType).HasConversion<int>();
+        builder.Property(x => x.Status).HasConversion<int>();
 
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Listings)

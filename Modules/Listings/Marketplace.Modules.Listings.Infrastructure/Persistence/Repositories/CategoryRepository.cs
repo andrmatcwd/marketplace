@@ -22,7 +22,6 @@ public class CategoryRepository
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
-            .Include(x => x.City)
             .Include(x => x.SubCategories)
             .Include(x => x.Listings)
             .OrderByDescending(x => x.Id)

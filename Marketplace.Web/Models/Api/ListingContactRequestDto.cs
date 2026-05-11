@@ -5,7 +5,7 @@ namespace Marketplace.Web.Models.Api;
 public sealed class ListingContactRequestDto
 {
     [Required]
-    public Guid ListingId { get; set; }
+    public int ListingId { get; set; }
 
     [Required]
     [StringLength(120)]

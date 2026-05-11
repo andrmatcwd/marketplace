@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Marketplace.Modules.Listings.Domain.Entities;
 
 public class Review : AuditedEntity
@@ -7,9 +9,14 @@ public class Review : AuditedEntity
     public int ListingId { get; set; }
     public Listing Listing { get; set; } = null!;
 
-    public int ReviewerId { get; set; }
-    public Reviewer Reviewer { get; set; } = null!;
+    public int? ReviewerId { get; set; }
+    public Reviewer? Reviewer { get; set; }
 
-    public int Rating { get; set; }
-    public string Comment { get; set; } = string.Empty;
+    [MaxLength(120)]
+    public string? AuthorName { get; set; }
+
+    [MaxLength(2000)]
+    public string? Text { get; set; }
+
+    public double Rating { get; set; }
 }

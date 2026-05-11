@@ -23,7 +23,6 @@ public class CityRepository
 
         var items = await query
             .Include(x => x.Region)
-            .Include(x => x.Categories)
             .Include(x => x.Listings)
             .OrderByDescending(x => x.Id)
             .Skip((filter.Page - 1) * filter.PageSize)

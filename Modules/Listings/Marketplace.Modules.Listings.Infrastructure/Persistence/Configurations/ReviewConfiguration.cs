@@ -11,7 +11,10 @@ public sealed class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.ToTable("Reviews");
 
         builder.HasKey(x => x.Id);
-        
+
+        builder.Property(x => x.AuthorName).HasMaxLength(120);
+        builder.Property(x => x.Text).HasMaxLength(2000);
+
         builder.HasOne(x => x.Listing)
             .WithMany(x => x.Reviews)
             .HasForeignKey(x => x.ListingId)
@@ -20,6 +23,7 @@ public sealed class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.HasOne(x => x.Reviewer)
             .WithMany(x => x.Reviews)
             .HasForeignKey(x => x.ReviewerId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

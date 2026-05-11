@@ -10,11 +10,12 @@ public class Image
     public Listing Listing { get; set; } = null!;
 
     [Required]
-    [MaxLength(200)]
+    [MaxLength(500)]
     public string Url { get; set; } = string.Empty;
 
-    [MaxLength(255)]
-    public string? AltText { get; set; }
+    [MaxLength(250)]
+    public string? Alt { get; set; }
 
     public bool IsPrimary { get; set; }
+    public int SortOrder { get; set; }
 }

@@ -1,0 +1,27 @@
+namespace Marketplace.Modules.Listings.Application.Catalog.Dtos;
+
+public sealed record ListingDetailsDto(
+    int Id,
+    string Title,
+    string Slug,
+    string? ShortDescription,
+    string? Description,
+    string? Address,
+    string? Phone,
+    string? Email,
+    string? Website,
+    double? Latitude,
+    double? Longitude,
+    double Rating,
+    int ReviewsCount,
+    int CityId,
+    string CityName,
+    string CitySlug,
+    int CategoryId,
+    string CategoryName,
+    string CategorySlug,
+    int SubCategoryId,
+    string SubCategoryName,
+    string SubCategorySlug,
+    IReadOnlyList<ListingImageDto> Images,
+    IReadOnlyList<ListingReviewDto> Reviews);

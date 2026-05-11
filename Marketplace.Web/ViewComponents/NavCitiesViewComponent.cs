@@ -1,37 +1,34 @@
-using Marketplace.Web.Data;
+using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Models.Shared;
 using Marketplace.Web.Utils;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.ViewComponents;
 
 public sealed class NavCitiesViewComponent : ViewComponent
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IMediator _mediator;
 
-    public NavCitiesViewComponent(ApplicationDbContext dbContext)
+    public NavCitiesViewComponent(IMediator mediator)
     {
-        _dbContext = dbContext;
+        _mediator = mediator;
     }
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var culture = CultureHelper.Current();
+        var cities = await _mediator.Send(new GetCatalogCitiesQuery(), CancellationToken.None);
 
-        var cities = await _dbContext.Cities
-            .AsNoTracking()
-            .Where(x => x.IsPublished)
-            .OrderBy(x => x.SortOrder)
-            .ThenBy(x => x.Name)
+        var vms = cities
             .Select(x => new NavCityOptionVm
             {
                 Name = x.Name,
                 Slug = x.Slug,
                 Url = $"/{culture}/{x.Slug}"
             })
-            .ToListAsync();
+            .ToList();
 
-        return View(cities);
+        return View(vms);
     }
 }

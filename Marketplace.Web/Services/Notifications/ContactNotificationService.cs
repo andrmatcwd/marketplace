@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Text.Json;
-using Marketplace.Web.Domain.Entities;
+using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Web.Models.Api;
 using Marketplace.Web.Options;
 using Microsoft.Extensions.Options;
@@ -26,7 +26,7 @@ public sealed class ContactNotificationService : IContactNotificationService
     }
 
     public async Task NotifyContactRequestAsync(
-        Listing listing,
+        ListingDetailsDto listing,
         ListingContactRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -58,7 +58,7 @@ public sealed class ContactNotificationService : IContactNotificationService
     }
 
     private async Task SendEmailAsync(
-        Listing listing,
+        ListingDetailsDto listing,
         ListingContactRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -101,7 +101,7 @@ public sealed class ContactNotificationService : IContactNotificationService
     }
 
     private async Task SendTelegramAsync(
-        Listing listing,
+        ListingDetailsDto listing,
         ListingContactRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -144,7 +144,7 @@ public sealed class ContactNotificationService : IContactNotificationService
         }
     }
 
-    private static string BuildEmailBody(Listing listing, ListingContactRequestDto request)
+    private static string BuildEmailBody(ListingDetailsDto listing, ListingContactRequestDto request)
     {
         return $"""
         New contact request
@@ -167,7 +167,7 @@ public sealed class ContactNotificationService : IContactNotificationService
         """;
     }
 
-    private static string BuildTelegramText(Listing listing, ListingContactRequestDto request)
+    private static string BuildTelegramText(ListingDetailsDto listing, ListingContactRequestDto request)
     {
         return $"""
         <b>Нова заявка з Marketplace</b>
