@@ -1,0 +1,51 @@
+@model IReadOnlyCollection<Marketplace.Web.Models.Listings.ListingVacancyVm>
+
+@if (Model != null && Model.Any())
+{
+    var previewCount = 2;
+    var hasToggle = Model.Count > previewCount;
+
+    <section class="app-card listing-vacancies">
+        <div class="listing-vacancies-body">
+            <div class="listing-vacancies-header">
+                <div>
+                    <h2 class="section-title">Вакансії</h2>
+                    <p class="section-description">
+                        Актуальні можливості роботи або співпраці.
+                    </p>
+                </div>
+            </div>
+
+            <div class="listing-vacancies-collapsible" data-collapsible>
+                <div class="listing-vacancy-list">
+                    @foreach (var vacancy in Model.Take(previewCount))
+                    {
+                        <partial name="~/Views/Shared/ListingDetails/_ListingVacancyCard.cshtml"
+                                 model="vacancy" />
+                    }
+                </div>
+
+                @if (hasToggle)
+                {
+                    <div class="listing-vacancies-extra" data-collapsible-content>
+                        <div class="listing-vacancy-list listing-vacancy-list-extra">
+                            @foreach (var vacancy in Model.Skip(previewCount))
+                            {
+                                <partial name="~/Views/Shared/ListingDetails/_ListingVacancyCard.cshtml"
+                                         model="vacancy" />
+                            }
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            class="listing-vacancies-toggle btn btn-app-outline btn-sm"
+                            data-collapsible-toggle
+                            data-expand-text="Показати більше"
+                            data-collapse-text="Згорнути">
+                        Показати більше
+                    </button>
+                }
+            </div>
+        </div>
+    </section>
+}

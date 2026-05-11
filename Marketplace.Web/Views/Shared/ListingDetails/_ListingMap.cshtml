@@ -1,14 +1,37 @@
-﻿@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
+﻿@using Marketplace.Web.Helpers
+@model Marketplace.Web.Models.Listings.ListingDetailsPageVm
 
 @{
     ViewData["Title"] = Model.Title;
+
+    var googleMapsUrl = MapUrlBuilder.BuildGoogleMapsUrl(
+        Model.Latitude,
+        Model.Longitude,
+        Model.Address);
+
+    var directionsUrl = MapUrlBuilder.BuildDirectionsUrl(
+        Model.Latitude,
+        Model.Longitude,
+        Model.Address);
 }
 
 @if (Model.HasCoordinates)
 {
     <section class="app-card listing-map-card">
         <div class="listing-map-body">
-            <h2 class="section-title">Location</h2>
+            <div class="listing-map-header">
+                <h2 class="section-title">Location</h2>
+
+                @if (!string.IsNullOrWhiteSpace(directionsUrl))
+                {
+                    <a href="@directionsUrl"
+                       target="_blank"
+                       rel="noopener"
+                       class="btn btn-app btn-sm map-directions-top">
+                        Прокласти маршрут
+                    </a>
+                }
+            </div>
 
             @if (!string.IsNullOrWhiteSpace(Model.Address))
             {

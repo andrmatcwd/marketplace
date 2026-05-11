@@ -7,6 +7,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/components/taxonomy-card.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/trust.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
 }
 
@@ -119,6 +120,8 @@
         </div>
     </div>
 </section>
+
+<partial name="~/Views/Shared/Sections/_TrustSection.cshtml" />
 
 <div id="popular-cities" class="anchor-section">
     <partial name="~/Views/Shared/Sections/_CitiesSection.cshtml" model="Model.PopularCitiesSection" />

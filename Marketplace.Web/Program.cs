@@ -10,6 +10,7 @@ using Marketplace.Web.Services.ContactRequests;
 using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Media;
+using Marketplace.Web.Services.Notifications;
 using Marketplace.Web.Services.Seo;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -22,6 +23,9 @@ builder.Services.Configure<UiOptions>(builder.Configuration.GetSection("Ui"));
 
 builder.Services.Configure<LocationDefaultsOptions>(
     builder.Configuration.GetSection("LocationDefaults"));
+
+builder.Services.Configure<ContactNotificationOptions>(
+    builder.Configuration.GetSection("ContactNotifications"));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -60,6 +64,8 @@ builder.Services
     })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<ICatalogVmMapper, CatalogVmMapper>();
 builder.Services.AddScoped<IListingVmMapper, ListingVmMapper>();
 
@@ -79,6 +85,11 @@ builder.Services.AddScoped<ICatalogLookupService, CatalogLookupService>();
 builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>();
 
 builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
+
+builder.Services.AddScoped<IContactNotificationService, ContactNotificationService>();
+
+builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
+builder.Services.AddScoped<IContactNotificationService, ContactNotificationService>();
 
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();
 builder.Services.AddScoped<CanonicalUrlBuilder>();

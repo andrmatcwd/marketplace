@@ -9,6 +9,7 @@
             @if (!string.IsNullOrWhiteSpace(Model.Contact.ContactName))
             {
                 <div class="contact-row">
+                    <span class="contact-icon">👤</span>
                     <strong>@Model.Contact.ContactName</strong>
                 </div>
             }
@@ -16,11 +17,12 @@
             @if (Model.Contact.HasPhone)
             {
                 <div class="contact-row">
+                    <span class="contact-icon">📞</span>
                     <a href="tel:@Model.Contact.Phone"
-                       class="listing-phone-link"
-                       data-phone="@Model.Contact.Phone"
-                       data-listing-id="@Model.Id"
-                       data-listing-title="@Model.Title">
+                    class="listing-phone-link"
+                    data-phone="@Model.Contact.Phone"
+                    data-listing-id="@Model.Id"
+                    data-listing-title="@Model.Title">
                         @Model.Contact.Phone
                     </a>
                 </div>
@@ -29,6 +31,7 @@
             @if (Model.Contact.HasEmail)
             {
                 <div class="contact-row">
+                    <span class="contact-icon">✉️</span>
                     <a href="mailto:@Model.Contact.Email">@Model.Contact.Email</a>
                 </div>
             }
@@ -36,20 +39,12 @@
             @if (Model.Contact.HasWebsite)
             {
                 <div class="contact-row">
-                    <a href="@Model.Contact.Website" rel="nofollow noopener" target="_blank">@Model.Contact.Website</a>
+                    <span class="contact-icon">🌐</span>
+                    <a href="@Model.Contact.Website" rel="nofollow noopener" target="_blank">
+                        @Model.Contact.Website
+                    </a>
                 </div>
             }
-
-            <div class="contact-actions mt-3">
-                <button type="button"
-                        class="btn btn-app w-100"
-                        data-bs-toggle="modal"
-                        data-bs-target="#contactListingModal"
-                        data-listing-id="@Model.Id"
-                        data-listing-title="@Model.Title">
-                    Написати
-                </button>
-            </div>
         </div>
     </section>
 }

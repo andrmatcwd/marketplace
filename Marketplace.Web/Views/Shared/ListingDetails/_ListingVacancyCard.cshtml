@@ -1,0 +1,37 @@
+@model Marketplace.Web.Models.Listings.ListingVacancyVm
+
+<article class="listing-vacancy-card">
+    <div class="listing-vacancy-main">
+        <h3 class="listing-vacancy-title">@Model.Title</h3>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="listing-vacancy-description">@Model.Description</p>
+        }
+
+        <div class="listing-vacancy-meta">
+            @if (!string.IsNullOrWhiteSpace(Model.EmploymentType))
+            {
+                <span>@Model.EmploymentType</span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.LocationText))
+            {
+                <span>@Model.LocationText</span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.SalaryText))
+            {
+                <span>@Model.SalaryText</span>
+            }
+        </div>
+    </div>
+
+    <div class="listing-vacancy-action">
+        <button type="button"
+                class="btn btn-app-outline btn-sm"
+                data-contact-open>
+            Відгукнутися
+        </button>
+    </div>
+</article>

@@ -44,6 +44,8 @@ public sealed class ListingDetailsPageVm
     public IReadOnlyCollection<ListingReviewVm> Reviews { get; set; } = Array.Empty<ListingReviewVm>();
     public IReadOnlyCollection<RelatedListingVm> RelatedListings { get; set; } = Array.Empty<RelatedListingVm>();
 
+    public IReadOnlyCollection<ListingVacancyVm> Vacancies { get; set; } = [];
+
     public CreateListingReviewVm ReviewForm { get; set; } = new();
 
     public RentalDetailsVm? Rental { get; set; }

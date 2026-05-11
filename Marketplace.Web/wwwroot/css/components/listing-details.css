@@ -340,3 +340,282 @@
 
 
 
+
+
+
+
+.map-actions {
+    display: flex;
+    gap: var(--app-space-2);
+    margin-top: var(--app-space-3);
+}
+
+.map-actions .btn {
+    flex: 1;
+}
+
+@media (min-width: 576px) {
+    .map-actions {
+        justify-content: flex-start;
+    }
+
+    .map-actions .btn {
+        flex: none;
+    }
+}
+
+
+
+
+.listing-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--app-space-3);
+    margin-bottom: var(--app-space-3);
+}
+
+.listing-map-header .section-title {
+    margin-bottom: 0;
+}
+
+.map-directions-top {
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+    .listing-map-header {
+        flex-direction: row;        /* 🔴 ключове: залишаємо в ряд */
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--app-space-2);
+    }
+
+    .listing-map-header .section-title {
+        font-size: 1.1rem;          /* опційно, щоб влазило */
+    }
+
+    .map-directions-top {
+        width: auto;
+        flex-shrink: 0;             /* щоб кнопка не стискалась */
+        white-space: nowrap;        /* щоб не переносилась */
+    }
+}
+
+
+
+
+
+.listing-vacancies-body {
+    padding: var(--app-space-5);
+}
+
+.listing-vacancies-header {
+    margin-bottom: var(--app-space-4);
+}
+
+.listing-vacancy-list {
+    display: grid;
+    gap: var(--app-space-3);
+}
+
+.listing-vacancy-card {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--app-space-4);
+    padding: var(--app-space-4);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface-muted);
+}
+
+.listing-vacancy-main {
+    min-width: 0;
+}
+
+.listing-vacancy-title {
+    margin: 0 0 var(--app-space-2);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.listing-vacancy-description {
+    margin: 0 0 var(--app-space-3);
+    color: var(--app-text-muted);
+    line-height: 1.6;
+}
+
+.listing-vacancy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--app-space-2);
+}
+
+.listing-vacancy-meta span {
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: var(--app-surface);
+    color: var(--app-text-muted);
+    font-size: 0.85rem;
+}
+
+.listing-vacancy-action {
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+@media (max-width: 576px) {
+    .listing-vacancy-card {
+        flex-direction: column;
+    }
+
+    .listing-vacancy-action .btn {
+        width: 100%;
+    }
+}
+
+
+
+
+
+.listing-vacancies-extra {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.listing-vacancies-collapsible.is-open .listing-vacancies-extra {
+    max-height: 2000px;
+}
+
+.listing-vacancy-list-extra {
+    margin-top: var(--app-space-3);
+}
+
+.listing-vacancies-toggle {
+    margin-top: var(--app-space-4);
+}
+
+
+
+
+
+
+
+.listing-reviews-extra {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.listing-reviews-collapsible.is-open .listing-reviews-extra {
+    max-height: 2000px;
+}
+
+.listing-reviews-list-extra {
+    margin-top: var(--app-space-3);
+}
+
+.listing-reviews-toggle {
+    margin-top: var(--app-space-4);
+}
+
+
+
+
+
+
+
+.listing-review-card {
+    padding: var(--app-space-4);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface);
+}
+
+.listing-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--app-space-3);
+    margin-bottom: var(--app-space-2);
+}
+
+.listing-review-user {
+    display: flex;
+    align-items: center;
+    gap: var(--app-space-3);
+}
+
+.listing-review-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--app-surface-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.listing-review-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.listing-review-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.listing-review-date {
+    font-size: 0.8rem;
+    color: var(--app-text-muted);
+}
+
+.listing-review-rating {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    font-size: 0.9rem;
+    color: var(--app-border);
+}
+
+.star.filled {
+    color: #f5b50a;
+}
+
+.listing-review-body p {
+    margin: 0;
+    color: var(--app-text-muted);
+    line-height: 1.6;
+}
+
+
+
+
+
+.contact-row {
+    display: flex;
+    align-items: center;
+    gap: var(--app-space-2);
+    margin-bottom: var(--app-space-2);
+}
+
+.contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: var(--app-radius-sm);
+    background: var(--app-surface-muted);
+
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}

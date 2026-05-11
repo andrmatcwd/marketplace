@@ -47,7 +47,7 @@
                     </div>
                 }
 
-                @if (Model.Features.Any())
+                @* @if (Model.Features.Any())
                 {
                     <ul class="rental-feature-list">
                         @foreach (var feature in Model.Features.Take(4))
@@ -60,7 +60,7 @@
                             <li>+@(Model.Features.Count - 4)</li>
                         }
                     </ul>
-                }
+                } *@
             </div>
 
             <div class="rental-collapsible" data-collapsible>

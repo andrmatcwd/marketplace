@@ -1,0 +1,41 @@
+@model Marketplace.Web.Models.Listings.ListingReviewVm
+
+<article class="listing-review-card">
+    <div class="listing-review-header">
+        <div class="listing-review-user">
+            <div class="listing-review-avatar">
+                @Model.AuthorName?.FirstOrDefault()
+            </div>
+
+            <div class="listing-review-user-info">
+                <div class="listing-review-name">
+                    @Model.AuthorName
+                </div>
+
+                @if (Model.CreatedAtUtc != default)
+                {
+                    <div class="listing-review-date">
+                        @Model.CreatedAtUtc.ToString("dd MMM yyyy")
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model.Rating > 0)
+        {
+            <div class="listing-review-rating">
+                @for (var i = 0; i < 5; i++)
+                {
+                    <span class="star @(i < Model.Rating ? "filled" : "")">★</span>
+                }
+            </div>
+        }
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Text))
+    {
+        <div class="listing-review-body">
+            <p>@Model.Text</p>
+        </div>
+    }
+</article>

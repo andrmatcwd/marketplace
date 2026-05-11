@@ -147,6 +147,34 @@ public sealed class ListingService : IListingService
             ]
         };
 
+        vm.Vacancies = new List<ListingVacancyVm>
+        {
+            new()
+            {
+                Title = "Адміністратор рецепції",
+                Description = "Прийом гостей, бронювання номерів, робота з клієнтами.",
+                EmploymentType = "Повна зайнятість",
+                SalaryText = "від 15 000 грн",
+                LocationText = "listing.CityName" // або просто "Коломия"
+            },
+            new()
+            {
+                Title = "Покоївка",
+                Description = "Прибирання номерів, підтримка чистоти та порядку.",
+                EmploymentType = "Позмінно",
+                SalaryText = "від 10 000 грн",
+                LocationText = "e.CityName"
+            },
+            new()
+            {
+                Title = "Менеджер з бронювань",
+                Description = "Обробка заявок, комунікація з клієнтами, онлайн-бронювання.",
+                EmploymentType = "Remote / Часткова зайнятість",
+                SalaryText = "договірна",
+                LocationText = "Віддалено"
+            }
+        };
+
         return vm;
     }
 }

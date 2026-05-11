@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Controllers.Api;
 
 [ApiController]
-[Route("{culture:regex(^uk|en$)}/api/contact")]
+[Route("{culture:regex(^uk|ru$)}/api/contact")]
 public sealed class ContactApiController : ControllerBase
 {
     private readonly IContactRequestService _contactRequestService;
