@@ -179,6 +179,8 @@ public sealed class CatalogDataService : ICatalogDataService
             .Include(x => x.City)
             .Include(x => x.Images)
             .Include(x => x.Reviews).ThenInclude(r => r.Reviewer)
+            .Include(x => x.Rental).ThenInclude(r => r.RoomOptions)
+            .Include(x => x.Vacancies)
             .FirstOrDefaultAsync(x => x.Status == ListingStatus.Active && x.Id == id, cancellationToken);
 
     public Task<IReadOnlyList<Listing>> GetRelatedListingsAsync(

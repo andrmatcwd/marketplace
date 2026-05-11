@@ -73,9 +73,6 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("RegionId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(140)
@@ -85,8 +82,6 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RegionId");
 
                     b.HasIndex("Slug")
                         .IsUnique();
@@ -218,25 +213,127 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.ToTable("Listings", (string)null);
                 });
 
-            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Region", b =>
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingRental", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
+                    b.Property<string>("Area")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Slug")
+                    b.Property<string>("Features")
                         .IsRequired()
-                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Floor")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Price")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Rooms")
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Regions", (string)null);
+                    b.HasIndex("ListingId")
+                        .IsUnique();
+
+                    b.ToTable("ListingRentals", (string)null);
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingRentalRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Amenities")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Area")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Beds")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Guests")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImageUrls")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Price")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RentalId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentalId");
+
+                    b.ToTable("ListingRentalRooms", (string)null);
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingVacancy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EmploymentType")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LocationText")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SalaryText")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListingId");
+
+                    b.ToTable("ListingVacancies", (string)null);
                 });
 
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Review", b =>
@@ -350,16 +447,6 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.ToTable("SubCategories", (string)null);
                 });
 
-            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.City", b =>
-                {
-                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Region", "Region")
-                        .WithMany("Cities")
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Region");
-                });
-
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Image", b =>
                 {
                     b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Listing", "Listing")
@@ -396,6 +483,38 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.Navigation("City");
 
                     b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingRental", b =>
+                {
+                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Listing", "Listing")
+                        .WithOne("Rental")
+                        .HasForeignKey("Marketplace.Modules.Listings.Domain.Entities.ListingRental", "ListingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Listing");
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingRentalRoom", b =>
+                {
+                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.ListingRental", "Rental")
+                        .WithMany("RoomOptions")
+                        .HasForeignKey("RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rental");
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingVacancy", b =>
+                {
+                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Listing", "Listing")
+                        .WithMany("Vacancies")
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Listing");
                 });
 
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Review", b =>
@@ -443,12 +562,16 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                 {
                     b.Navigation("Images");
 
+                    b.Navigation("Rental");
+
                     b.Navigation("Reviews");
+
+                    b.Navigation("Vacancies");
                 });
 
-            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Region", b =>
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingRental", b =>
                 {
-                    b.Navigation("Cities");
+                    b.Navigation("RoomOptions");
                 });
 
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Reviewer", b =>

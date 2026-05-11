@@ -1,0 +1,112 @@
+@model RentalFormVm
+@using Marketplace.Modules.Listings.Application.Rentals.Dtos
+@{
+    ViewData["Title"] = "Rental";
+    var rooms = ViewBag.RoomOptions as IReadOnlyList<RentalRoomAdminDto> ?? [];
+    var rentalId = ViewBag.RentalId as int?;
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Rental — оголошення #@Model.ListingId</h2>
+            <p class="admin-page-subtitle">Інформація про оренду для даного оголошення.</p>
+        </div>
+        <div>
+            <a asp-area="Admin" asp-controller="Listings" asp-action="Index" class="admin-btn admin-btn--secondary">← Назад до Listings</a>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ListingId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="Price" class="admin-label"></label>
+                    <input asp-for="Price" class="admin-input" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Rooms" class="admin-label"></label>
+                    <input asp-for="Rooms" class="admin-input" />
+                    <span asp-validation-for="Rooms" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Area" class="admin-label"></label>
+                    <input asp-for="Area" class="admin-input" />
+                    <span asp-validation-for="Area" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Floor" class="admin-label"></label>
+                    <input asp-for="Floor" class="admin-input" />
+                    <span asp-validation-for="Floor" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="FeaturesText" class="admin-label"></label>
+                    <textarea asp-for="FeaturesText" class="admin-textarea" rows="4"></textarea>
+                    <span asp-validation-for="FeaturesText" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти</button>
+                @if (rentalId.HasValue)
+                {
+                    <a asp-action="DeleteRental" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--danger">Видалити rental</a>
+                }
+            </div>
+        </form>
+    </div>
+
+    @if (rentalId.HasValue)
+    {
+        <div class="admin-card" style="margin-top: 1.5rem;">
+            <div class="admin-toolbar">
+                <h3 class="admin-section-heading__title">Кімнати / варіанти</h3>
+                <a asp-action="CreateRoom" asp-route-rentalId="@rentalId" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--primary">Додати кімнату</a>
+            </div>
+            @if (rooms.Any())
+            {
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Назва</th>
+                                <th>Ціна</th>
+                                <th>Площа</th>
+                                <th>Гості</th>
+                                <th>Ліжка</th>
+                                <th class="admin-table__actions">Дії</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var room in rooms)
+                            {
+                                <tr>
+                                    <td>@room.Id</td>
+                                    <td>@room.Title</td>
+                                    <td>@room.Price</td>
+                                    <td>@room.Area</td>
+                                    <td>@room.Guests</td>
+                                    <td>@room.Beds</td>
+                                    <td class="admin-table__actions">
+                                        <a asp-action="EditRoom" asp-route-id="@room.Id" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
+                                        <a asp-action="DeleteRoom" asp-route-id="@room.Id" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Кімнат ще не додано.</p>
+            }
+        </div>
+    }
+</div>

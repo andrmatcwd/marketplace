@@ -1,0 +1,58 @@
+@model List<VacancyListItemVm>
+@{
+    ViewData["Title"] = "Вакансії";
+    var listingId = (int)ViewBag.ListingId;
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Вакансії</h2>
+            <p class="admin-page-subtitle">Керування вакансіями для оголошення #@listingId.</p>
+        </div>
+        <div>
+            <a asp-area="Admin" asp-controller="Listings" asp-action="Index" class="admin-btn admin-btn--secondary">← Назад до Listings</a>
+            <a asp-action="Create" asp-route-listingId="@listingId" class="admin-btn admin-btn--primary">Додати вакансію</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Тип зайнятості</th>
+                            <th>Зарплата</th>
+                            <th>Місцезнаходження</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Title</td>
+                                <td>@item.EmploymentType</td>
+                                <td>@item.SalaryText</td>
+                                <td>@item.LocationText</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">Вакансій ще не додано.</p>
+        }
+    </div>
+</div>

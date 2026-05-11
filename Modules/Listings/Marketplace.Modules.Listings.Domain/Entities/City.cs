@@ -21,8 +21,5 @@ public class City : ISlugEntity
     public bool IsPublished { get; set; }
     public int SortOrder { get; set; }
 
-    public int? RegionId { get; set; }
-    public Region? Region { get; set; }
-
     public ICollection<Listing> Listings { get; set; } = new List<Listing>();
 }

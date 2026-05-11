@@ -2,8 +2,8 @@ using Marketplace.Modules.Listings.Application.Categories.Commands.CreateCategor
 using Marketplace.Modules.Listings.Application.Categories.Commands.DeleteCategory;
 using Marketplace.Modules.Listings.Application.Categories.Commands.EditCategory;
 using Marketplace.Modules.Listings.Application.Categories.Filters;
-using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoryById;
 using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
+using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoryById;
 using Marketplace.Web.Areas.Admin.Models.Categories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-//[Authorize]
+[Authorize(Roles = "Admin")]
 public class CategoriesController : Controller
 {
     private readonly ISender _sender;
@@ -24,17 +24,16 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> Index(string? search, CancellationToken cancellationToken)
     {
-        var categories = await _sender.Send(new GetCategoriesByFilterQuery(new CategoryFilter
+        var result = await _sender.Send(new GetCategoriesByFilterQuery(new CategoryFilter
         {
             Search = search,
-            Page = 1,
-            PageSize = 3
+            PageSize = 25
         }), cancellationToken);
 
-        var model = new CategoryIndexVm
+        return View(new CategoryIndexVm
         {
             Search = search,
-            Items = categories.Items
+            Items = result.Items
                 .OrderBy(x => x.Name)
                 .Select(x => new CategoryListItemVm
                 {
@@ -43,31 +42,26 @@ public class CategoriesController : Controller
                     Slug = x.Slug,
                     SubCategoriesCount = x.SubCategoriesCount,
                     ListingsCount = x.ListingsCount
-                }).ToList()
-        };
-
-        return View(model);
+                })
+                .ToList()
+        });
     }
 
-    public IActionResult Create()
-    {
-        return View(new CategoryFormVm());
-    }
+    public IActionResult Create() => View(new CategoryFormVm());
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CategoryFormVm model, CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) return View(model);
 
         await _sender.Send(new CreateCategoryCommand(
-            model.CityId,
             model.Name,
+            model.Slug,
             model.Description,
-            model.Icon), cancellationToken);
+            model.Icon,
+            model.IsPublished,
+            model.SortOrder), cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -88,23 +82,21 @@ public class CategoriesController : Controller
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, CategoryFormVm model, CancellationToken cancellationToken)
     {
         if (id != model.Id) return BadRequest();
-
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) return View(model);
 
         await _sender.Send(new EditCategoryCommand(
             id,
-            model.CityId,
             model.Name,
+            model.Slug,
             model.Description,
-            model.Icon), cancellationToken);
-            
+            model.Icon,
+            model.IsPublished,
+            model.SortOrder), cancellationToken);
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -118,18 +110,16 @@ public class CategoriesController : Controller
             Id = category.Id,
             Name = category.Name,
             Slug = category.Slug,
-            //SubCategoriesCount = category.SubCategories.Count,
-            //ListingsCount = category.Listings.Count
+            SubCategoriesCount = category.SubCategoriesCount,
+            ListingsCount = category.ListingsCount
         });
     }
 
     [HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
-
         await _sender.Send(new DeleteCategoryCommand(id), cancellationToken);
-
         return RedirectToAction(nameof(Index));
     }
 }

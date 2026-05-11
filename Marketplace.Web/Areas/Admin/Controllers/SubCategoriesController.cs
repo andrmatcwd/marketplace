@@ -1,61 +1,56 @@
+using Marketplace.Modules.Listings.Application.Categories.Filters;
+using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
 using Marketplace.Modules.Listings.Application.SubCategories.Commands.CreateSubCategory;
 using Marketplace.Modules.Listings.Application.SubCategories.Commands.DeleteSubCategory;
 using Marketplace.Modules.Listings.Application.SubCategories.Commands.EditSubCategory;
 using Marketplace.Modules.Listings.Application.SubCategories.Filters;
-using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoryById;
 using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoriesByFilter;
-using Marketplace.Modules.Listings.Domain.Entities;
-using Marketplace.Modules.Listings.Infrastructure.Persistence;
+using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoryById;
 using Marketplace.Web.Areas.Admin.Models.SubCategories;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-//[Authorize]
+[Authorize(Roles = "Admin")]
 public class SubCategoriesController : Controller
 {
-    private readonly ListingsDbContext _db;
     private readonly ISender _sender;
 
-    public SubCategoriesController(ListingsDbContext db, ISender sender)
+    public SubCategoriesController(ISender sender)
     {
-        _db = db;
         _sender = sender;
     }
 
     public async Task<IActionResult> Index(string? search, int? categoryId, CancellationToken cancellationToken)
     {
-        var subCategories = await _sender.Send(new GetSubCategoriesByFilterQuery(new SubCategoryFilter
+        var result = await _sender.Send(new GetSubCategoriesByFilterQuery(new SubCategoryFilter
         {
             Search = search,
-            //CategoryId = categoryId,
-            Page = 1,
-            PageSize = 3
+            PageSize = 25
         }), cancellationToken);
 
         ViewBag.Categories = await GetCategoriesSelectList(cancellationToken);
 
-        var model = new SubCategoryIndexVm
+        return View(new SubCategoryIndexVm
         {
             Search = search,
             CategoryId = categoryId,
-            Items = subCategories.Items
+            Items = result.Items
                 .Select(x => new SubCategoryListItemVm
                 {
                     Id = x.Id,
-                    //CategoryId = x.CategoryId,
+                    CategoryId = 0,
+                    CategoryName = x.CategoryName,
                     Name = x.Name,
-                    Slug = x.Slug
+                    Slug = x.Slug,
+                    ListingsCount = x.ListingsCount
                 })
                 .ToList()
-        };
-
-        return View(model);
+        });
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
@@ -65,20 +60,20 @@ public class SubCategoriesController : Controller
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(SubCategoryFormVm model, CancellationToken cancellationToken)
     {
         ViewBag.Categories = await GetCategoriesSelectList(cancellationToken);
-
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) return View(model);
 
         await _sender.Send(new CreateSubCategoryCommand(
             model.CategoryId,
             model.Name,
-            model.Description), cancellationToken);
+            model.Slug,
+            model.Description,
+            model.Icon,
+            model.IsPublished,
+            model.SortOrder), cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -93,33 +88,31 @@ public class SubCategoriesController : Controller
         return View(new SubCategoryFormVm
         {
             Id = subCategory.Id,
-            //CategoryId = subCategory.CategoryId,
             Name = subCategory.Name,
             Slug = subCategory.Slug,
-            Description = subCategory.Description
+            Description = subCategory.Description,
+            Icon = subCategory.Icon
         });
     }
 
     [HttpPost]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, SubCategoryFormVm model, CancellationToken cancellationToken)
     {
         if (id != model.Id) return BadRequest();
 
         ViewBag.Categories = await GetCategoriesSelectList(cancellationToken);
-
-        if (!ModelState.IsValid)
-        {
-            return View(model);
-        }
+        if (!ModelState.IsValid) return View(model);
 
         await _sender.Send(new EditSubCategoryCommand(
             id,
             model.CategoryId,
             model.Name,
             model.Slug,
-            model.Description
-        ), cancellationToken);
+            model.Description,
+            model.Icon,
+            model.IsPublished,
+            model.SortOrder), cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -132,14 +125,14 @@ public class SubCategoriesController : Controller
         return View(new SubCategoryListItemVm
         {
             Id = subCategory.Id,
-            //CategoryId = subCategory.CategoryId,
             Name = subCategory.Name,
             Slug = subCategory.Slug,
+            CategoryName = subCategory.CategoryName
         });
     }
 
     [HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, CancellationToken cancellationToken)
     {
         await _sender.Send(new DeleteSubCategoryCommand(id), cancellationToken);
@@ -148,14 +141,10 @@ public class SubCategoriesController : Controller
 
     private async Task<List<SelectListItem>> GetCategoriesSelectList(CancellationToken cancellationToken)
     {
-        return await _db.Categories
-            .AsNoTracking()
+        var result = await _sender.Send(new GetCategoriesByFilterQuery(new CategoryFilter { PageSize = 100 }), cancellationToken);
+        return result.Items
             .OrderBy(x => x.Name)
-            .Select(x => new SelectListItem
-            {
-                Value = x.Id.ToString(),
-                Text = x.Name
-            })
-            .ToListAsync(cancellationToken);
+            .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name })
+            .ToList();
     }
 }

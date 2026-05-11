@@ -119,33 +119,6 @@
 
 
 
-/* .app-navbar-center {
-    flex: 1;
-    justify-content: center;
-    padding: 0 20px;
-}
-
-.nav-city-dropdown {
-    min-width: 220px;
-    max-width: 280px;
-    width: 100%;
-}
-
-.nav-city-select {
-    min-height: 40px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    font-size: 0.95rem;
-    border-radius: 12px;
-}
-
-@media (max-width: 991.98px) {
-    .nav-city-dropdown {
-        min-width: 100%;
-        max-width: none;
-    }
-} */
-
 
 
 .app-navbar-center {

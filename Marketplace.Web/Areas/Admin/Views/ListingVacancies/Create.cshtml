@@ -1,0 +1,54 @@
+@model VacancyFormVm
+@{
+    ViewData["Title"] = "Додати вакансію";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Додати вакансію</h2>
+            <p class="admin-page-subtitle">Нова вакансія для оголошення #@Model.ListingId.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ListingId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="Title" class="admin-label"></label>
+                    <input asp-for="Title" class="admin-input" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="EmploymentType" class="admin-label"></label>
+                    <input asp-for="EmploymentType" class="admin-input" />
+                    <span asp-validation-for="EmploymentType" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="SalaryText" class="admin-label"></label>
+                    <input asp-for="SalaryText" class="admin-input" />
+                    <span asp-validation-for="SalaryText" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="LocationText" class="admin-label"></label>
+                    <input asp-for="LocationText" class="admin-input" />
+                    <span asp-validation-for="LocationText" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Description" class="admin-label"></label>
+                    <textarea asp-for="Description" class="admin-textarea" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти</button>
+                <a asp-action="Index" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

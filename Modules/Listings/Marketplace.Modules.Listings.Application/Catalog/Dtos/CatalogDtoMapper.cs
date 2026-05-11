@@ -45,5 +45,20 @@ internal static class CatalogDtoMapper
             .Select(x => new ListingReviewDto(
                 x.Reviewer?.UserId ?? x.AuthorName ?? "Anonymous",
                 x.Text, x.Rating, x.CreatedAtUtc))
+            .ToList(),
+        listing.Rental is null ? null : new ListingRentalDto(
+            listing.Rental.Price,
+            listing.Rental.Rooms,
+            listing.Rental.Area,
+            listing.Rental.Floor,
+            listing.Rental.Features,
+            listing.Rental.RoomOptions
+                .Select(r => new ListingRentalRoomDto(
+                    r.Title, r.Description, r.Price, r.Area, r.Guests, r.Beds,
+                    r.ImageUrls, r.Amenities))
+                .ToList()),
+        listing.Vacancies
+            .Select(v => new ListingVacancyDto(
+                v.Title, v.Description, v.EmploymentType, v.SalaryText, v.LocationText))
             .ToList());
 }

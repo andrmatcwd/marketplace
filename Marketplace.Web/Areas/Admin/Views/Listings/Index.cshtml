@@ -51,12 +51,12 @@
             </div>
 
             <div class="admin-filterbar__group">
-                <label for="locationId" class="admin-label">Місто</label>
-                <select id="locationId" name="locationId" class="admin-select">
+                <label for="cityId" class="admin-label">Місто</label>
+                <select id="cityId" name="cityId" class="admin-select">
                     <option value="">Усі міста</option>
                     @foreach (var item in cities)
                     {
-                        <option value="@item.Value" selected="@(Model.LocationId?.ToString() == item.Value)">@item.Text</option>
+                        <option value="@item.Value" selected="@(Model.CityId?.ToString() == item.Value)">@item.Text</option>
                     }
                 </select>
             </div>
@@ -91,7 +91,6 @@
                             <th>Категорія</th>
                             <th>Підкатегорія</th>
                             <th>Місто</th>
-                            <th>Ціна</th>
                             <th>Статус</th>
                             <th>Створено</th>
                             <th class="admin-table__actions">Дії</th>
@@ -106,12 +105,13 @@
                                 <td>@item.CategoryName</td>
                                 <td>@item.SubCategoryName</td>
                                 <td>@item.CityName</td>
-                                @* <td>@item.Price @item.Currency</td> *@
                                 <td>@item.Status</td>
                                 <td>@item.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
                                 <td class="admin-table__actions">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>
                                     <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                    <a asp-area="Admin" asp-controller="ListingVacancies" asp-action="Index" asp-route-listingId="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Вакансії</a>
+                                    <a asp-area="Admin" asp-controller="ListingRentals" asp-action="Edit" asp-route-listingId="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Оренда</a>
                                 </td>
                             </tr>
                         }

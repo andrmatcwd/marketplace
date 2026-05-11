@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rho '\\\\bclass=[\"'\\\\''][^\"'\\\\'']*[\"'\\\\'']' /Users/andrmatcwd/Projects/Marketplace.Web/Marketplace.Web '--include=*.cshtml' '--include=*.html' '--include=*.js' '--include=*.ts' ! -path '*/node_modules/*' ! -path '*/lib/*')",
+      "Bash(grep -v '^$')",
+      "Bash(xargs cat)",
+      "Bash(xargs ls)",
+      "Bash(xargs ls -la)",
+      "Bash(dotnet restore *)"
+    ]
+  }
+}

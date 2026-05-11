@@ -73,6 +73,39 @@ public sealed class ListingVmMapper : IListingVmMapper
             ReviewForm = new CreateListingReviewVm { ListingId = dto.Id },
 
             ServiceFeatures = BuildServiceFeatures(dto),
+
+            Rental = dto.Rental is null ? null : new RentalDetailsVm
+            {
+                Price = dto.Rental.Price,
+                Rooms = dto.Rental.Rooms,
+                Area = dto.Rental.Area,
+                Floor = dto.Rental.Floor,
+                Features = dto.Rental.Features,
+                RoomOptions = dto.Rental.RoomOptions
+                    .Select(r => new RentalRoomVm
+                    {
+                        Title = r.Title,
+                        Description = r.Description,
+                        Price = r.Price,
+                        Area = r.Area,
+                        Guests = r.Guests,
+                        Beds = r.Beds,
+                        ImageUrls = r.ImageUrls,
+                        Amenities = r.Amenities
+                    })
+                    .ToList()
+            },
+
+            Vacancies = dto.Vacancies
+                .Select(v => new ListingVacancyVm
+                {
+                    Title = v.Title,
+                    Description = v.Description,
+                    EmploymentType = v.EmploymentType,
+                    SalaryText = v.SalaryText,
+                    LocationText = v.LocationText
+                })
+                .ToList(),
         };
     }
 

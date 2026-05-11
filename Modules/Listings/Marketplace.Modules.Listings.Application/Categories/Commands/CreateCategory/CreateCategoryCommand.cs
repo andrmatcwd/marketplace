@@ -3,8 +3,10 @@ using MediatR;
 namespace Marketplace.Modules.Listings.Application.Categories.Commands.CreateCategory;
 
 public sealed record CreateCategoryCommand(
-    int CityId,
     string Name,
+    string? Slug,
     string? Description,
-    string? Icon
+    string? Icon,
+    bool IsPublished,
+    int SortOrder
 ) : IRequest<Unit>;

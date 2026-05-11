@@ -12,13 +12,23 @@ public class ListingFormVm
     [Display(Name = "Назва")]
     public string Title { get; set; } = string.Empty;
 
-    [Required]
-    [Display(Name = "Slug")]
-    public string Slug { get; set; } = string.Empty;
+    [Display(Name = "Slug (авто якщо порожній)")]
+    public string? Slug { get; set; }
 
-    [Required]
+    [Display(Name = "Короткий опис")]
+    public string? ShortDescription { get; set; }
+
     [Display(Name = "Опис")]
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
+
+    [Display(Name = "Телефон")]
+    public string? Phone { get; set; }
+
+    [Display(Name = "Email")]
+    public string? Email { get; set; }
+
+    [Display(Name = "Сайт")]
+    public string? Website { get; set; }
 
     [Display(Name = "Категорія")]
     public int CategoryId { get; set; }
@@ -27,27 +37,19 @@ public class ListingFormVm
     public int SubCategoryId { get; set; }
 
     [Display(Name = "Місто")]
-    public int LocationId { get; set; }
-
-    [Display(Name = "Ціна")]
-    public decimal Price { get; set; }
-
-    [Required]
-    [Display(Name = "Валюта")]
-    public string Currency { get; set; } = "USD";
-
-    [Required]
-    [Display(Name = "Seller Id")]
-    public string SellerId { get; set; } = string.Empty;
+    public int CityId { get; set; }
 
     [Display(Name = "Адреса")]
-    public string? AddressLine { get; set; }
+    public string? Address { get; set; }
 
     [Display(Name = "Latitude")]
     public double? Latitude { get; set; }
 
     [Display(Name = "Longitude")]
     public double? Longitude { get; set; }
+
+    [Display(Name = "Seller Id")]
+    public string? SellerId { get; set; }
 
     [Display(Name = "Статус")]
     public ListingStatus Status { get; set; } = ListingStatus.Active;

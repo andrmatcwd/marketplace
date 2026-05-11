@@ -57,4 +57,7 @@ public class Listing : AuditedEntity
 
     public ICollection<Image> Images { get; set; } = new List<Image>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+    public ListingRental? Rental { get; set; }
+    public ICollection<ListingVacancy> Vacancies { get; set; } = new List<ListingVacancy>();
 }

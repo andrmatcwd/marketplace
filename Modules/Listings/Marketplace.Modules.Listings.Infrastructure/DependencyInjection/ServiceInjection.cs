@@ -11,13 +11,15 @@ public static class ServiceInjection
     public static IServiceCollection AddListingsServices(this IServiceCollection services)
     {
         services.AddScoped<IListingService, ListingService>();
-        services.AddScoped<IRegionService, RegionService>();
         services.AddScoped<IReviewerService, ReviewerService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<ISubCategoryService, SubCategoryService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<ICityService, CityService>();
+
+        services.AddScoped<IListingVacancyService, ListingVacancyService>();
+        services.AddScoped<IListingRentalService, ListingRentalService>();
 
         services.AddScoped<ISlugService, SlugService>();
         services.AddScoped<ICatalogDataService, CatalogDataService>();

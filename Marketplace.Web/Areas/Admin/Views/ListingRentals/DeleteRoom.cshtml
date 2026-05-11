@@ -1,0 +1,40 @@
+@using Marketplace.Modules.Listings.Application.Rentals.Dtos
+@model RentalRoomAdminDto
+@{
+    ViewData["Title"] = "Видалити кімнату";
+    var listingId = (int)ViewBag.ListingId;
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити кімнату</h2>
+            <p class="admin-page-subtitle">Ви впевнені, що хочете видалити цю кімнату?</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <dl>
+            <dt>Назва</dt>
+            <dd>@Model.Title</dd>
+            <dt>Ціна</dt>
+            <dd>@Model.Price</dd>
+            <dt>Площа</dt>
+            <dd>@Model.Area</dd>
+            <dt>Гості</dt>
+            <dd>@Model.Guests</dd>
+            <dt>Ліжка</dt>
+            <dd>@Model.Beds</dd>
+        </dl>
+
+        <form method="post" asp-action="DeleteRoomConfirmed">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="listingId" value="@listingId" />
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--danger">Видалити</button>
+                <a asp-action="Edit" asp-route-listingId="@listingId" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

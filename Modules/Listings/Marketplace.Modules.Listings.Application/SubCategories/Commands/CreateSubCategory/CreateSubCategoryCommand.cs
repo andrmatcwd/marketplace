@@ -1,4 +1,3 @@
-using Marketplace.Modules.Listings.Application.SubCategories.Dtos;
 using MediatR;
 
 namespace Marketplace.Modules.Listings.Application.SubCategories.Commands.CreateSubCategory;
@@ -6,5 +5,9 @@ namespace Marketplace.Modules.Listings.Application.SubCategories.Commands.Create
 public sealed record CreateSubCategoryCommand(
     int CategoryId,
     string Name,
-    string? Description
+    string? Slug,
+    string? Description,
+    string? Icon,
+    bool IsPublished,
+    int SortOrder
 ) : IRequest<Unit>;

@@ -11,9 +11,11 @@ public sealed class ListingsDbContext : DbContext
 
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<SubCategory> SubCategories => Set<SubCategory>();
-    public DbSet<Region> Regions => Set<Region>();
     public DbSet<City> Cities => Set<City>();
     public DbSet<Listing> Listings => Set<Listing>();
+    public DbSet<ListingRental> ListingRentals => Set<ListingRental>();
+    public DbSet<ListingRentalRoom> ListingRentalRooms => Set<ListingRentalRoom>();
+    public DbSet<ListingVacancy> ListingVacancies => Set<ListingVacancy>();
     public DbSet<Image> Images => Set<Image>();
     public DbSet<Reviewer> Reviewers => Set<Reviewer>();
     public DbSet<Review> Reviews => Set<Review>();

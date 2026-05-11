@@ -1,4 +1,3 @@
-using System;
 using Marketplace.Modules.Listings.Application.Cities.Filters;
 using Marketplace.Modules.Listings.Application.Repositories;
 using Marketplace.Modules.Listings.Domain.Entities;
@@ -22,7 +21,6 @@ public class CityRepository
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
-            .Include(x => x.Region)
             .Include(x => x.Listings)
             .OrderByDescending(x => x.Id)
             .Skip((filter.Page - 1) * filter.PageSize)

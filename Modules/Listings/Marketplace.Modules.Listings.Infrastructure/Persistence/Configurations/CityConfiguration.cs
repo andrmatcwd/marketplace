@@ -18,12 +18,6 @@ public sealed class CityConfiguration : IEntityTypeConfiguration<City>
 
         builder.HasIndex(x => x.Slug).IsUnique();
 
-        builder.HasOne(x => x.Region)
-            .WithMany(x => x.Cities)
-            .HasForeignKey(x => x.RegionId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
-
         builder.HasMany(x => x.Listings)
             .WithOne(x => x.City)
             .HasForeignKey(x => x.CityId)

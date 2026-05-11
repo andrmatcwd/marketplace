@@ -25,12 +25,3 @@
     font-weight: 600;
     margin-bottom: 6px;
 }
-
-.form-check-input:checked {
-    background-color: var(--app-primary);
-    border-color: var(--app-primary);
-}
-
-.text-danger {
-    font-size: 0.9rem;
-}

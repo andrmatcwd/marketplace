@@ -1,9 +1,7 @@
-﻿@model CityIndexVm
-@using Microsoft.AspNetCore.Mvc.Rendering
+@model CityIndexVm
 
 @{
     ViewData["Title"] = "Cities";
-    var regions = ViewBag.Regions as List<SelectListItem> ?? new();
 }
 
 <div class="admin-page">
@@ -25,17 +23,6 @@
                 <input id="search" name="search" value="@Model.Search" class="admin-input" placeholder="Назва або slug" />
             </div>
 
-            <div class="admin-filterbar__group">
-                <label for="regionId" class="admin-label">Регіон</label>
-                <select id="regionId" name="regionId" class="admin-select">
-                    <option value="">Усі регіони</option>
-                    @foreach (var item in regions)
-                    {
-                        <option value="@item.Value" selected="@(Model.RegionId?.ToString() == item.Value)">@item.Text</option>
-                    }
-                </select>
-            </div>
-
             <div class="admin-filterbar__actions">
                 <button type="submit" class="admin-btn admin-btn--primary">Застосувати</button>
                 <a asp-action="Index" class="admin-btn admin-btn--secondary">Скинути</a>
@@ -53,7 +40,6 @@
                             <th>ID</th>
                             <th>Назва</th>
                             <th>Slug</th>
-                            <th>Регіон</th>
                             <th>Listings</th>
                             <th class="admin-table__actions">Дії</th>
                         </tr>
@@ -65,7 +51,6 @@
                                 <td>@item.Id</td>
                                 <td>@item.Name</td>
                                 <td>@item.Slug</td>
-                                <td>@item.RegionName</td>
                                 <td>@item.ListingsCount</td>
                                 <td class="admin-table__actions">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Редагувати</a>

@@ -1,6 +1,10 @@
 using System.Globalization;
 using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
+using Marketplace.Modules.Notifications.Infrastructure.DependencyInjection;
+using Marketplace.Modules.Notifications.Infrastructure.Persistence;
+using Marketplace.Modules.Users.Infrastructure.DependencyInjection;
+using Marketplace.Modules.Users.Infrastructure.Persistence;
 using Marketplace.Web.Data;
 using Marketplace.Web.Localization;
 using Marketplace.Web.Mappings;
@@ -12,7 +16,6 @@ using Marketplace.Web.Services.ContactRequests;
 using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Media;
-using Marketplace.Web.Services.Notifications;
 using Marketplace.Web.Services.Seo;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -25,9 +28,6 @@ builder.Services.Configure<UiOptions>(builder.Configuration.GetSection("Ui"));
 
 builder.Services.Configure<LocationDefaultsOptions>(
     builder.Configuration.GetSection("LocationDefaults"));
-
-builder.Services.Configure<ContactNotificationOptions>(
-    builder.Configuration.GetSection("ContactNotifications"));
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -60,12 +60,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddListingsModule(builder.Configuration);
+builder.Services.AddUsersModule(builder.Configuration);
+builder.Services.AddNotificationsModule(builder.Configuration);
 
 builder.Services
     .AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
     })
+    .AddRoles<Microsoft.AspNetCore.Identity.IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddHttpClient();
@@ -88,11 +91,6 @@ builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>(
 
 builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
 
-builder.Services.AddScoped<IContactNotificationService, ContactNotificationService>();
-
-builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
-builder.Services.AddScoped<IContactNotificationService, ContactNotificationService>();
-
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();
 builder.Services.AddScoped<CanonicalUrlBuilder>();
 builder.Services.AddScoped<MetaBuilder>();
@@ -102,6 +100,7 @@ builder.Services.AddScoped<SeoIndexingPolicy>();
 builder.Services.AddScoped<HreflangBuilder>();
 
 builder.Services.AddScoped<DbSeeder>();
+builder.Services.AddScoped<AdminSeeder>();
 
 var app = builder.Build();
 
@@ -120,8 +119,23 @@ else
     var listingsDb = scope.ServiceProvider.GetRequiredService<ListingsDbContext>();
     await listingsDb.Database.MigrateAsync();
 
+    var usersDb = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+    await usersDb.Database.MigrateAsync();
+
+    var notificationsDb = scope.ServiceProvider.GetRequiredService<NotificationsDbContext>();
+    await notificationsDb.Database.MigrateAsync();
+
     var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
     await seeder.SeedAsync();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var appDb = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await appDb.Database.MigrateAsync();
+
+    var adminSeeder = scope.ServiceProvider.GetRequiredService<AdminSeeder>();
+    await adminSeeder.SeedAsync();
 }
 
 app.UseStatusCodePagesWithReExecute("/error/{0}");
@@ -133,6 +147,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapAreaControllerRoute(
+    name: "admin",
+    areaName: "Admin",
+    pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

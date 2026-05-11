@@ -52,5 +52,16 @@ public sealed class ListingConfiguration : IEntityTypeConfiguration<Listing>
             .WithOne(x => x.Listing)
             .HasForeignKey(x => x.ListingId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Rental)
+            .WithOne(x => x.Listing)
+            .HasForeignKey<ListingRental>(x => x.ListingId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.Vacancies)
+            .WithOne(x => x.Listing)
+            .HasForeignKey(x => x.ListingId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

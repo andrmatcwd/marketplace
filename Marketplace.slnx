@@ -5,5 +5,15 @@
     <Project Path="Modules/Listings/Marketplace.Modules.Listings.Domain/Marketplace.Modules.Listings.Domain.csproj" />
     <Project Path="Modules/Listings/Marketplace.Modules.Listings.Infrastructure/Marketplace.Modules.Listings.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/Modules/Users/">
+    <Project Path="Modules/Users/Marketplace.Modules.Users.Application/Marketplace.Modules.Users.Application.csproj" />
+    <Project Path="Modules/Users/Marketplace.Modules.Users.Domain/Marketplace.Modules.Users.Domain.csproj" />
+    <Project Path="Modules/Users/Marketplace.Modules.Users.Infrastructure/Marketplace.Modules.Users.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Notifications/">
+    <Project Path="Modules/Notifications/Marketplace.Modules.Notifications.Application/Marketplace.Modules.Notifications.Application.csproj" />
+    <Project Path="Modules/Notifications/Marketplace.Modules.Notifications.Domain/Marketplace.Modules.Notifications.Domain.csproj" />
+    <Project Path="Modules/Notifications/Marketplace.Modules.Notifications.Infrastructure/Marketplace.Modules.Notifications.Infrastructure.csproj" />
+  </Folder>
   <Project Path="Marketplace.Web/Marketplace.Web.csproj" />
 </Solution>

@@ -6,6 +6,9 @@ public sealed record EditSubCategoryCommand(
     int Id,
     int CategoryId,
     string Name,
+    string? Slug,
     string? Description,
-    string? Icon
+    string? Icon,
+    bool IsPublished,
+    int SortOrder
 ) : IRequest<Unit>;

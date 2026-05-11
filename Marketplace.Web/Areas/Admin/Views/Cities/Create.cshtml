@@ -1,9 +1,7 @@
-﻿@model CityFormVm
-@using Microsoft.AspNetCore.Mvc.Rendering
+@model CityFormVm
 
 @{
     ViewData["Title"] = "Create City";
-    var regions = ViewBag.Regions as List<SelectListItem> ?? new();
 }
 
 <div class="admin-page">
@@ -21,18 +19,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
             <div class="admin-form-grid">
-                <div class="admin-form-group">
-                    <label asp-for="RegionId" class="admin-label"></label>
-                    <select asp-for="RegionId" class="admin-select">
-                        <option value="">Оберіть регіон</option>
-                        @foreach (var item in regions)
-                        {
-                            <option value="@item.Value">@item.Text</option>
-                        }
-                    </select>
-                    <span asp-validation-for="RegionId" class="text-danger"></span>
-                </div>
-
                 <div class="admin-form-group">
                     <label asp-for="Name" class="admin-label"></label>
                     <input asp-for="Name" class="admin-input" />

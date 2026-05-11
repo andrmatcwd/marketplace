@@ -24,4 +24,6 @@ public sealed record ListingDetailsDto(
     string SubCategoryName,
     string SubCategorySlug,
     IReadOnlyList<ListingImageDto> Images,
-    IReadOnlyList<ListingReviewDto> Reviews);
+    IReadOnlyList<ListingReviewDto> Reviews,
+    ListingRentalDto? Rental,
+    IReadOnlyList<ListingVacancyDto> Vacancies);

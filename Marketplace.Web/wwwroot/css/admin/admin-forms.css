@@ -1,0 +1,145 @@
+/* ── Form grid ── */
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ── Labels ── */
+.admin-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* ── Inputs ── */
+.admin-input,
+.admin-select,
+.admin-textarea {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    font-family: inherit;
+}
+
+.admin-input:focus,
+.admin-select:focus,
+.admin-textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,70,229,.12);
+}
+
+.admin-input::placeholder,
+.admin-textarea::placeholder {
+    color: #cbd5e1;
+}
+
+.admin-select { cursor: pointer; }
+
+.admin-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* ── Validation ── */
+.text-danger {
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 500;
+}
+
+/* ── Form actions ── */
+.admin-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+/* ── Buttons ── */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 18px;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, opacity .15s;
+    white-space: nowrap;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.admin-btn--primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.admin-btn--primary:hover { background: var(--accent-hover); color: #fff; }
+
+.admin-btn--secondary {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.admin-btn--secondary:hover {
+    background: #e8edf5;
+    color: var(--text);
+}
+
+.admin-btn--danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.admin-btn--danger:hover { background: var(--danger-hover); color: #fff; }
+
+.admin-btn--xs {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+/* ── Delete confirm card ── */
+.admin-delete-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 0;
+}
+
+.admin-delete-info__row {
+    display: flex;
+    gap: 10px;
+    font-size: 13.5px;
+}
+
+.admin-delete-info__label {
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 140px;
+    flex-shrink: 0;
+}
+
+.admin-delete-info__value { color: var(--text); }

@@ -1,0 +1,65 @@
+@model RentalRoomFormVm
+@{
+    ViewData["Title"] = "Додати кімнату";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Додати кімнату</h2>
+            <p class="admin-page-subtitle">Новий варіант кімнати для rental.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="RentalId" />
+            <input type="hidden" asp-for="ListingId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="Title" class="admin-label"></label>
+                    <input asp-for="Title" class="admin-input" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Price" class="admin-label"></label>
+                    <input asp-for="Price" class="admin-input" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Area" class="admin-label"></label>
+                    <input asp-for="Area" class="admin-input" />
+                    <span asp-validation-for="Area" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Guests" class="admin-label"></label>
+                    <input asp-for="Guests" class="admin-input" />
+                    <span asp-validation-for="Guests" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group">
+                    <label asp-for="Beds" class="admin-label"></label>
+                    <input asp-for="Beds" class="admin-input" />
+                    <span asp-validation-for="Beds" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Description" class="admin-label"></label>
+                    <textarea asp-for="Description" class="admin-textarea" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="AmenitiesText" class="admin-label"></label>
+                    <textarea asp-for="AmenitiesText" class="admin-textarea" rows="4"></textarea>
+                    <span asp-validation-for="AmenitiesText" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти</button>
+                <a asp-action="Edit" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

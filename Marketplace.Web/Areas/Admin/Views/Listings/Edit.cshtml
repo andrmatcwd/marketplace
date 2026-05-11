@@ -1,4 +1,4 @@
-﻿@model ListingFormVm
+@model ListingFormVm
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Marketplace.Modules.Listings.Domain.Enums.Listing
 @using Marketplace.Modules.Listings.Domain.Enums.Subscription
@@ -15,6 +15,10 @@
         <div>
             <h2 class="admin-page-title">Редагувати listing</h2>
             <p class="admin-page-subtitle">Оновлення даних оголошення.</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <a asp-area="Admin" asp-controller="ListingVacancies" asp-action="Index" asp-route-listingId="@Model.Id" class="admin-btn admin-btn--secondary">Вакансії</a>
+            <a asp-area="Admin" asp-controller="ListingRentals" asp-action="Edit" asp-route-listingId="@Model.Id" class="admin-btn admin-btn--secondary">Оренда / Кімнати</a>
         </div>
     </div>
 
@@ -69,27 +73,15 @@
                 </div>
 
                 <div class="admin-form-group">
-                    <label asp-for="LocationId" class="admin-label"></label>
-                    <select asp-for="LocationId" class="admin-select">
+                    <label asp-for="CityId" class="admin-label"></label>
+                    <select asp-for="CityId" class="admin-select">
                         <option value="">Оберіть місто</option>
                         @foreach (var item in cities)
                         {
-                            <option value="@item.Value" selected="@(Model.LocationId.ToString() == item.Value)">@item.Text</option>
+                            <option value="@item.Value" selected="@(Model.CityId.ToString() == item.Value)">@item.Text</option>
                         }
                     </select>
-                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                </div>
-
-                <div class="admin-form-group">
-                    <label asp-for="Price" class="admin-label"></label>
-                    <input asp-for="Price" class="admin-input" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-
-                <div class="admin-form-group">
-                    <label asp-for="Currency" class="admin-label"></label>
-                    <input asp-for="Currency" class="admin-input" />
-                    <span asp-validation-for="Currency" class="text-danger"></span>
+                    <span asp-validation-for="CityId" class="text-danger"></span>
                 </div>
 
                 <div class="admin-form-group">
@@ -114,10 +106,28 @@
                     <span asp-validation-for="SubscriptionType" class="text-danger"></span>
                 </div>
 
+                <div class="admin-form-group">
+                    <label asp-for="Phone" class="admin-label"></label>
+                    <input asp-for="Phone" class="admin-input" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Email" class="admin-label"></label>
+                    <input asp-for="Email" class="admin-input" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Website" class="admin-label"></label>
+                    <input asp-for="Website" class="admin-input" />
+                    <span asp-validation-for="Website" class="text-danger"></span>
+                </div>
+
                 <div class="admin-form-group" style="grid-column: 1 / -1;">
-                    <label asp-for="AddressLine" class="admin-label"></label>
-                    <input asp-for="AddressLine" class="admin-input" />
-                    <span asp-validation-for="AddressLine" class="text-danger"></span>
+                    <label asp-for="Address" class="admin-label"></label>
+                    <input asp-for="Address" class="admin-input" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
 
                 <div class="admin-form-group">
@@ -133,8 +143,14 @@
                 </div>
 
                 <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="ShortDescription" class="admin-label"></label>
+                    <input asp-for="ShortDescription" class="admin-input" />
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
                     <label asp-for="Description" class="admin-label"></label>
-                    <textarea asp-for="Description" class="admin-textarea"></textarea>
+                    <textarea asp-for="Description" class="admin-textarea" rows="6"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>

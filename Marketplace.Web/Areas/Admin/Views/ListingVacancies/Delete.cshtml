@@ -1,0 +1,36 @@
+@model VacancyFormVm
+@{
+    ViewData["Title"] = "Видалити вакансію";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити вакансію</h2>
+            <p class="admin-page-subtitle">Ви впевнені, що хочете видалити цю вакансію?</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <dl>
+            <dt>Назва</dt>
+            <dd>@Model.Title</dd>
+            <dt>Тип зайнятості</dt>
+            <dd>@Model.EmploymentType</dd>
+            <dt>Зарплата</dt>
+            <dd>@Model.SalaryText</dd>
+            <dt>Місцезнаходження</dt>
+            <dd>@Model.LocationText</dd>
+        </dl>
+
+        <form method="post" asp-action="DeleteConfirmed">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="hidden" name="listingId" value="@Model.ListingId" />
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--danger">Видалити</button>
+                <a asp-action="Index" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -137,16 +137,6 @@
     background: #e9eef6;
 }
 
-.listing-map-placeholder {
-    margin-top: 16px;
-    min-height: 220px;
-    border: 1px dashed #bfd6ff;
-    border-radius: 16px;
-    display: grid;
-    place-items: center;
-    color: var(--app-text-muted);
-    background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
-}
 
 .listing-reviews-list {
     display: grid;
@@ -341,28 +331,6 @@
 
 
 
-
-
-
-.map-actions {
-    display: flex;
-    gap: var(--app-space-2);
-    margin-top: var(--app-space-3);
-}
-
-.map-actions .btn {
-    flex: 1;
-}
-
-@media (min-width: 576px) {
-    .map-actions {
-        justify-content: flex-start;
-    }
-
-    .map-actions .btn {
-        flex: none;
-    }
-}
 
 
 
