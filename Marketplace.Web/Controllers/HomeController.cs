@@ -1,3 +1,4 @@
+using Marketplace.Web.Navigation;
 using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Seo;
@@ -12,11 +13,22 @@ public sealed class HomeController : Controller
 
     private readonly IHomeService _homeService;
     private readonly ISeoService _seoService;
+    private readonly StructuredDataBuilder _structuredDataBuilder;
+    private readonly IAbsoluteUrlBuilder _absoluteUrlBuilder;
+    private readonly ICatalogUrlBuilder _urlBuilder;
 
-    public HomeController(IHomeService homeService, ISeoService seoService)
+    public HomeController(
+        IHomeService homeService,
+        ISeoService seoService,
+        StructuredDataBuilder structuredDataBuilder,
+        IAbsoluteUrlBuilder absoluteUrlBuilder,
+        ICatalogUrlBuilder urlBuilder)
     {
         _homeService = homeService;
         _seoService = seoService;
+        _structuredDataBuilder = structuredDataBuilder;
+        _absoluteUrlBuilder = absoluteUrlBuilder;
+        _urlBuilder = urlBuilder;
     }
 
     [HttpGet("/{culture:regex(^uk|ru$)}")]
@@ -28,6 +40,10 @@ public sealed class HomeController : Controller
 
         var vm = await _homeService.GetHomePageAsync(culture, selectedCitySlug, cancellationToken);
         ViewData["Seo"] = _seoService.BuildHomePageSeo(vm, Request, culture);
+
+        var siteUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildHomeUrl(culture));
+        var searchUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCatalogUrl(culture)) + "?search=";
+        ViewData["StructuredData"] = _structuredDataBuilder.BuildWebSite(siteUrl, searchUrl);
 
         return View(vm);
     }

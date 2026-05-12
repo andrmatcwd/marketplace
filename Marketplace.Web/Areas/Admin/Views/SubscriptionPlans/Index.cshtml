@@ -1,0 +1,60 @@
+@model List<SubscriptionPlanListItemVm>
+@{
+    ViewData["Title"] = "Subscription Plans";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Subscription Plans</h2>
+            <p class="admin-page-subtitle">Manage available subscription plans.</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="admin-btn admin-btn--primary">Create plan</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Tier</th>
+                            <th>Price (UAH)</th>
+                            <th>Duration</th>
+                            <th>Order</th>
+                            <th>Active</th>
+                            <th class="admin-table__actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.SubscriptionType</td>
+                                <td>@item.PriceUah</td>
+                                <td>@item.DurationDays days</td>
+                                <td>@item.DisplayOrder</td>
+                                <td>@(item.IsActive ? "Yes" : "No")</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml" model='"No subscription plans created yet."' />
+        }
+    </div>
+</div>

@@ -46,6 +46,8 @@ public sealed class SeoService : ISeoService
             OgTitle = title,
             OgDescription = description,
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = "index, follow",
             Hreflangs = _hreflangBuilder.Build(request, relative)
         };
@@ -70,6 +72,8 @@ public sealed class SeoService : ISeoService
             OgDescription = description,
             OgType = "website",
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = "index, follow",
             Hreflangs = _hreflangBuilder.Build(request, relative)
         };
@@ -94,6 +98,8 @@ public sealed class SeoService : ISeoService
             OgTitle = title,
             OgDescription = description,
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = robots,
             PrevUrl = _seoPaginationBuilder.BuildPrev(request, model.ListingsSection.Pagination),
             NextUrl = _seoPaginationBuilder.BuildNext(request, model.ListingsSection.Pagination),
@@ -120,6 +126,8 @@ public sealed class SeoService : ISeoService
             OgTitle = title,
             OgDescription = description,
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = robots,
             PrevUrl = _seoPaginationBuilder.BuildPrev(request, model.ListingsSection.Pagination),
             NextUrl = _seoPaginationBuilder.BuildNext(request, model.ListingsSection.Pagination),
@@ -146,6 +154,8 @@ public sealed class SeoService : ISeoService
             OgTitle = title,
             OgDescription = description,
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = robots,
             PrevUrl = _seoPaginationBuilder.BuildPrev(request, model.ListingsSection.Pagination),
             NextUrl = _seoPaginationBuilder.BuildNext(request, model.ListingsSection.Pagination),
@@ -172,6 +182,8 @@ public sealed class SeoService : ISeoService
             OgTitle = title,
             OgDescription = description,
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = robots,
             PrevUrl = _seoPaginationBuilder.BuildPrev(request, model.ListingsSection.Pagination),
             NextUrl = _seoPaginationBuilder.BuildNext(request, model.ListingsSection.Pagination),
@@ -204,8 +216,13 @@ public sealed class SeoService : ISeoService
             OgImage = image is null ? null : _absoluteUrlBuilder.Build(request, image),
             OgType = "article",
             OgUrl = canonical,
+            OgLocale = ToOgLocale(culture),
+            OgSiteName = "Marketplace",
             Robots = "index, follow",
             Hreflangs = _hreflangBuilder.Build(request, relative)
         };
     }
+
+    private static string ToOgLocale(string culture)
+        => culture == "uk" ? "uk_UA" : "ru_UA";
 }

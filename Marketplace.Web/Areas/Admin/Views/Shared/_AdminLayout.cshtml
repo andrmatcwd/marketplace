@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="~/css/admin/admin-forms.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin/admin-tables.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin/admin-responsive.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/admin/select2-admin-theme.css" asp-append-version="true" />
 </head>
 <body class="admin-body">
     <div class="admin-shell">
@@ -45,7 +47,10 @@
         </div>
     </div>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/js/admin/select2-admin-init.js" asp-append-version="true"></script>
     <script src="~/js/admin/admin-ui.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

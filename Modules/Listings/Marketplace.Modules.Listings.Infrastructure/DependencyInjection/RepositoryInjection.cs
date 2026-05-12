@@ -17,6 +17,8 @@ public static class RepositoryInjection
         services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<IListingVacancyRepository, ListingVacancyRepository>();
         services.AddScoped<IListingRentalRepository, ListingRentalRepository>();
+        services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+        services.AddScoped<IListingSubscriptionRepository, ListingSubscriptionRepository>();
 
         return services;
     }

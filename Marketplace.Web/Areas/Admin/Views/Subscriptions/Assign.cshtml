@@ -1,0 +1,58 @@
+@model AssignSubscriptionVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Assign Subscription";
+    var plans = ViewBag.Plans as List<SelectListItem> ?? new();
+    var listings = ViewBag.Listings as List<SelectListItem> ?? new();
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Assign Subscription</h2>
+            <p class="admin-page-subtitle">Assign a subscription plan to a listing.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="ListingId" class="admin-label"></label>
+                    <select asp-for="ListingId" class="admin-select" asp-items="listings">
+                        <option value="">-- Select listing --</option>
+                    </select>
+                    <span asp-validation-for="ListingId" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="PlanId" class="admin-label"></label>
+                    <select asp-for="PlanId" class="admin-select" asp-items="plans">
+                        <option value="">-- Select plan --</option>
+                    </select>
+                    <span asp-validation-for="PlanId" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="StartsAt" class="admin-label"></label>
+                    <input asp-for="StartsAt" type="date" class="admin-input" />
+                    <span asp-validation-for="StartsAt" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Notes" class="admin-label"></label>
+                    <textarea asp-for="Notes" class="admin-textarea" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Assign</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

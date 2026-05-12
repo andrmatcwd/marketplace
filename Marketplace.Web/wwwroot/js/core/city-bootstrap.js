@@ -14,6 +14,7 @@
         function applyCity(city, cityName) {
             if (!city) return;
             citySelect.value = city;
+            if (typeof $ !== 'undefined' && $.fn.select2) $(citySelect).trigger('change');
             window.locationContext.setPreferredCity(city);
             if (message) {
                 message.hidden = false;
@@ -74,6 +75,7 @@
                         .then(function (data) {
                             if (data && data.city) {
                                 citySelect.value = data.city;
+                                if (typeof $ !== 'undefined' && $.fn.select2) $(citySelect).trigger('change');
                                 window.locationContext.setPreferredCity(data.city);
                                 if (message) {
                                     message.hidden = false;

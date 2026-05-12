@@ -110,6 +110,29 @@ public sealed class StructuredDataBuilder
         return JsonSerializer.Serialize(payload, JsonOptions);
     }
 
+    public string BuildWebSite(string siteUrl, string searchTargetUrl)
+    {
+        var payload = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "WebSite",
+            ["name"] = "Marketplace",
+            ["url"] = siteUrl,
+            ["potentialAction"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "SearchAction",
+                ["target"] = new Dictionary<string, object?>
+                {
+                    ["@type"] = "EntryPoint",
+                    ["urlTemplate"] = searchTargetUrl + "{search_term_string}"
+                },
+                ["query-input"] = "required name=search_term_string"
+            }
+        };
+
+        return JsonSerializer.Serialize(payload, JsonOptions);
+    }
+
     public string BuildBreadcrumbs(IEnumerable<(string Name, string Url)> items)
     {
         var list = items

@@ -182,6 +182,9 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("SubscriptionExpiresAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SubscriptionType")
                         .HasColumnType("INTEGER");
 
@@ -297,6 +300,53 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.HasIndex("RentalId");
 
                     b.ToTable("ListingRentalRooms", (string)null);
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AssignedByUserId")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ListingId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RequestedByUserId")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartsAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("PlanId");
+
+                    b.HasIndex("ListingId", "Status");
+
+                    b.ToTable("ListingSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingVacancy", b =>
@@ -447,6 +497,45 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                     b.ToTable("SubCategories", (string)null);
                 });
 
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.SubscriptionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DurationDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PriceUah")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SubscriptionType")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubscriptionPlans", (string)null);
+                });
+
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.Image", b =>
                 {
                     b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Listing", "Listing")
@@ -504,6 +593,25 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Rental");
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingSubscription", b =>
+                {
+                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.Listing", "Listing")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Marketplace.Modules.Listings.Domain.Entities.SubscriptionPlan", "Plan")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Listing");
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.ListingVacancy", b =>
@@ -566,6 +674,8 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
 
                     b.Navigation("Reviews");
 
+                    b.Navigation("Subscriptions");
+
                     b.Navigation("Vacancies");
                 });
 
@@ -582,6 +692,11 @@ namespace Marketplace.Modules.Listings.Infrastructure.Migrations
             modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.SubCategory", b =>
                 {
                     b.Navigation("Listings");
+                });
+
+            modelBuilder.Entity("Marketplace.Modules.Listings.Domain.Entities.SubscriptionPlan", b =>
+                {
+                    b.Navigation("Subscriptions");
                 });
 #pragma warning restore 612, 618
         }

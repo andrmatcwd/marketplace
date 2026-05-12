@@ -10,8 +10,10 @@ public sealed class RobotsController : Controller
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var content = $"""
         User-agent: *
-        Disallow: /error/
+        Allow: /
         Disallow: /admin/
+        Disallow: /error/
+        Disallow: /api/
         Sitemap: {baseUrl}/sitemap.xml
         """;
 

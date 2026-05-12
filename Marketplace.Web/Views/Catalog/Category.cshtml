@@ -2,6 +2,13 @@
 
 @{
     ViewData["Title"] = Model.Hero.Title;
+    var structuredData = ViewData["StructuredData"] as string;
+    var breadcrumbsStructuredData = ViewData["BreadcrumbsStructuredData"] as string;
+}
+
+@section StructuredData {
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="structuredData" />
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="breadcrumbsStructuredData" />
 }
 
 @section Styles {

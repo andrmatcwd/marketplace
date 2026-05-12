@@ -9,4 +9,4 @@ public sealed record SitemapDataDto(
 public sealed record SitemapCityDto(string Slug);
 public sealed record SitemapCategoryDto(string Slug);
 public sealed record SitemapSubCategoryDto(string Slug, string CategorySlug);
-public sealed record SitemapListingDto(int Id, string Slug, string CitySlug, string CategorySlug, string SubCategorySlug);
+public sealed record SitemapListingDto(int Id, string Slug, string CitySlug, string CategorySlug, string SubCategorySlug, DateTime UpdatedAtUtc);

@@ -1,4 +1,6 @@
 using Marketplace.Web.Models.Catalog;
+using Marketplace.Web.Navigation;
+using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Catalog;
 using Marketplace.Web.Services.Seo;
 using Marketplace.Web.Utils;
@@ -12,13 +14,22 @@ public sealed class CatalogController : Controller
 
     private readonly ICatalogService _catalogService;
     private readonly ISeoService _seoService;
+    private readonly StructuredDataBuilder _structuredDataBuilder;
+    private readonly IAbsoluteUrlBuilder _absoluteUrlBuilder;
+    private readonly ICatalogUrlBuilder _urlBuilder;
 
     public CatalogController(
         ICatalogService catalogService,
-        ISeoService seoService)
+        ISeoService seoService,
+        StructuredDataBuilder structuredDataBuilder,
+        IAbsoluteUrlBuilder absoluteUrlBuilder,
+        ICatalogUrlBuilder urlBuilder)
     {
         _catalogService = catalogService;
         _seoService = seoService;
+        _structuredDataBuilder = structuredDataBuilder;
+        _absoluteUrlBuilder = absoluteUrlBuilder;
+        _urlBuilder = urlBuilder;
     }
 
     [HttpGet("/{culture:regex(^uk|ru$)}/catalog")]
@@ -70,6 +81,24 @@ public sealed class CatalogController : Controller
 
         ViewData["Seo"] = _seoService.BuildCityPageSeo(vm, Request, culture);
 
+        var homeUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildHomeUrl(culture));
+        var cityUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCityUrl(culture, citySlug));
+
+        ViewData["BreadcrumbsStructuredData"] = _structuredDataBuilder.BuildBreadcrumbs(
+        [
+            ("Marketplace", homeUrl),
+            (vm.CityName, cityUrl)
+        ]);
+
+        var listingItems = vm.ListingsSection.Listings
+            .Select(x => (x.Title, _absoluteUrlBuilder.Build(Request, x.Url)))
+            .ToList();
+
+        if (listingItems.Count > 0)
+        {
+            ViewData["StructuredData"] = _structuredDataBuilder.BuildItemList(listingItems);
+        }
+
         return View(vm);
     }
 
@@ -99,6 +128,26 @@ public sealed class CatalogController : Controller
         }
 
         ViewData["Seo"] = _seoService.BuildCategoryPageSeo(vm, Request, culture);
+
+        var homeUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildHomeUrl(culture));
+        var cityUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCityUrl(culture, citySlug));
+        var categoryUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug));
+
+        ViewData["BreadcrumbsStructuredData"] = _structuredDataBuilder.BuildBreadcrumbs(
+        [
+            ("Marketplace", homeUrl),
+            (vm.CityName, cityUrl),
+            (vm.CategoryName, categoryUrl)
+        ]);
+
+        var listingItems = vm.ListingsSection.Listings
+            .Select(x => (x.Title, _absoluteUrlBuilder.Build(Request, x.Url)))
+            .ToList();
+
+        if (listingItems.Count > 0)
+        {
+            ViewData["StructuredData"] = _structuredDataBuilder.BuildItemList(listingItems);
+        }
 
         return View(vm);
     }
@@ -136,6 +185,28 @@ public sealed class CatalogController : Controller
         }
 
         ViewData["Seo"] = _seoService.BuildSubCategoryPageSeo(vm, Request, culture);
+
+        var homeUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildHomeUrl(culture));
+        var cityUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCityUrl(culture, citySlug));
+        var categoryUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug));
+        var subCategoryUrl = _absoluteUrlBuilder.Build(Request, _urlBuilder.BuildSubCategoryUrl(culture, citySlug, categorySlug, subCategorySlug));
+
+        ViewData["BreadcrumbsStructuredData"] = _structuredDataBuilder.BuildBreadcrumbs(
+        [
+            ("Marketplace", homeUrl),
+            (vm.CityName ?? citySlug, cityUrl),
+            (vm.CategoryName ?? categorySlug, categoryUrl),
+            (vm.SubCategoryName, subCategoryUrl)
+        ]);
+
+        var listingItems = vm.ListingsSection.Listings
+            .Select(x => (x.Title, _absoluteUrlBuilder.Build(Request, x.Url)))
+            .ToList();
+
+        if (listingItems.Count > 0)
+        {
+            ViewData["StructuredData"] = _structuredDataBuilder.BuildItemList(listingItems);
+        }
 
         return View(vm);
     }

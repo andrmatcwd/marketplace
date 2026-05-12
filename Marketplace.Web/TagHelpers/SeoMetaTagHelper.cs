@@ -41,6 +41,16 @@ public sealed class SeoMetaTagHelper : TagHelper
             html.Add($"""<link rel="alternate" hreflang="{Encode(link.Lang)}" href="{Encode(link.Url)}" />""");
         }
 
+        if (!string.IsNullOrWhiteSpace(Model.OgLocale))
+        {
+            html.Add($"""<meta property="og:locale" content="{Encode(Model.OgLocale)}" />""");
+        }
+
+        if (!string.IsNullOrWhiteSpace(Model.OgSiteName))
+        {
+            html.Add($"""<meta property="og:site_name" content="{Encode(Model.OgSiteName)}" />""");
+        }
+
         if (!string.IsNullOrWhiteSpace(Model.OgTitle))
         {
             html.Add($"""<meta property="og:title" content="{Encode(Model.OgTitle)}" />""");

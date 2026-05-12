@@ -10,6 +10,7 @@ using Marketplace.Web.Localization;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Navigation;
 using Marketplace.Web.Options;
+using Marketplace.Web.BackgroundJobs;
 using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Catalog;
 using Marketplace.Web.Services.ContactRequests;
@@ -101,6 +102,8 @@ builder.Services.AddScoped<HreflangBuilder>();
 
 builder.Services.AddScoped<DbSeeder>();
 builder.Services.AddScoped<AdminSeeder>();
+
+builder.Services.AddHostedService<SubscriptionExpiryJob>();
 
 var app = builder.Build();
 

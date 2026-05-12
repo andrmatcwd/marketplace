@@ -11,11 +11,6 @@ public sealed class SeoIndexingPolicy
             return true;
         }
 
-        if (filter.Page > 1)
-        {
-            return true;
-        }
-
         if (!string.IsNullOrWhiteSpace(filter.Sort) &&
             !string.Equals(filter.Sort, "rating", StringComparison.OrdinalIgnoreCase))
         {

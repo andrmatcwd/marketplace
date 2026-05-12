@@ -1,15 +1,27 @@
-﻿@model Marketplace.Web.Models.Listings.ListingGalleryVm
+@model Marketplace.Web.Models.Listings.ListingGalleryVm
+
+@{
+    var primaryImage = Model.Images.FirstOrDefault(x => x.IsPrimary) ?? Model.Images.FirstOrDefault();
+    var primaryUrl = primaryImage?.Url ?? "/img/placeholders/listing-default.jpg";
+    var primaryAlt = !string.IsNullOrWhiteSpace(primaryImage?.Alt) ? primaryImage.Alt : "Service image";
+}
 
 <section class="app-card listing-gallery-card">
     <div class="listing-gallery-body">
-        <img src="@Model.GetPrimaryImageOrDefault()" alt="Gallery image" class="listing-gallery-main-image" />
+        <img src="@primaryUrl"
+             alt="@primaryAlt"
+             class="listing-gallery-main-image"
+             fetchpriority="high" />
 
         @if (Model.HasImages && Model.Images.Count > 1)
         {
             <div class="listing-gallery-thumbs">
                 @foreach (var image in Model.Images)
                 {
-                    <img src="@image.Url" alt="@image.Alt" class="listing-gallery-thumb" />
+                    <img src="@image.Url"
+                         alt="@image.Alt"
+                         class="listing-gallery-thumb"
+                         loading="lazy" />
                 }
             </div>
         }

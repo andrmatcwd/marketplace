@@ -43,6 +43,7 @@ public class Listing : AuditedEntity
     public string? SellerId { get; set; }
 
     public SubscriptionType SubscriptionType { get; set; } = SubscriptionType.Free;
+    public DateTime? SubscriptionExpiresAt { get; set; }
 
     public ListingStatus Status { get; set; } = ListingStatus.Active;
 
@@ -57,6 +58,7 @@ public class Listing : AuditedEntity
 
     public ICollection<Image> Images { get; set; } = new List<Image>();
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<ListingSubscription> Subscriptions { get; set; } = new List<ListingSubscription>();
 
     public ListingRental? Rental { get; set; }
     public ICollection<ListingVacancy> Vacancies { get; set; } = new List<ListingVacancy>();

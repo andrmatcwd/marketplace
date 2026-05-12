@@ -2,6 +2,11 @@
 
 @{
     ViewData["Title"] = Model.Hero.Title;
+    var structuredData = ViewData["StructuredData"] as string;
+}
+
+@section StructuredData {
+    <partial name="~/Views/Shared/Layout/_StructuredData.cshtml" model="structuredData" />
 }
 
 @section Styles {

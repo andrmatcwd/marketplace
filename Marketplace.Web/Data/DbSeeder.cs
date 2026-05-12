@@ -33,21 +33,47 @@ public sealed class DbSeeder
 
     public async Task SeedAsync()
     {
-        if (await _db.Cities.AnyAsync())
+        if (!await _db.Cities.AnyAsync())
+        {
+            var random = new Random(42);
+
+            var cities = SeedCities();
+            var (categories, subCategories) = SeedCategoriesAndSubCategories();
+
+            _db.Cities.AddRange(cities);
+            _db.Categories.AddRange(categories);
+            _db.SubCategories.AddRange(subCategories);
+
+            var listings = BuildListings(cities, subCategories, random);
+            _db.Listings.AddRange(listings);
+
+            await _db.SaveChangesAsync();
+        }
+
+        await SeedSubscriptionsAsync();
+    }
+
+    private async Task SeedSubscriptionsAsync()
+    {
+        if (await _db.SubscriptionPlans.AnyAsync())
             return;
 
-        var random = new Random(42);
+        var random = new Random(7);
 
-        var cities = SeedCities();
-        var (categories, subCategories) = SeedCategoriesAndSubCategories();
+        var plans = SubscriptionSeedData.BuildPlans();
+        _db.SubscriptionPlans.AddRange(plans);
+        await _db.SaveChangesAsync();
 
-        _db.Cities.AddRange(cities);
-        _db.Categories.AddRange(categories);
-        _db.SubCategories.AddRange(subCategories);
+        var listings = await _db.Listings
+            .OrderBy(x => x.Id)
+            .Take(60)
+            .ToListAsync();
 
-        var listings = BuildListings(cities, subCategories, random);
-        _db.Listings.AddRange(listings);
+        if (listings.Count < 10)
+            return;
 
+        var subscriptions = SubscriptionSeedData.BuildSubscriptions(listings, plans, random);
+        _db.ListingSubscriptions.AddRange(subscriptions);
         await _db.SaveChangesAsync();
     }
 

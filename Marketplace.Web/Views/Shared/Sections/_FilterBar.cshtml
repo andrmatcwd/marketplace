@@ -16,7 +16,7 @@
         {
             <div class="filter-bar-group">
                 <label class="filter-label" for="city">City</label>
-                <select id="city" name="city" class="form-select app-select">
+                <select id="city" name="city" class="form-select app-select" data-min-search="0">
                     <option value="">All cities</option>
                     @foreach (var option in Model.Cities)
                     {
@@ -37,7 +37,7 @@
         {
             <div class="filter-bar-group">
                 <label class="filter-label" for="category">Category</label>
-                <select id="category" name="category" class="form-select app-select">
+                <select id="category" name="category" class="form-select app-select" data-min-search="0">
                     <option value="">All categories</option>
                     @foreach (var option in Model.Categories)
                     {

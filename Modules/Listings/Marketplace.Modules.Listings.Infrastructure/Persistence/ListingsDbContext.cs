@@ -19,6 +19,8 @@ public sealed class ListingsDbContext : DbContext
     public DbSet<Image> Images => Set<Image>();
     public DbSet<Reviewer> Reviewers => Set<Reviewer>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<SubscriptionPlan> SubscriptionPlans => Set<SubscriptionPlan>();
+    public DbSet<ListingSubscription> ListingSubscriptions => Set<ListingSubscription>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

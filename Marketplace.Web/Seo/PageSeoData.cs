@@ -14,6 +14,9 @@ public sealed class PageSeoData
     public string? OgType { get; set; } = "website";
     public string? OgUrl { get; set; }
 
+    public string? OgLocale { get; set; }
+    public string? OgSiteName { get; set; }
+
     public string? TwitterCard { get; set; } = "summary_large_image";
     public string? TwitterTitle { get; set; }
     public string? TwitterDescription { get; set; }

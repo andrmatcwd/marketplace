@@ -1,0 +1,113 @@
+@model SubscriptionIndexVm
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Subscriptions";
+    var plans = ViewBag.Plans as List<SelectListItem> ?? new();
+    var statuses = ViewBag.Statuses as List<SelectListItem> ?? new();
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Subscriptions</h2>
+            <p class="admin-page-subtitle">All listing subscriptions. Total: @Model.TotalCount</p>
+        </div>
+        <div>
+            <a asp-action="Assign" class="admin-btn admin-btn--primary">Assign subscription</a>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <form method="get" class="admin-filterbar">
+            <div class="admin-filterbar__group">
+                <label for="listingId" class="admin-label">Listing ID</label>
+                <input id="listingId" name="listingId" value="@Model.ListingId" type="number" class="admin-input" placeholder="Listing ID" />
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="planId" class="admin-label">Plan</label>
+                <select id="planId" name="planId" class="admin-select">
+                    <option value="">All plans</option>
+                    @foreach (var item in plans)
+                    {
+                        <option value="@item.Value" selected="@(Model.PlanId?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="status" class="admin-label">Status</label>
+                <select id="status" name="status" class="admin-select">
+                    <option value="">All statuses</option>
+                    @foreach (var item in statuses)
+                    {
+                        <option value="@item.Value" selected="@(Model.Status?.ToString() == item.Value)">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Apply</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Items.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Listing</th>
+                            <th>Plan</th>
+                            <th>Tier</th>
+                            <th>Starts</th>
+                            <th>Expires</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th class="admin-table__actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Subscriptions" asp-action="Index" asp-route-listingId="@item.ListingId">
+                                        #@item.ListingId @item.ListingTitle
+                                    </a>
+                                </td>
+                                <td>@item.PlanName</td>
+                                <td>@item.SubscriptionType</td>
+                                <td>@item.StartsAt.ToString("yyyy-MM-dd")</td>
+                                <td class="@(item.ExpiresAt < DateTime.UtcNow && item.Status == SubscriptionStatus.Active ? "text-danger" : "")">
+                                    @item.ExpiresAt.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>@item.Status</td>
+                                <td>@item.Notes</td>
+                                <td class="admin-table__actions">
+                                    @if (item.Status == SubscriptionStatus.Active)
+                                    {
+                                        <form method="post" asp-action="Cancel" asp-route-id="@item.Id" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="admin-btn admin-btn--xs admin-btn--danger"
+                                                    onclick="return confirm('Cancel this subscription?')">Cancel</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml" model='"No subscriptions found."' />
+        }
+    </div>
+</div>

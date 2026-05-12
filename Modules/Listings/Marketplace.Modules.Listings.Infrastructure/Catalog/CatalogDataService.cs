@@ -248,7 +248,7 @@ public sealed class CatalogDataService : ICatalogDataService
 
         var listings = await _db.Listings.AsNoTracking()
             .Where(x => x.Status == ListingStatus.Active)
-            .Select(x => new SitemapListingDto(x.Id, x.Slug, x.City.Slug, x.Category.Slug, x.SubCategory.Slug))
+            .Select(x => new SitemapListingDto(x.Id, x.Slug, x.City.Slug, x.Category.Slug, x.SubCategory.Slug, x.UpdatedAtUtc))
             .ToListAsync(cancellationToken);
 
         return new SitemapDataDto(cities, categories, subCategories, listings);
