@@ -33,15 +33,18 @@ public sealed class SeoService : ISeoService
         var relative = _canonicalUrlBuilder.BuildCatalog(culture);
         var canonical = _absoluteUrlBuilder.Build(request, relative);
 
+        var title = "Каталог послуг по містах — Marketplace";
+        var description = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.";
+
         return new PageSeoData
         {
-            Title = "Каталог послуг по містах — Marketplace",
-            Description = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
+            Title = title,
+            Description = description,
             CanonicalUrl = canonical,
             H1 = model.Hero.Title,
             SeoText = model.SeoIntro.Text,
-            OgTitle = "Каталог послуг по містах — Marketplace",
-            OgDescription = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
+            OgTitle = title,
+            OgDescription = description,
             OgUrl = canonical,
             Robots = "index, follow",
             Hreflangs = _hreflangBuilder.Build(request, relative)
@@ -53,15 +56,18 @@ public sealed class SeoService : ISeoService
         var relative = _canonicalUrlBuilder.BuildHome(culture);
         var canonical = _absoluteUrlBuilder.Build(request, relative);
 
+        var title = "Marketplace — каталог послуг у вашому місті";
+        var description = "Знайдіть компанії, спеціалістів і послуги за містами, категоріями та підкатегоріями.";
+
         return new PageSeoData
         {
-            Title = "Marketplace — каталог послуг у вашому місті",
-            Description = "Знайдіть компанії, спеціалістів і послуги за містами, категоріями та підкатегоріями.",
+            Title = title,
+            Description = description,
             CanonicalUrl = canonical,
             H1 = model.Hero.Title,
             SeoText = model.SeoIntro.Text,
-            OgTitle = "Marketplace — каталог послуг у вашому місті",
-            OgDescription = "Знайдіть компанії, спеціалістів і послуги за містами, категоріями та підкатегоріями.",
+            OgTitle = title,
+            OgDescription = description,
             OgType = "website",
             OgUrl = canonical,
             Robots = "index, follow",
@@ -75,15 +81,18 @@ public sealed class SeoService : ISeoService
         var canonical = _absoluteUrlBuilder.Build(request, relative);
         var robots = _seoIndexingPolicy.GetRobots(model.ListingsSection.Filter);
 
+        var title = "Каталог послуг — Marketplace";
+        var description = "Каталог послуг за містами та категоріями. Знаходьте потрібні сервіси швидко та зручно.";
+
         return new PageSeoData
         {
-            Title = "Каталог послуг — Marketplace",
-            Description = "Каталог послуг за містами та категоріями. Знаходьте потрібні сервіси швидко та зручно.",
+            Title = title,
+            Description = description,
             CanonicalUrl = canonical,
             H1 = model.Hero.Title,
             SeoText = model.SeoIntro.Text,
-            OgTitle = "Каталог послуг — Marketplace",
-            OgDescription = "Каталог послуг за містами та категоріями. Знаходьте потрібні сервіси швидко та зручно.",
+            OgTitle = title,
+            OgDescription = description,
             OgUrl = canonical,
             Robots = robots,
             PrevUrl = _seoPaginationBuilder.BuildPrev(request, model.ListingsSection.Pagination),

@@ -1,78 +1,82 @@
 (function () {
+    'use strict';
+
     function initListingContactModal() {
-        const form = document.getElementById("contactListingForm");
-        const feedback = document.getElementById("contactListingFeedback");
-        const submitBtn = document.getElementById("contactListingSubmitBtn");
+        var form = document.getElementById('contactListingForm');
+        var feedback = document.getElementById('contactListingFeedback');
+        var submitBtn = document.getElementById('contactListingSubmitBtn');
+        var spinner = document.getElementById('contactListingSpinner');
+        var submitText = document.getElementById('contactListingSubmitText');
 
-        if (!form || !feedback || !submitBtn) {
-            return;
-        }
+        if (!form || !feedback || !submitBtn) return;
 
-        form.addEventListener("submit", async function (e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const culture = form.dataset.culture || "uk";
-            const listingId = form.dataset.listingId;
+            var culture = form.dataset.culture || 'uk';
+            var listingId = form.dataset.listingId;
 
-            const payload = {
+            var payload = {
                 listingId: listingId,
-                name: document.getElementById("contactName")?.value?.trim() || "",
-                phone: document.getElementById("contactPhone")?.value?.trim() || "",
-                message: document.getElementById("contactMessage")?.value?.trim() || ""
+                name: (document.getElementById('contactName')?.value || '').trim(),
+                phone: (document.getElementById('contactPhone')?.value || '').trim(),
+                message: (document.getElementById('contactMessage')?.value || '').trim()
             };
 
             feedback.hidden = true;
-            feedback.className = "contact-form-feedback";
-            feedback.textContent = "";
+            feedback.className = 'contact-form-feedback';
+            feedback.textContent = '';
 
             submitBtn.disabled = true;
-            submitBtn.textContent = culture === "uk" ? "Надсилання..." : "Sending...";
+            submitBtn.setAttribute('aria-busy', 'true');
+            if (spinner) spinner.classList.remove('d-none');
+            if (submitText) submitText.textContent = culture === 'uk' ? 'Надсилання...' : 'Sending...';
 
             try {
-                const response = await fetch(`/${culture}/api/contact/send`, {
-                    method: "POST",
+                var response = await fetch('/' + culture + '/api/contact/send', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
+                var result = await response.json();
 
                 feedback.hidden = false;
 
                 if (response.ok && result.success) {
-                    feedback.classList.add("is-success");
-                    feedback.textContent = result.message || (culture === "uk"
-                        ? "Повідомлення успішно надіслано."
-                        : "Message sent successfully.");
+                    feedback.classList.add('is-success');
+                    feedback.textContent = result.message || (culture === 'uk'
+                        ? 'Повідомлення успішно надіслано.'
+                        : 'Message sent successfully.');
 
                     form.reset();
 
                     if (window.gtag) {
-                        gtag("event", "contact_form_submit", {
-                            listing_id: listingId
-                        });
+                        gtag('event', 'contact_form_submit', { listing_id: listingId });
                     }
                 } else {
-                    feedback.classList.add("is-error");
-                    feedback.textContent = result.message || (culture === "uk"
-                        ? "Не вдалося надіслати повідомлення."
-                        : "Could not send message.");
+                    feedback.classList.add('is-error');
+                    feedback.textContent = result.message || (culture === 'uk'
+                        ? 'Не вдалося надіслати повідомлення.'
+                        : 'Could not send message.');
                 }
             } catch {
                 feedback.hidden = false;
-                feedback.classList.add("is-error");
-                feedback.textContent = culture === "uk"
-                    ? "Сталася помилка під час надсилання."
-                    : "An error occurred while sending.";
+                feedback.classList.add('is-error');
+                feedback.textContent = culture === 'uk'
+                    ? 'Сталася помилка під час надсилання.'
+                    : 'An error occurred while sending.';
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = culture === "uk" ? "Надіслати" : "Send";
+                submitBtn.removeAttribute('aria-busy');
+                if (spinner) spinner.classList.add('d-none');
+                if (submitText) submitText.textContent = culture === 'uk' ? 'Надіслати' : 'Send';
             }
         });
     }
 
-    document.addEventListener("DOMContentLoaded", initListingContactModal);
+    document.addEventListener('DOMContentLoaded', initListingContactModal);
 })();

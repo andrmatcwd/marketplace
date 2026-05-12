@@ -37,8 +37,11 @@ public sealed class CatalogService : ICatalogService
         string? selectedCitySlug,
         CancellationToken cancellationToken)
     {
-        var cities = await _mediator.Send(new GetCatalogCitiesQuery(), cancellationToken);
-        var featuredListings = await _mediator.Send(new GetFeaturedListingsQuery(8), cancellationToken);
+        var citiesTask = _mediator.Send(new GetCatalogCitiesQuery(), cancellationToken);
+        var featuredListingsTask = _mediator.Send(new GetFeaturedListingsQuery(8), cancellationToken);
+        await Task.WhenAll(citiesTask, featuredListingsTask);
+        var cities = citiesTask.Result;
+        var featuredListings = featuredListingsTask.Result;
 
         var selectedCity = !string.IsNullOrWhiteSpace(selectedCitySlug)
             ? cities.FirstOrDefault(x => string.Equals(x.Slug, selectedCitySlug, StringComparison.OrdinalIgnoreCase))
@@ -102,11 +105,15 @@ public sealed class CatalogService : ICatalogService
             PageSize = filter.PageSize
         };
 
-        var listings = await _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
-        var totalCount = await _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
-
-        var cities = await _mediator.Send(new GetCatalogCitiesQuery(Take: 12), cancellationToken);
-        var categories = await _mediator.Send(new GetCatalogCategoriesQuery(Take: 12), cancellationToken);
+        var listingsTask = _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
+        var totalCountTask = _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
+        var citiesTask = _mediator.Send(new GetCatalogCitiesQuery(Take: 12), cancellationToken);
+        var categoriesTask = _mediator.Send(new GetCatalogCategoriesQuery(Take: 12), cancellationToken);
+        await Task.WhenAll(listingsTask, totalCountTask, citiesTask, categoriesTask);
+        var listings = listingsTask.Result;
+        var totalCount = totalCountTask.Result;
+        var cities = citiesTask.Result;
+        var categories = categoriesTask.Result;
 
         return new CatalogIndexPageVm
         {
@@ -165,10 +172,15 @@ public sealed class CatalogService : ICatalogService
             PageSize = filter.PageSize
         };
 
-        var listings = await _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
-        var totalCount = await _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
-        var categories = await _mediator.Send(new GetCityCatalogCategoriesQuery(city.Id), cancellationToken);
-        var popularSubCategories = await _mediator.Send(new GetPopularCitySubCategoriesQuery(city.Id), cancellationToken);
+        var listingsTask = _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
+        var totalCountTask = _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
+        var categoriesTask = _mediator.Send(new GetCityCatalogCategoriesQuery(city.Id), cancellationToken);
+        var popularSubCategoriesTask = _mediator.Send(new GetPopularCitySubCategoriesQuery(city.Id), cancellationToken);
+        await Task.WhenAll(listingsTask, totalCountTask, categoriesTask, popularSubCategoriesTask);
+        var listings = listingsTask.Result;
+        var totalCount = totalCountTask.Result;
+        var categories = categoriesTask.Result;
+        var popularSubCategories = popularSubCategoriesTask.Result;
 
         return new CityPageVm
         {
@@ -184,7 +196,7 @@ public sealed class CatalogService : ICatalogService
             SeoIntro = new()
             {
                 Title = $"Service catalog in {city.Name}",
-                Text = $"<p>Find актуальні services, companies and specialists in {city.Name}.</p>"
+                Text = $"<p>Find current services, companies and specialists in {city.Name}.</p>"
             },
             CategoriesSection = new()
             {
@@ -224,9 +236,13 @@ public sealed class CatalogService : ICatalogService
         filter = await _filterEnricher.EnrichAsync(culture, filter, cancellationToken);
         filter.ResetUrl = _urlBuilder.BuildCategoryUrl(culture, citySlug, categorySlug);
 
-        var subCategories = await _mediator.Send(new GetCategorySubCategoriesInCityQuery(city.Id, category.Id), cancellationToken);
-        var topListings = await _mediator.Send(new GetTopListingsByCategoryQuery(city.Id, category.Id, filter.Search, 6), cancellationToken);
-        var totalCount = await _mediator.Send(new CountListingsByCategoryQuery(city.Id, category.Id, filter.Search), cancellationToken);
+        var subCategoriesTask = _mediator.Send(new GetCategorySubCategoriesInCityQuery(city.Id, category.Id), cancellationToken);
+        var topListingsTask = _mediator.Send(new GetTopListingsByCategoryQuery(city.Id, category.Id, filter.Search, 6), cancellationToken);
+        var totalCountTask = _mediator.Send(new CountListingsByCategoryQuery(city.Id, category.Id, filter.Search), cancellationToken);
+        await Task.WhenAll(subCategoriesTask, topListingsTask, totalCountTask);
+        var subCategories = subCategoriesTask.Result;
+        var topListings = topListingsTask.Result;
+        var totalCount = totalCountTask.Result;
 
         return new CategoryPageVm
         {
@@ -290,8 +306,11 @@ public sealed class CatalogService : ICatalogService
             PageSize = filter.PageSize
         };
 
-        var listings = await _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
-        var totalCount = await _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
+        var listingsTask = _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
+        var totalCountTask = _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
+        await Task.WhenAll(listingsTask, totalCountTask);
+        var listings = listingsTask.Result;
+        var totalCount = totalCountTask.Result;
 
         return new SubCategoryPageVm
         {

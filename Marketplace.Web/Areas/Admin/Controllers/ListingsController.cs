@@ -42,6 +42,10 @@ public class ListingsController : Controller
         var result = await _sender.Send(new GetListingsByFilterQuery(new ListingFilter
         {
             Search = search,
+            CategoryId = categoryId,
+            SubCategoryId = subCategoryId,
+            CityId = cityId,
+            Status = status,
             PageSize = 25
         }), cancellationToken);
 

@@ -1,11 +1,19 @@
 using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Web.Models.Listings;
 using Marketplace.Web.Models.Listings.Forms;
+using Marketplace.Web.Navigation;
 
 namespace Marketplace.Web.Mappings;
 
 public sealed class ListingVmMapper : IListingVmMapper
 {
+    private readonly ICatalogUrlBuilder _urlBuilder;
+
+    public ListingVmMapper(ICatalogUrlBuilder urlBuilder)
+    {
+        _urlBuilder = urlBuilder;
+    }
+
     public ListingDetailsPageVm MapDetails(ListingDetailsDto dto, string culture, IReadOnlyCollection<RelatedListingVm>? relatedListings = null)
     {
         return new ListingDetailsPageVm
@@ -14,22 +22,22 @@ public sealed class ListingVmMapper : IListingVmMapper
             Id = dto.Id,
             Title = dto.Title,
             Slug = dto.Slug,
-            Url = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}/{dto.Slug}/{dto.Id}",
+            Url = _urlBuilder.BuildListingUrl(culture, dto.CitySlug, dto.CategorySlug, dto.SubCategorySlug, dto.Slug, dto.Id),
 
             ShortDescription = dto.ShortDescription,
             Description = dto.Description,
 
             CategoryName = dto.CategoryName,
             CategorySlug = dto.CategorySlug,
-            CategoryUrl = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}",
+            CategoryUrl = _urlBuilder.BuildCategoryUrl(culture, dto.CitySlug, dto.CategorySlug),
 
             SubCategoryName = dto.SubCategoryName,
             SubCategorySlug = dto.SubCategorySlug,
-            SubCategoryUrl = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}",
+            SubCategoryUrl = _urlBuilder.BuildSubCategoryUrl(culture, dto.CitySlug, dto.CategorySlug, dto.SubCategorySlug),
 
             CityName = dto.CityName,
             CitySlug = dto.CitySlug,
-            CityUrl = $"/{culture}/{dto.CitySlug}",
+            CityUrl = _urlBuilder.BuildCityUrl(culture, dto.CitySlug),
 
             Address = dto.Address,
             Rating = dto.Rating,
@@ -115,7 +123,7 @@ public sealed class ListingVmMapper : IListingVmMapper
         {
             Id = dto.Id,
             Title = dto.Title,
-            Url = $"/{culture}/{dto.CitySlug}/{dto.CategorySlug}/{dto.SubCategorySlug}/{dto.Slug}/{dto.Id}",
+            Url = _urlBuilder.BuildListingUrl(culture, dto.CitySlug, dto.CategorySlug, dto.SubCategorySlug, dto.Slug, dto.Id),
             ImageUrl = dto.PrimaryImageUrl,
             CityName = dto.CityName,
             SubCategoryName = dto.SubCategoryName,

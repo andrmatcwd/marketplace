@@ -1,18 +1,18 @@
-(function ($) {
-    $(function () {
-        var $main = $(".listing-gallery-main-image");
-        var $thumbs = $(".listing-gallery-thumb");
+(function () {
+    'use strict';
 
-        if (!$main.length || !$thumbs.length) {
-            return;
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        var main = document.querySelector('.listing-gallery-main-image');
+        var thumbs = document.querySelectorAll('.listing-gallery-thumb');
 
-        $thumbs.on("click", function () {
-            var src = $(this).attr("src");
-            var alt = $(this).attr("alt") || "";
+        if (!main || !thumbs.length) return;
 
-            $main.attr("src", src);
-            $main.attr("alt", alt);
+        thumbs.forEach(function (thumb) {
+            thumb.style.cursor = 'pointer';
+            thumb.addEventListener('click', function () {
+                main.src = thumb.src;
+                main.alt = thumb.alt || '';
+            });
         });
     });
-})(jQuery);
+})();

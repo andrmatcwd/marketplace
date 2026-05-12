@@ -1,72 +1,90 @@
-(function ($) {
-    $(function () {
-        var $input = $("#search");
-        if (!$input.length) {
-            return;
-        }
+(function () {
+    'use strict';
 
-        var $box = $('<div class="search-autocomplete"></div>');
-        $input.after($box);
+    document.addEventListener('DOMContentLoaded', function () {
+        var input = document.getElementById('search');
+        if (!input) return;
+
+        var box = document.createElement('div');
+        box.className = 'search-autocomplete';
+        box.setAttribute('role', 'listbox');
+        box.setAttribute('aria-label', 'Search suggestions');
+        input.insertAdjacentElement('afterend', box);
+
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-haspopup', 'listbox');
 
         var timer = null;
 
         function getCulture() {
-            var pathSegments = window.location.pathname.split('/').filter(Boolean);
-            return pathSegments.length ? pathSegments[0] : 'uk';
+            var segments = window.location.pathname.split('/').filter(Boolean);
+            return segments.length ? segments[0] : 'uk';
         }
 
         function getCurrentCity() {
-            var pathSegments = window.location.pathname.split('/').filter(Boolean);
-            return pathSegments.length >= 2 ? pathSegments[1] : '';
+            var segments = window.location.pathname.split('/').filter(Boolean);
+            return segments.length >= 2 ? segments[1] : '';
         }
 
-        $input.on("input", function () {
-            var query = $(this).val();
+        function escapeHtml(str) {
+            var d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
 
+        function clearBox() {
+            box.innerHTML = '';
+            box.classList.remove('is-visible');
+            input.removeAttribute('aria-expanded');
+        }
+
+        function renderItems(items) {
+            box.innerHTML = items.map(function (item) {
+                var badge = item.category
+                    ? '<span class="search-autocomplete-city">' + escapeHtml(item.category) + '</span>'
+                    : '';
+                return '<a class="search-autocomplete-item" href="' + escapeHtml(item.url) + '" role="option">' +
+                    '<span class="search-autocomplete-title">' + escapeHtml(item.label) + '</span>' +
+                    badge +
+                    '</a>';
+            }).join('');
+            box.classList.add('is-visible');
+            input.setAttribute('aria-expanded', 'true');
+        }
+
+        input.addEventListener('input', function () {
             clearTimeout(timer);
+            var query = input.value;
 
             if (!query || query.length < 2) {
-                $box.empty().removeClass("is-visible");
+                clearBox();
                 return;
             }
 
             timer = setTimeout(function () {
                 var culture = getCulture();
                 var city = getCurrentCity();
+                var url = '/' + culture + '/api/listings/autocomplete' +
+                    '?search=' + encodeURIComponent(query) +
+                    '&city=' + encodeURIComponent(city);
 
-                $.get('/' + culture + '/api/listings/autocomplete', {
-                    search: query,
-                    city: city
-                })
-                    .done(function (items) {
-                        if (!items || !items.length) {
-                            $box.empty().removeClass("is-visible");
-                            return;
-                        }
-
-                        var html = items.map(function (item) {
-                            var badge = item.category
-                                ? '<span class="search-autocomplete-city">' + item.category + '</span>'
-                                : '';
-
-                            return '<a class="search-autocomplete-item" href="' + item.url + '">' +
-                                '<span class="search-autocomplete-title">' + item.label + '</span>' +
-                                badge +
-                                '</a>';
-                        }).join("");
-
-                        $box.html(html).addClass("is-visible");
+                fetch(url)
+                    .then(function (r) { return r.json(); })
+                    .then(function (items) {
+                        if (!items || !items.length) { clearBox(); return; }
+                        renderItems(items);
                     })
-                    .fail(function () {
-                        $box.empty().removeClass("is-visible");
-                    });
+                    .catch(clearBox);
             }, 180);
         });
 
-        $(document).on("click", function (e) {
-            if (!$(e.target).closest(".filter-bar-group").length) {
-                $box.removeClass("is-visible");
-            }
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.filter-bar-group')) clearBox();
+        });
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') clearBox();
         });
     });
-})(jQuery);
+})();

@@ -20,14 +20,23 @@ public class ListingRepository
     {
         var query = DbSet.AsNoTracking();
 
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+            query = query.Where(x => x.Title.Contains(filter.Search));
+        if (filter.CategoryId.HasValue)
+            query = query.Where(x => x.CategoryId == filter.CategoryId.Value);
+        if (filter.SubCategoryId.HasValue)
+            query = query.Where(x => x.SubCategoryId == filter.SubCategoryId.Value);
+        if (filter.CityId.HasValue)
+            query = query.Where(x => x.CityId == filter.CityId.Value);
+        if (filter.Status.HasValue)
+            query = query.Where(x => x.Status == filter.Status.Value);
+
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
             .Include(x => x.City)
             .Include(x => x.Category)
             .Include(x => x.SubCategory)
-            .Include(x => x.Images)
-            .Include(x => x.Reviews)
             .OrderByDescending(x => x.Id)
             .Skip((filter.Page - 1) * filter.PageSize)
             .Take(filter.PageSize)

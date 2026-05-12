@@ -25,9 +25,13 @@ public sealed class HomeService : IHomeService
 
     public async Task<HomePageVm> GetHomePageAsync(string culture, string? selectedCitySlug, CancellationToken cancellationToken)
     {
-        var cities = await _mediator.Send(new GetCatalogCitiesQuery(Take: 8), cancellationToken);
-        var categories = await _mediator.Send(new GetCatalogCategoriesQuery(Take: 8), cancellationToken);
-        var featuredListings = await _mediator.Send(new GetFeaturedListingsQuery(8), cancellationToken);
+        var citiesTask = _mediator.Send(new GetCatalogCitiesQuery(Take: 8), cancellationToken);
+        var categoriesTask = _mediator.Send(new GetCatalogCategoriesQuery(Take: 8), cancellationToken);
+        var featuredListingsTask = _mediator.Send(new GetFeaturedListingsQuery(8), cancellationToken);
+        await Task.WhenAll(citiesTask, categoriesTask, featuredListingsTask);
+        var cities = citiesTask.Result;
+        var categories = categoriesTask.Result;
+        var featuredListings = featuredListingsTask.Result;
 
         return new HomePageVm
         {

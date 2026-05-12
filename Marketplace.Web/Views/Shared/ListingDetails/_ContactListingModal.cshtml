@@ -41,7 +41,10 @@
 
                     <div class="d-flex gap-2 justify-content-end">
                         <button type="button" class="btn btn-app-outline" data-bs-dismiss="modal">Скасувати</button>
-                        <button type="submit" class="btn btn-app" id="contactListingSubmitBtn">Надіслати</button>
+                        <button type="submit" class="btn btn-app d-inline-flex align-items-center gap-2" id="contactListingSubmitBtn">
+                            <span class="spinner-border spinner-border-sm d-none" id="contactListingSpinner" aria-hidden="true"></span>
+                            <span id="contactListingSubmitText">Надіслати</span>
+                        </button>
                     </div>
                 </form>
             </div>
