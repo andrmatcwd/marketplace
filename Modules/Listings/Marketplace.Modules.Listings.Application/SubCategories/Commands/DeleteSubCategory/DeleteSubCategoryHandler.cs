@@ -11,7 +11,7 @@ public sealed class DeleteSubCategoryHandler : IRequestHandler<DeleteSubCategory
     {
         _subCategoryService = subCategoryService;
     }
-    
+
     public async Task<Unit> Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
     {
         await _subCategoryService.DeleteAsync(request.Id, cancellationToken);

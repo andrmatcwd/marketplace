@@ -11,7 +11,7 @@ public class ListingRepository
 {
     public ListingRepository(ListingsDbContext dbContext) : base(dbContext)
     {
-        
+
     }
 
     public async Task<(IReadOnlyCollection<Listing> Items, int TotalCount)> GetByFilterAsync(

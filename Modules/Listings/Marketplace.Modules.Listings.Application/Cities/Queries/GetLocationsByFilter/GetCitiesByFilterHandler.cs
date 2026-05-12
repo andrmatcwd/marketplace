@@ -14,7 +14,7 @@ public sealed class GetCitiesByFilterHandler
     {
         _cityService = cityService;
     }
-    
+
     public Task<PagedResult<CityDto>> Handle(GetCitiesByFilterQuery request, CancellationToken cancellationToken)
     {
         return _cityService.GetByFilterAsync(request.Filter, cancellationToken);

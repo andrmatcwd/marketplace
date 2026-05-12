@@ -12,7 +12,7 @@ public sealed class EditSubCategoryHandler : IRequestHandler<EditSubCategoryComm
     {
         _subCategoryService = subCategoryService;
     }
-    
+
     public async Task<Unit> Handle(EditSubCategoryCommand request, CancellationToken cancellationToken)
     {
         await _subCategoryService.EditAsync(request, cancellationToken);

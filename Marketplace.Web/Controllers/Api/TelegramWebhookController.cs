@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using System.Text.Json.Serialization;
+using Marketplace.Web.Controllers.Api.Telegram;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Controllers.Api;
@@ -93,13 +93,9 @@ public sealed class TelegramWebhookController : ControllerBase
         }
     }
 
-    // 🔹 КНОПКА ЗАПИТУ ТЕЛЕФОНУ
-    private async Task SendPhoneRequestAsync(
-        long chatId,
-        CancellationToken cancellationToken)
+    private async Task SendPhoneRequestAsync(long chatId, CancellationToken cancellationToken)
     {
         var client = _httpClientFactory.CreateClient();
-
         var payload = new
         {
             chat_id = chatId,
@@ -108,14 +104,7 @@ public sealed class TelegramWebhookController : ControllerBase
             {
                 keyboard = new[]
                 {
-                    new[]
-                    {
-                        new
-                        {
-                            text = "Поділитися номером",
-                            request_contact = true
-                        }
-                    }
+                    new[] { new { text = "Поділитися номером", request_contact = true } }
                 },
                 resize_keyboard = true,
                 one_time_keyboard = true
@@ -128,89 +117,14 @@ public sealed class TelegramWebhookController : ControllerBase
             cancellationToken);
     }
 
-    // 🔹 ПРОСТЕ ПОВІДОМЛЕННЯ
-    private async Task SendSimpleMessageAsync(
-        long chatId,
-        string text,
-        CancellationToken cancellationToken)
+    private async Task SendSimpleMessageAsync(long chatId, string text, CancellationToken cancellationToken)
     {
         var client = _httpClientFactory.CreateClient();
-
-        var payload = new
-        {
-            chat_id = chatId,
-            text = text
-        };
+        var payload = new { chat_id = chatId, text };
 
         await client.PostAsJsonAsync(
             $"https://api.telegram.org/bot{_botToken}/sendMessage",
             payload,
             cancellationToken);
     }
-}
-
-public sealed class TelegramUpdateDto
-{
-    [JsonPropertyName("message")]
-    public TelegramMessageDto? Message { get; set; }
-}
-
-public sealed class TelegramMessageDto
-{
-    [JsonPropertyName("chat")]
-    public TelegramChatDto? Chat { get; set; }
-
-    [JsonPropertyName("from")]
-    public TelegramUserDto? From { get; set; }
-
-    [JsonPropertyName("text")]
-    public string? Text { get; set; }
-
-    [JsonPropertyName("contact")]
-    public TelegramContactDto? Contact { get; set; }
-}
-
-public sealed class TelegramChatDto
-{
-    [JsonPropertyName("id")]
-    public long Id { get; set; }
-
-    [JsonPropertyName("username")]
-    public string? Username { get; set; }
-
-    [JsonPropertyName("first_name")]
-    public string? FirstName { get; set; }
-
-    [JsonPropertyName("last_name")]
-    public string? LastName { get; set; }
-}
-
-public sealed class TelegramUserDto
-{
-    [JsonPropertyName("id")]
-    public long Id { get; set; }
-
-    [JsonPropertyName("username")]
-    public string? Username { get; set; }
-
-    [JsonPropertyName("first_name")]
-    public string? FirstName { get; set; }
-
-    [JsonPropertyName("last_name")]
-    public string? LastName { get; set; }
-}
-
-public sealed class TelegramContactDto
-{
-    [JsonPropertyName("phone_number")]
-    public string PhoneNumber { get; set; } = string.Empty;
-
-    [JsonPropertyName("first_name")]
-    public string? FirstName { get; set; }
-
-    [JsonPropertyName("last_name")]
-    public string? LastName { get; set; }
-
-    [JsonPropertyName("user_id")]
-    public long? UserId { get; set; }
 }

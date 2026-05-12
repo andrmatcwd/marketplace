@@ -12,7 +12,7 @@ public sealed class GetSubCategoryByIdHandler : IRequestHandler<GetSubCategoryBy
     {
         _subCategoryService = subCategoryService;
     }
-    
+
     public Task<SubCategoryDto> Handle(GetSubCategoryByIdQuery request, CancellationToken cancellationToken)
     {
         return _subCategoryService.GetByIdAsync(request.Id, cancellationToken);

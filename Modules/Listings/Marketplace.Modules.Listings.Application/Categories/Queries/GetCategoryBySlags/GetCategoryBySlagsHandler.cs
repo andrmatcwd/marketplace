@@ -14,7 +14,7 @@ public sealed class GetCategoryBySlagsHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public Task<CategoryDto> Handle(GetCategoryBySlagsQuery request, CancellationToken cancellationToken)
     {
         return _categoryRepository.GetBySlagsAsync(

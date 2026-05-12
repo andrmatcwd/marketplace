@@ -102,51 +102,51 @@ public sealed class ListingsController : Controller
     string culture,
     CreateListingReviewVm model,
     CancellationToken cancellationToken)
-{
-    culture = CultureHelper.NormalizeRouteCulture(culture);
-
-    if (!ModelState.IsValid)
     {
-        TempData["ReviewError"] = culture == "uk"
-            ? "Будь ласка, перевірте форму."
-            : "Please check the form.";
+        culture = CultureHelper.NormalizeRouteCulture(culture);
+
+        if (!ModelState.IsValid)
+        {
+            TempData["ReviewError"] = culture == "uk"
+                ? "Будь ласка, перевірте форму."
+                : "Please check the form.";
+
+            return RedirectToAction("Details", new { culture, id = model.ListingId });
+        }
+
+        // var listing = await _dbContext.Listings
+        //     .Include(x => x.Reviews)
+        //     .FirstOrDefaultAsync(x => x.Id == model.ListingId, cancellationToken);
+
+        // if (listing == null)
+        // {
+        //     return NotFound();
+        // }
+
+        // var review = new ListingReview
+        // {
+        //     Id = Guid.NewGuid(),
+        //     Listing = listing,
+        //     AuthorName = model.AuthorName,
+        //     Email = model.Email,
+        //     Rating = model.Rating ?? 5,
+        //     Text = model.Text,
+        //     IsApproved = true, // або false якщо модерація
+        //     CreatedAtUtc = DateTime.UtcNow
+        // };
+
+        // listing.Reviews.Add(review);
+
+        // // 🔥 Перерахунок рейтингу
+        // listing.ReviewsCount = listing.Reviews.Count;
+        // listing.Rating = Math.Round(listing.Reviews.Average(x => x.Rating), 1);
+
+        // await _dbContext.SaveChangesAsync(cancellationToken);
+
+        // TempData["ReviewSuccess"] = culture == "uk"
+        //     ? "Дякуємо за відгук!"
+        //     : "Thank you for your review!";
 
         return RedirectToAction("Details", new { culture, id = model.ListingId });
-    }
-
-    // var listing = await _dbContext.Listings
-    //     .Include(x => x.Reviews)
-    //     .FirstOrDefaultAsync(x => x.Id == model.ListingId, cancellationToken);
-
-    // if (listing == null)
-    // {
-    //     return NotFound();
-    // }
-
-    // var review = new ListingReview
-    // {
-    //     Id = Guid.NewGuid(),
-    //     Listing = listing,
-    //     AuthorName = model.AuthorName,
-    //     Email = model.Email,
-    //     Rating = model.Rating ?? 5,
-    //     Text = model.Text,
-    //     IsApproved = true, // або false якщо модерація
-    //     CreatedAtUtc = DateTime.UtcNow
-    // };
-
-    // listing.Reviews.Add(review);
-
-    // // 🔥 Перерахунок рейтингу
-    // listing.ReviewsCount = listing.Reviews.Count;
-    // listing.Rating = Math.Round(listing.Reviews.Average(x => x.Rating), 1);
-
-    // await _dbContext.SaveChangesAsync(cancellationToken);
-
-    // TempData["ReviewSuccess"] = culture == "uk"
-    //     ? "Дякуємо за відгук!"
-    //     : "Thank you for your review!";
-
-    return RedirectToAction("Details", new { culture, id = model.ListingId });
     }
 }

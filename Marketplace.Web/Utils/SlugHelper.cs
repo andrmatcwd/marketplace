@@ -6,6 +6,43 @@ namespace Marketplace.Web.Utils;
 
 public static class SlugHelper
 {
+    private static readonly Dictionary<char, string> _transliterationMap = new()
+    {
+        ['а'] = "a",
+        ['б'] = "b",
+        ['в'] = "v",
+        ['г'] = "h",
+        ['ґ'] = "g",
+        ['д'] = "d",
+        ['е'] = "e",
+        ['є'] = "ye",
+        ['ж'] = "zh",
+        ['з'] = "z",
+        ['и'] = "y",
+        ['і'] = "i",
+        ['ї'] = "yi",
+        ['й'] = "y",
+        ['к'] = "k",
+        ['л'] = "l",
+        ['м'] = "m",
+        ['н'] = "n",
+        ['о'] = "o",
+        ['п'] = "p",
+        ['р'] = "r",
+        ['с'] = "s",
+        ['т'] = "t",
+        ['у'] = "u",
+        ['ф'] = "f",
+        ['х'] = "kh",
+        ['ц'] = "ts",
+        ['ч'] = "ch",
+        ['ш'] = "sh",
+        ['щ'] = "shch",
+        ['ь'] = "",
+        ['ю'] = "yu",
+        ['я'] = "ya"
+    };
+
     public static string Generate(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -15,22 +52,11 @@ public static class SlugHelper
 
         value = value.ToLowerInvariant().Trim();
 
-        var map = new Dictionary<char, string>
-        {
-            ['а'] = "a", ['б'] = "b", ['в'] = "v", ['г'] = "h", ['ґ'] = "g",
-            ['д'] = "d", ['е'] = "e", ['є'] = "ye", ['ж'] = "zh", ['з'] = "z",
-            ['и'] = "y", ['і'] = "i", ['ї'] = "yi", ['й'] = "y", ['к'] = "k",
-            ['л'] = "l", ['м'] = "m", ['н'] = "n", ['о'] = "o", ['п'] = "p",
-            ['р'] = "r", ['с'] = "s", ['т'] = "t", ['у'] = "u", ['ф'] = "f",
-            ['х'] = "kh", ['ц'] = "ts", ['ч'] = "ch", ['ш'] = "sh", ['щ'] = "shch",
-            ['ь'] = "", ['ю'] = "yu", ['я'] = "ya"
-        };
-
         var sb = new StringBuilder();
 
         foreach (var c in value)
         {
-            if (map.TryGetValue(c, out var replacement))
+            if (_transliterationMap.TryGetValue(c, out var replacement))
             {
                 sb.Append(replacement);
             }

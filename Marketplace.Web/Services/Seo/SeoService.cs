@@ -29,41 +29,23 @@ public sealed class SeoService : ISeoService
     }
 
     public PageSeoData BuildCatalogGatewaySeo(CatalogGatewayPageVm model, HttpRequest request, string culture)
-
     {
-
         var relative = _canonicalUrlBuilder.BuildCatalog(culture);
-
         var canonical = _absoluteUrlBuilder.Build(request, relative);
 
-
-
         return new PageSeoData
-
         {
-
             Title = "Каталог послуг по містах — Marketplace",
-
             Description = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
-
             CanonicalUrl = canonical,
-
             H1 = model.Hero.Title,
-
             SeoText = model.SeoIntro.Text,
-
             OgTitle = "Каталог послуг по містах — Marketplace",
-
             OgDescription = "Оберіть місто, щоб перейти до локального каталогу послуг, категорій і спеціалістів.",
-
             OgUrl = canonical,
-
             Robots = "index, follow",
-
             Hreflangs = _hreflangBuilder.Build(request, relative)
-
         };
-
     }
 
     public PageSeoData BuildHomePageSeo(HomePageVm model, HttpRequest request, string culture)

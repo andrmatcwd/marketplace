@@ -13,7 +13,7 @@ public sealed class GetCategoryByIdHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
         return _categoryRepository.GetByIdAsync(request.Id, cancellationToken);

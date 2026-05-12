@@ -12,7 +12,7 @@ public sealed class CreateCategoryHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public async Task<Unit> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         await _categoryRepository.AddAsync(request, cancellationToken);

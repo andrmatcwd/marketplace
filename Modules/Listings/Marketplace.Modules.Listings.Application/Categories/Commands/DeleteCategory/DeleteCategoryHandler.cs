@@ -12,7 +12,7 @@ public sealed class DeleteCategoryHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         await _categoryRepository.DeleteAsync(request.Id, cancellationToken);

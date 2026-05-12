@@ -161,19 +161,19 @@ public sealed class CatalogDataService : ICatalogDataService
             .ApplyFilter(filter)
             .CountAsync(cancellationToken);
 
-    public Task<IReadOnlyList<Listing>> GetFeaturedListingsAsync(int take, CancellationToken cancellationToken)
-        => _db.Listings
+    public async Task<IReadOnlyList<Listing>> GetFeaturedListingsAsync(int take, CancellationToken cancellationToken)
+        => await _db.Listings
             .AsNoTracking()
             .Published()
             .WithCatalogIncludes()
             .ApplySorting("rating")
             .Take(take)
-            .ToListAsync(cancellationToken)
-            .ContinueWith(t => (IReadOnlyList<Listing>)t.Result, TaskContinuationOptions.ExecuteSynchronously);
+            .ToListAsync(cancellationToken);
 
     public Task<Listing?> GetPublishedListingByIdAsync(int id, CancellationToken cancellationToken)
         => _db.Listings
             .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Category)
             .Include(x => x.SubCategory)
             .Include(x => x.City)
@@ -183,9 +183,9 @@ public sealed class CatalogDataService : ICatalogDataService
             .Include(x => x.Vacancies)
             .FirstOrDefaultAsync(x => x.Status == ListingStatus.Active && x.Id == id, cancellationToken);
 
-    public Task<IReadOnlyList<Listing>> GetRelatedListingsAsync(
+    public async Task<IReadOnlyList<Listing>> GetRelatedListingsAsync(
         int excludeId, int cityId, int subCategoryId, int take, CancellationToken cancellationToken)
-        => _db.Listings
+        => await _db.Listings
             .AsNoTracking()
             .Include(x => x.City)
             .Include(x => x.Category)
@@ -199,12 +199,11 @@ public sealed class CatalogDataService : ICatalogDataService
             .OrderByDescending(x => x.Rating)
             .ThenByDescending(x => x.ReviewsCount)
             .Take(take)
-            .ToListAsync(cancellationToken)
-            .ContinueWith(t => (IReadOnlyList<Listing>)t.Result, TaskContinuationOptions.ExecuteSynchronously);
+            .ToListAsync(cancellationToken);
 
-    public Task<IReadOnlyList<Listing>> GetTopListingsByCategoryInCityAsync(
+    public async Task<IReadOnlyList<Listing>> GetTopListingsByCategoryInCityAsync(
         int cityId, int categoryId, string? search, int take, CancellationToken cancellationToken)
-        => _db.Listings
+        => await _db.Listings
             .AsNoTracking()
             .Published()
             .WithCatalogIncludes()
@@ -212,8 +211,7 @@ public sealed class CatalogDataService : ICatalogDataService
             .ApplySearch(search)
             .ApplySorting("rating")
             .Take(take)
-            .ToListAsync(cancellationToken)
-            .ContinueWith(t => (IReadOnlyList<Listing>)t.Result, TaskContinuationOptions.ExecuteSynchronously);
+            .ToListAsync(cancellationToken);
 
     public Task<int> CountListingsByCategoryInCityAsync(
         int cityId, int categoryId, string? search, CancellationToken cancellationToken)
@@ -244,15 +242,11 @@ public sealed class CatalogDataService : ICatalogDataService
             .ToListAsync(cancellationToken);
 
         var subCategories = await _db.SubCategories.AsNoTracking()
-            .Include(x => x.Category)
             .Where(x => x.IsPublished && x.Category.IsPublished)
             .Select(x => new SitemapSubCategoryDto(x.Slug, x.Category.Slug))
             .ToListAsync(cancellationToken);
 
         var listings = await _db.Listings.AsNoTracking()
-            .Include(x => x.City)
-            .Include(x => x.Category)
-            .Include(x => x.SubCategory)
             .Where(x => x.Status == ListingStatus.Active)
             .Select(x => new SitemapListingDto(x.Id, x.Slug, x.City.Slug, x.Category.Slug, x.SubCategory.Slug))
             .ToListAsync(cancellationToken);

@@ -14,7 +14,7 @@ public sealed class GetCategoriesByFilterHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public Task<PagedResult<CategoryDto>> Handle(GetCategoriesByFilterQuery request, CancellationToken cancellationToken)
     {
         return _categoryRepository.GetByFilterAsync(request.Filter, cancellationToken);

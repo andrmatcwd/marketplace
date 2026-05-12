@@ -13,7 +13,7 @@ public sealed class GetCityByIdHandler
     {
         _cityService = cityService;
     }
-    
+
     public Task<CityDto> Handle(GetCityByIdQuery request, CancellationToken cancellationToken)
     {
         return _cityService.GetByIdAsync(request.Id, cancellationToken);

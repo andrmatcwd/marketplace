@@ -6,7 +6,8 @@
       "Bash(xargs cat)",
       "Bash(xargs ls)",
       "Bash(xargs ls -la)",
-      "Bash(dotnet restore *)"
+      "Bash(dotnet restore *)",
+      "Bash(dotnet format *)"
     ]
   }
 }

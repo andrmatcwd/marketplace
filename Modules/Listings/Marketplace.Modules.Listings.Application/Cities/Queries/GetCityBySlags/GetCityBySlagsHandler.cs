@@ -14,7 +14,7 @@ public class GetCityBySlagsHandler
     {
         _cityService = cityService;
     }
-    
+
     public Task<CityDto> Handle(GetCityBySlagsQuery request, CancellationToken cancellationToken)
     {
         return _cityService.GetBySlagAsync(request.CitySlag, cancellationToken);

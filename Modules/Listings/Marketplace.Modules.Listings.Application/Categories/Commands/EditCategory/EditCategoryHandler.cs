@@ -12,7 +12,7 @@ public sealed class EditCategoryHandler
     {
         _categoryRepository = categoryRepository;
     }
-    
+
     public async Task<Unit> Handle(EditCategoryCommand request, CancellationToken cancellationToken)
     {
         await _categoryRepository.EditAsync(request, cancellationToken);

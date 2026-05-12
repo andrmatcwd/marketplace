@@ -14,7 +14,7 @@ public class GetSubCategoryBySlagsHandler
     {
         _subCategoryService = subCategoryService;
     }
-    
+
     public Task<SubCategoryDto> Handle(GetSubCategoryBySlagsQuery request, CancellationToken cancellationToken)
     {
         return _subCategoryService.GetBySlagsAsync(

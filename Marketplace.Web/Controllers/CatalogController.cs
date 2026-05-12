@@ -9,7 +9,7 @@ namespace Marketplace.Web.Controllers;
 public sealed class CatalogController : Controller
 {
     private const string PreferredCityCookieName = "preferred_city";
-    
+
     private readonly ICatalogService _catalogService;
     private readonly ISeoService _seoService;
 
