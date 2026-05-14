@@ -1,0 +1,89 @@
+@using Marketplace.Modules.Appointments.Application.Appointments.Dtos
+@using Marketplace.Modules.Appointments.Domain.Enums
+@model AppointmentDto
+
+@{
+    ViewData["Title"] = "Деталі заявки";
+
+    string StatusBadge(AppointmentStatus s) => s switch
+    {
+        AppointmentStatus.New       => "admin-badge--blue",
+        AppointmentStatus.InReview  => "admin-badge--yellow",
+        AppointmentStatus.Converted => "admin-badge--green",
+        AppointmentStatus.Rejected  => "admin-badge--gray",
+        _                           => "admin-badge--gray"
+    };
+
+    string StatusLabel(AppointmentStatus s) => s switch
+    {
+        AppointmentStatus.New       => "Нова",
+        AppointmentStatus.InReview  => "На розгляді",
+        AppointmentStatus.Converted => "Конвертовано",
+        AppointmentStatus.Rejected  => "Відхилено",
+        _                           => s.ToString()
+    };
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Заявка #@Model.Id</h2>
+            <p class="admin-page-subtitle">@Model.BusinessName · @Model.CreatedAtUtc.ToString("dd.MM.yyyy HH:mm")</p>
+        </div>
+        <div style="display:flex;gap:8px">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="admin-btn admin-btn--primary">Змінити статус</a>
+            <a asp-action="Index" class="admin-btn admin-btn--secondary">← Назад</a>
+        </div>
+    </div>
+
+    <div class="admin-details-grid">
+
+        <!-- Business info -->
+        <div class="admin-card">
+            <h3 class="admin-card-section-title">Про компанію</h3>
+            <dl class="admin-dl">
+                <dt>Назва компанії</dt>      <dd>@Model.BusinessName</dd>
+                <dt>Сфера діяльності</dt>   <dd>@Model.CategoryName</dd>
+                <dt>Місто</dt>              <dd>@Model.CityName</dd>
+                @if (!string.IsNullOrWhiteSpace(Model.Address))
+                {
+                    <dt>Адреса</dt>          <dd>@Model.Address</dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Website))
+                {
+                    <dt>Сайт</dt>            <dd><a href="@Model.Website" target="_blank" rel="noopener">@Model.Website</a></dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <dt>Опис</dt>            <dd style="white-space:pre-wrap">@Model.Description</dd>
+                }
+            </dl>
+        </div>
+
+        <!-- Contact info -->
+        <div class="admin-card">
+            <h3 class="admin-card-section-title">Контактна особа</h3>
+            <dl class="admin-dl">
+                <dt>Ім'я</dt>   <dd>@Model.ContactName</dd>
+                <dt>Телефон</dt><dd><a href="tel:@Model.Phone">@Model.Phone</a></dd>
+                <dt>Email</dt>  <dd><a href="mailto:@Model.Email">@Model.Email</a></dd>
+            </dl>
+        </div>
+
+        <!-- Status & admin notes -->
+        <div class="admin-card">
+            <h3 class="admin-card-section-title">Статус та нотатки</h3>
+            <dl class="admin-dl">
+                <dt>Поточний статус</dt>
+                <dd><span class="admin-badge @StatusBadge(Model.Status)">@StatusLabel(Model.Status)</span></dd>
+                <dt>Дата заявки</dt>  <dd>@Model.CreatedAtUtc.ToString("dd.MM.yyyy HH:mm")</dd>
+                <dt>Оновлено</dt>     <dd>@Model.UpdatedAtUtc.ToString("dd.MM.yyyy HH:mm")</dd>
+                @if (!string.IsNullOrWhiteSpace(Model.AdminNotes))
+                {
+                    <dt>Нотатки</dt>      <dd style="white-space:pre-wrap">@Model.AdminNotes</dd>
+                }
+            </dl>
+        </div>
+
+    </div>
+</div>

@@ -15,5 +15,15 @@
     <Project Path="Modules/Notifications/Marketplace.Modules.Notifications.Domain/Marketplace.Modules.Notifications.Domain.csproj" />
     <Project Path="Modules/Notifications/Marketplace.Modules.Notifications.Infrastructure/Marketplace.Modules.Notifications.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/Modules/Blog/">
+    <Project Path="Modules/Blog/Marketplace.Modules.Blog.Application/Marketplace.Modules.Blog.Application.csproj" />
+    <Project Path="Modules/Blog/Marketplace.Modules.Blog.Domain/Marketplace.Modules.Blog.Domain.csproj" />
+    <Project Path="Modules/Blog/Marketplace.Modules.Blog.Infrastructure/Marketplace.Modules.Blog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Modules/Appointments/">
+    <Project Path="Modules/Appointments/Marketplace.Modules.Appointments.Application/Marketplace.Modules.Appointments.Application.csproj" />
+    <Project Path="Modules/Appointments/Marketplace.Modules.Appointments.Domain/Marketplace.Modules.Appointments.Domain.csproj" />
+    <Project Path="Modules/Appointments/Marketplace.Modules.Appointments.Infrastructure/Marketplace.Modules.Appointments.Infrastructure.csproj" />
+  </Folder>
   <Project Path="Marketplace.Web/Marketplace.Web.csproj" />
 </Solution>

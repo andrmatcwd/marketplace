@@ -12,8 +12,11 @@
             </div>
 
             <div class="footer-links">
-                <a href="/@culture/privacy">Privacy</a>
-                <a href="/@culture/catalog">Catalog</a>
+                <a href="/@culture/for-business">@(culture == "uk" ? "Для бізнесу" : "Для бизнеса")</a>
+                <a href="/@culture/blog">@(culture == "uk" ? "Блог" : "Блог")</a>
+                <a href="/@culture/catalog">@(culture == "uk" ? "Каталог" : "Каталог")</a>
+                <a href="/@culture/support">@(culture == "uk" ? "Підтримка" : "Поддержка")</a>
+                <a href="/@culture/privacy">@(culture == "uk" ? "Конфіденційність" : "Конфиденциальность")</a>
             </div>
         </div>
     </div>

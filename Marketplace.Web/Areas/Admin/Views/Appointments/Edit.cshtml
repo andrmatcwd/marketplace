@@ -1,0 +1,60 @@
+@using Marketplace.Modules.Appointments.Domain.Enums
+@using Marketplace.Web.Areas.Admin.Models.Appointments
+@model AppointmentEditVm
+
+@{
+    ViewData["Title"] = "Оновити заявку";
+
+    string StatusLabel(AppointmentStatus s) => s switch
+    {
+        AppointmentStatus.New       => "Нова",
+        AppointmentStatus.InReview  => "На розгляді",
+        AppointmentStatus.Converted => "Конвертовано",
+        AppointmentStatus.Rejected  => "Відхилено",
+        _                           => s.ToString()
+    };
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Оновити заявку #@Model.Id</h2>
+        </div>
+        <div style="display:flex;gap:8px">
+            <a asp-action="Details" asp-route-id="@Model.Id" class="admin-btn admin-btn--secondary">Деталі</a>
+            <a asp-action="Index" class="admin-btn admin-btn--secondary">← Назад</a>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form" style="max-width:540px">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-group">
+                <label asp-for="Status" class="admin-label"></label>
+                <select asp-for="Status" class="admin-select">
+                    @foreach (AppointmentStatus s in Enum.GetValues<AppointmentStatus>())
+                    {
+                        <option value="@((int)s)" selected="@(Model.Status == s)">@StatusLabel(s)</option>
+                    }
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="admin-form-group">
+                <label asp-for="AdminNotes" class="admin-label"></label>
+                <textarea asp-for="AdminNotes" class="admin-textarea" rows="5"
+                          placeholder="Внутрішні нотатки для команди..."></textarea>
+                <span asp-validation-for="AdminNotes" class="text-danger"></span>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

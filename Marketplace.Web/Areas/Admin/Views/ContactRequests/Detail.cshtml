@@ -1,0 +1,142 @@
+@model ContactRequestDetailVm
+
+@{
+    ViewData["Title"] = $"Заявка #{Model.Id}";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Заявка #@Model.Id</h2>
+            <p class="admin-page-subtitle">
+                @(Model.Type == ContactRequestType.BusinessInquiry ? "Бізнес-запит" : "Контакт з listing")
+                &nbsp;·&nbsp; @Model.CreatedAtUtc.ToString("dd.MM.yyyy HH:mm")
+            </p>
+        </div>
+        <div>
+            <a asp-action="Index" class="admin-btn admin-btn--secondary">← Назад</a>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start;">
+
+        <!-- Left: request details -->
+        <div class="admin-card">
+            <div class="admin-card__header" style="padding: 16px 20px 0; border-bottom: 1px solid var(--admin-border); margin-bottom: 20px;">
+                <h3 style="margin:0 0 12px; font-size:1rem; font-weight:700;">Дані заявки</h3>
+            </div>
+            <div style="padding: 0 20px 20px; display:grid; gap: 16px;">
+
+                <div class="admin-form-group">
+                    <span class="admin-label">Ім'я клієнта</span>
+                    <p style="margin:4px 0 0; font-weight:600;">@Model.CustomerName</p>
+                </div>
+
+                <div class="admin-form-group">
+                    <span class="admin-label">Телефон</span>
+                    <p style="margin:4px 0 0;">
+                        <a href="tel:@Model.CustomerPhone" style="color:inherit;">@Model.CustomerPhone</a>
+                    </p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.CustomerEmail))
+                {
+                    <div class="admin-form-group">
+                        <span class="admin-label">Email</span>
+                        <p style="margin:4px 0 0;">
+                            <a href="mailto:@Model.CustomerEmail" style="color:inherit;">@Model.CustomerEmail</a>
+                        </p>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.CustomerCompany))
+                {
+                    <div class="admin-form-group">
+                        <span class="admin-label">Компанія</span>
+                        <p style="margin:4px 0 0;">@Model.CustomerCompany</p>
+                    </div>
+                }
+
+                @if (Model.ListingId.HasValue)
+                {
+                    <div class="admin-form-group">
+                        <span class="admin-label">Listing</span>
+                        <p style="margin:4px 0 0;">
+                            @Model.ListingTitle
+                            <span style="color:var(--admin-text-muted); font-size:0.85rem;">(ID: @Model.ListingId)</span>
+                        </p>
+                    </div>
+                }
+
+                <div class="admin-form-group">
+                    <span class="admin-label">Повідомлення</span>
+                    <p style="margin:4px 0 0; white-space:pre-wrap; line-height:1.65;">@Model.Message</p>
+                </div>
+
+                @if (Model.ProcessedAtUtc.HasValue)
+                {
+                    <div class="admin-form-group">
+                        <span class="admin-label">Оброблено</span>
+                        <p style="margin:4px 0 0; color:var(--admin-text-muted);">@Model.ProcessedAtUtc.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right: status management -->
+        <div class="admin-card">
+            <div style="padding: 16px 20px 0; border-bottom: 1px solid var(--admin-border); margin-bottom: 20px;">
+                <h3 style="margin:0 0 12px; font-size:1rem; font-weight:700;">Управління</h3>
+            </div>
+            <div style="padding: 0 20px 20px;">
+
+                <form asp-action="UpdateStatus" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="admin-form-group" style="margin-bottom:14px;">
+                        <label asp-for="Status" class="admin-label">Статус</label>
+                        <select asp-for="Status" class="admin-select">
+                            @foreach (var s in Enum.GetValues<ContactRequestStatus>())
+                            {
+                                <option value="@((int)s)" selected="@(Model.Status == s)">@StatusLabel(s)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group" style="margin-bottom:16px;">
+                        <label asp-for="AdminNotes" class="admin-label">Нотатки адміна</label>
+                        <textarea asp-for="AdminNotes" class="admin-textarea" rows="4"
+                                  placeholder="Внутрішні нотатки..."></textarea>
+                    </div>
+
+                    <button type="submit" class="admin-btn admin-btn--primary" style="width:100%;">
+                        Зберегти зміни
+                    </button>
+                </form>
+
+                <hr style="margin: 20px 0; border-color: var(--admin-border);" />
+
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                      onsubmit="return confirm('Видалити цю заявку?')">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="admin-btn admin-btn--danger" style="width:100%;">
+                        Видалити заявку
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@functions {
+    static string StatusLabel(ContactRequestStatus s) => s switch
+    {
+        ContactRequestStatus.New => "Новий",
+        ContactRequestStatus.InProgress => "В роботі",
+        ContactRequestStatus.Processed => "Оброблено",
+        ContactRequestStatus.Rejected => "Відхилено",
+        _ => s.ToString()
+    };
+}

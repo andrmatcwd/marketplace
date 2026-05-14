@@ -1,0 +1,240 @@
+@using Marketplace.Modules.Blog.Application.BlogPosts.Dtos
+@using Marketplace.Modules.Blog.Application.Common.Models
+@using Marketplace.Web.Models.Shared
+@using Marketplace.Web.Utils
+@model PagedResult<BlogPostDto>
+
+@{
+    var culture = ViewData["Culture"] as string ?? CultureHelper.Current();
+    var isUk = culture == "uk";
+    var search = ViewData["Search"] as string;
+    var page = (int)(ViewData["Page"] ?? 1);
+    var seoIntro = ViewData["SeoIntro"] as SeoIntroVm;
+    var seoBottom = ViewData["SeoBottom"] as SeoBottomVm;
+
+    var featured = string.IsNullOrEmpty(search) ? Model.Items.FirstOrDefault() : null;
+    var gridPosts = featured is not null ? Model.Items.Skip(1).ToList() : Model.Items.ToList();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/blog.css" asp-append-version="true" />
+}
+
+<!-- ─── Hero ──────────────────────────────────────────────── -->
+<div class="blog-hero">
+    <div class="container">
+        <div class="blog-hero-card">
+            <div class="blog-hero__badge">@(isUk ? "Блог" : "Блог")</div>
+
+            <h1 class="blog-hero__title">
+                @(isUk ? "Статті та поради" : "Статьи и советы")
+            </h1>
+
+            <p class="blog-hero__subtitle">
+                @(isUk
+                    ? "Корисні матеріали про бізнес, маркетинг та роботу з клієнтами."
+                    : "Полезные материалы о бизнесе, маркетинге и работе с клиентами.")
+            </p>
+
+            <form method="get" class="blog-search">
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       class="blog-search__input"
+                       placeholder="@(isUk ? "Пошук статей..." : "Поиск статей...")" />
+                <button type="submit" class="blog-search__btn">
+                    @(isUk ? "Знайти" : "Найти")
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ─── SEO Intro ─────────────────────────────────────────── -->
+@if (seoIntro is not null && seoIntro.HasContent)
+{
+    <div class="container">
+        <section class="blog-seo-intro app-section">
+            <div class="app-card blog-seo-intro__card">
+                <div class="blog-seo-intro__body">
+                    @if (!string.IsNullOrWhiteSpace(seoIntro.Title))
+                    {
+                        <h2 class="blog-seo-intro__title">@seoIntro.Title</h2>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(seoIntro.Text))
+                    {
+                        <p class="blog-seo-intro__text">@seoIntro.Text</p>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+}
+
+<!-- ─── Posts ─────────────────────────────────────────────── -->
+<section class="blog-section">
+    <div class="container">
+
+        @if (!Model.Items.Any())
+        {
+            <div class="blog-empty">
+                <span class="blog-empty__icon">✍</span>
+                <h2 class="blog-empty__title">
+                    @(isUk ? "Статей ще немає" : "Статей пока нет")
+                </h2>
+                <p class="blog-empty__text">
+                    @(isUk
+                        ? "Незабаром тут з'являться корисні матеріали."
+                        : "Скоро здесь появятся полезные материалы.")
+                </p>
+            </div>
+        }
+        else
+        {
+            @* ── Featured first post ── *@
+            @if (featured is not null)
+            {
+                <a href="/@culture/blog/@featured.Slug" class="blog-featured">
+                    <div class="blog-featured__body">
+                        <span class="blog-featured__label">
+                            @(isUk ? "Рекомендована стаття" : "Рекомендованная статья")
+                        </span>
+                        <h2 class="blog-featured__title">@featured.Title</h2>
+                        <p class="blog-featured__excerpt">@featured.Excerpt</p>
+                        <div class="blog-featured__meta">
+                            <span>@(featured.PublishedAtUtc?.ToString("dd.MM.yyyy") ?? featured.CreatedAtUtc.ToString("dd.MM.yyyy"))</span>
+                        </div>
+                        <span class="blog-featured__read-more">
+                            @(isUk ? "Читати далі →" : "Читать далее →")
+                        </span>
+                    </div>
+                    <div class="blog-featured__cover">
+                        @if (!string.IsNullOrEmpty(featured.CoverImageUrl))
+                        {
+                            <img src="@featured.CoverImageUrl" alt="@featured.Title" loading="eager" />
+                        }
+                        else
+                        {
+                            <div class="blog-featured__cover-placeholder">✍</div>
+                        }
+                    </div>
+                </a>
+            }
+
+            @* ── Grid of remaining posts ── *@
+            @if (gridPosts.Any())
+            {
+                <div class="blog-grid-header">
+                    <h2 class="blog-grid-heading">
+                        @if (!string.IsNullOrEmpty(search))
+                        {
+                            @(isUk ? $"Результати пошуку: «{search}»" : $"Результаты поиска: «{search}»")
+                        }
+                        else
+                        {
+                            @(isUk ? "Усі статті" : "Все статьи")
+                        }
+                    </h2>
+                    <span class="blog-grid-count">
+                        @Model.TotalCount @(isUk ? "публікацій" : "публикаций")
+                    </span>
+                </div>
+
+                <div class="blog-grid">
+                    @foreach (var post in gridPosts)
+                    {
+                        <a href="/@culture/blog/@post.Slug" class="blog-card">
+                            <div class="blog-card__cover">
+                                @if (!string.IsNullOrEmpty(post.CoverImageUrl))
+                                {
+                                    <img src="@post.CoverImageUrl" alt="@post.Title" loading="lazy" />
+                                }
+                                else
+                                {
+                                    <div class="blog-card__cover-placeholder">✍</div>
+                                }
+                            </div>
+                            <div class="blog-card__body">
+                                <div class="blog-card__date">
+                                    @(post.PublishedAtUtc?.ToString("dd.MM.yyyy") ?? post.CreatedAtUtc.ToString("dd.MM.yyyy"))
+                                </div>
+                                <h2 class="blog-card__title">@post.Title</h2>
+                                <p class="blog-card__excerpt">@post.Excerpt</p>
+                                <div class="blog-card__footer">
+                                    <span class="blog-card__read-more">
+                                        @(isUk ? "Читати" : "Читать") →
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+
+            @* ── Pagination ── *@
+            @if (Model.TotalPages > 1)
+            {
+                <div class="blog-pagination">
+                    @if (page > 1)
+                    {
+                        <a asp-controller="Blog" asp-action="Index"
+                           asp-route-culture="@culture" asp-route-search="@search" asp-route-page="@(page - 1)"
+                           class="blog-pagination__item" aria-label="Назад">←</a>
+                    }
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <a asp-controller="Blog" asp-action="Index"
+                           asp-route-culture="@culture" asp-route-search="@search" asp-route-page="@p"
+                           class="blog-pagination__item @(p == page ? "is-active" : "")">@p</a>
+                    }
+                    @if (page < Model.TotalPages)
+                    {
+                        <a asp-controller="Blog" asp-action="Index"
+                           asp-route-culture="@culture" asp-route-search="@search" asp-route-page="@(page + 1)"
+                           class="blog-pagination__item" aria-label="Вперед">→</a>
+                    }
+                </div>
+            }
+        }
+
+    </div>
+</section>
+
+<!-- ─── SEO Bottom ────────────────────────────────────────── -->
+@if (seoBottom is not null && seoBottom.HasContent)
+{
+    <div class="container">
+        <section class="blog-seo-bottom app-section">
+            <div class="app-card blog-seo-bottom__card">
+                <div class="blog-seo-bottom__body">
+                    @if (!string.IsNullOrWhiteSpace(seoBottom.Title))
+                    {
+                        <h2 class="blog-seo-bottom__title">@seoBottom.Title</h2>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(seoBottom.Text))
+                    {
+                        <div class="blog-seo-bottom__faq">
+                            @{
+                                var sentences = seoBottom.Text.Split('?', StringSplitOptions.RemoveEmptyEntries);
+                                for (var i = 0; i + 1 < sentences.Length; i += 2)
+                                {
+                                    var question = sentences[i].Trim() + "?";
+                                    var answer = sentences[i + 1].Trim();
+                                    <div class="blog-seo-faq-item">
+                                        <h3 class="blog-seo-faq-item__q">@question</h3>
+                                        <p class="blog-seo-faq-item__a">@answer</p>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    <div class="blog-seo-bottom__cta">
+                        <a href="/@culture/for-business" class="btn btn-app-outline">
+                            @(isUk ? "Розмістити бізнес →" : "Разместить бизнес →")
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}

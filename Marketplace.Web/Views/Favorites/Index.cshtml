@@ -1,0 +1,89 @@
+@using Marketplace.Web.Models.Listings
+@using Marketplace.Web.Utils
+
+@{
+    var culture  = ViewData["Culture"]  as string ?? CultureHelper.Current();
+    var listings = ViewData["Listings"] as IReadOnlyCollection<ListingCardVm> ?? [];
+    var isUk     = culture == "uk";
+    var count    = listings.Count;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
+}
+
+<div data-culture="@culture">
+
+    <!-- ── Hero ─────────────────────────────────────────────── -->
+    <div class="favs-hero">
+        <div class="favs-hero__eyebrow">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            @(isUk ? "Збережені" : "Сохранённые")
+        </div>
+        <h1 class="favs-hero__title">
+            @(isUk ? "Мої збережені оголошення" : "Мои сохранённые объявления")
+        </h1>
+        <p class="favs-hero__sub">
+            @(isUk
+                ? "Оголошення, які ви зберегли для швидкого доступу."
+                : "Объявления, которые вы сохранили для быстрого доступа.")
+        </p>
+    </div>
+
+    <!-- ── Content ───────────────────────────────────────────── -->
+    <section class="favs-section">
+
+        @if (!listings.Any())
+        {
+            <!-- Empty state -->
+            <div id="favs-empty" class="favs-empty">
+                <span class="favs-empty__icon">🤍</span>
+                <h2 class="favs-empty__title">
+                    @(isUk ? "Нічого не збережено" : "Ничего не сохранено")
+                </h2>
+                <p class="favs-empty__text">
+                    @(isUk
+                        ? "Натисніть на серце на картці оголошення, щоб зберегти його тут."
+                        : "Нажмите на сердечко на карточке объявления, чтобы сохранить его здесь.")
+                </p>
+                <a href="/@culture" class="btn btn-app">
+                    @(isUk ? "Переглянути оголошення →" : "Посмотреть объявления →")
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- Count -->
+            <p class="favs-count" id="favs-count">
+                <strong>@count</strong> @(isUk ? "публікацій" : "объявлений")
+            </p>
+
+            <!-- Listings grid — same component as category/subcategory pages -->
+            <div id="favs-grid">
+                <partial name="~/Views/Shared/Lists/_ListingsGrid.cshtml" model="listings" />
+            </div>
+        }
+
+        <!-- Hidden empty state shown by JS after all cards are removed -->
+        @if (listings.Any())
+        {
+            <div id="favs-empty" class="favs-empty" style="display:none">
+                <span class="favs-empty__icon">🤍</span>
+                <h2 class="favs-empty__title">
+                    @(isUk ? "Нічого не збережено" : "Ничего не сохранено")
+                </h2>
+                <p class="favs-empty__text">
+                    @(isUk
+                        ? "Натисніть на серце на картці оголошення, щоб зберегти його тут."
+                        : "Нажмите на сердечко на карточке объявления, чтобы сохранить його здесь.")
+                </p>
+                <a href="/@culture" class="btn btn-app">
+                    @(isUk ? "Переглянути оголошення →" : "Посмотреть объявления →")
+                </a>
+            </div>
+        }
+
+    </section>
+</div>

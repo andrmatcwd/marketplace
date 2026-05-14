@@ -1,0 +1,151 @@
+/* ═══════════════════════════════════════════════════════════
+   APPOINTMENT PAGE
+   ═══════════════════════════════════════════════════════════ */
+
+.appt-page { padding-bottom: 80px; }
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.appt-hero {
+    padding: 52px 0 44px;
+    border-bottom: 1px solid var(--app-border);
+    margin-bottom: 40px;
+}
+
+.appt-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--app-primary);
+    margin-bottom: 16px;
+}
+
+.appt-hero__title {
+    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--app-text);
+    margin: 0 0 12px;
+    max-width: 640px;
+}
+
+.appt-hero__sub {
+    font-size: 1.05rem;
+    color: var(--app-text-muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 560px;
+}
+
+/* ── Form wrapper ─────────────────────────────────────────── */
+.appt-form-wrap {
+    max-width: 800px;
+}
+
+.appt-form-card { padding: 36px 40px; }
+
+/* ── Form sections ────────────────────────────────────────── */
+.appt-form-section {
+    padding-bottom: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--app-border);
+}
+
+.appt-form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.appt-form-section__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--app-text);
+    margin: 0 0 22px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--app-primary-light);
+}
+
+/* ── Form grid ────────────────────────────────────────────── */
+.appt-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 0;
+}
+
+.appt-form-row + .app-form-group,
+.appt-form-row + .appt-form-row { margin-top: 18px; }
+
+.app-form-group { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── Actions ──────────────────────────────────────────────── */
+.appt-form-actions {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.appt-submit-btn { min-width: 200px; }
+
+.appt-form-note {
+    font-size: 12.5px;
+    color: var(--app-text-muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Success page ─────────────────────────────────────────── */
+.appt-success {
+    max-width: 520px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.appt-success__icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--app-primary);
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    box-shadow: 0 4px 20px rgba(59,130,246,.3);
+}
+
+.appt-success__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--app-text);
+    margin: 0 0 16px;
+}
+
+.appt-success__text {
+    font-size: 1rem;
+    color: var(--app-text-muted);
+    line-height: 1.7;
+    margin: 0 0 32px;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 767px) {
+    .appt-hero  { padding: 36px 0 28px; margin-bottom: 28px; }
+    .appt-form-card { padding: 24px 20px; }
+    .appt-form-row  { grid-template-columns: 1fr; gap: 0; }
+    .appt-form-row + .app-form-group,
+    .appt-form-row + .appt-form-row { margin-top: 14px; }
+    .appt-form-row .app-form-group + .app-form-group { margin-top: 14px; }
+    .appt-submit-btn { width: 100%; }
+}

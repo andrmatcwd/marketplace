@@ -1,0 +1,31 @@
+@using Marketplace.Web.Utils
+@{
+    var culture = ViewData["Culture"] as string ?? CultureHelper.Current();
+    var isUk = culture == "uk";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/support.css" asp-append-version="true" />
+}
+
+<div class="sup-success">
+    <div class="sup-success__icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+    </div>
+
+    <h1 class="sup-success__title">
+        @(isUk ? "Звернення надіслано!" : "Обращение отправлено!")
+    </h1>
+
+    <p class="sup-success__text">
+        @(isUk
+            ? "Дякуємо за ваше звернення. Ми отримали повідомлення і відповімо вам протягом одного робочого дня на вказаний email."
+            : "Спасибо за ваше обращение. Мы получили сообщение и ответим вам в течение одного рабочего дня на указанный email.")
+    </p>
+
+    <a href="/@culture" class="btn btn-app">
+        @(isUk ? "← На головну" : "← На главную")
+    </a>
+</div>

@@ -1,0 +1,30 @@
+@using Marketplace.Modules.Appointments.Application.Appointments.Dtos
+@model AppointmentDto
+
+@{
+    ViewData["Title"] = "Видалити заявку";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити заявку #@Model.Id</h2>
+            <p class="admin-page-subtitle">Цю дію неможливо скасувати.</p>
+        </div>
+        <a asp-action="Index" class="admin-btn admin-btn--secondary">← Назад</a>
+    </div>
+
+    <div class="admin-card admin-card--form" style="max-width:520px">
+        <p style="margin:0 0 20px;color:var(--app-text-muted)">
+            Ви впевнені, що хочете видалити заявку від <strong>@Model.BusinessName</strong>
+            (@Model.ContactName)?
+        </p>
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--danger">Так, видалити</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -76,4 +76,24 @@ public sealed class HomeController : Controller
     {
         return View();
     }
+
+    [HttpGet("/{culture:regex(^uk|ru$)}/for-business")]
+    public IActionResult ForBusiness(string culture)
+    {
+        culture = CultureHelper.NormalizeRouteCulture(culture);
+
+        ViewData["Seo"] = new PageSeoData
+        {
+            Title = culture == "uk"
+                ? "Для бізнесу — розміщення та підписки"
+                : "Для бизнеса — размещение и подписки",
+            Description = culture == "uk"
+                ? "Розмістіть свій бізнес на Marketplace: плани підписки, умови співпраці та все необхідне для залучення нових клієнтів через локальний каталог послуг."
+                : "Разместите свой бизнес на Marketplace: планы подписки, условия сотрудничества и всё необходимое для привлечения новых клиентов через локальный каталог услуг.",
+            Robots = "index, follow",
+            OgType = "website"
+        };
+
+        return View();
+    }
 }

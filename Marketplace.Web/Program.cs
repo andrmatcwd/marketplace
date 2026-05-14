@@ -1,6 +1,10 @@
 using System.Globalization;
 using Marketplace.Modules.Listings.Infrastructure.DependencyInjection;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
+using Marketplace.Modules.Blog.Infrastructure.DependencyInjection;
+using Marketplace.Modules.Blog.Infrastructure.Persistence;
+using Marketplace.Modules.Appointments.Infrastructure.DependencyInjection;
+using Marketplace.Modules.Appointments.Infrastructure.Persistence;
 using Marketplace.Modules.Notifications.Infrastructure.DependencyInjection;
 using Marketplace.Modules.Notifications.Infrastructure.Persistence;
 using Marketplace.Modules.Users.Infrastructure.DependencyInjection;
@@ -63,6 +67,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddListingsModule(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);
 builder.Services.AddNotificationsModule(builder.Configuration);
+builder.Services.AddBlogModule(builder.Configuration);
+builder.Services.AddAppointmentsModule(builder.Configuration);
 
 builder.Services
     .AddDefaultIdentity<Microsoft.AspNetCore.Identity.IdentityUser>(options =>
@@ -102,6 +108,7 @@ builder.Services.AddScoped<HreflangBuilder>();
 
 builder.Services.AddScoped<DbSeeder>();
 builder.Services.AddScoped<AdminSeeder>();
+builder.Services.AddScoped<AppointmentSeeder>();
 
 builder.Services.AddHostedService<SubscriptionExpiryJob>();
 
@@ -128,8 +135,17 @@ else
     var notificationsDb = scope.ServiceProvider.GetRequiredService<NotificationsDbContext>();
     await notificationsDb.Database.MigrateAsync();
 
+    var blogDb = scope.ServiceProvider.GetRequiredService<BlogDbContext>();
+    await blogDb.Database.MigrateAsync();
+
+    var appointmentsDb = scope.ServiceProvider.GetRequiredService<AppointmentsDbContext>();
+    await appointmentsDb.Database.MigrateAsync();
+
     var seeder = scope.ServiceProvider.GetRequiredService<DbSeeder>();
     await seeder.SeedAsync();
+
+    var appointmentSeeder = scope.ServiceProvider.GetRequiredService<AppointmentSeeder>();
+    await appointmentSeeder.SeedAsync();
 }
 
 using (var scope = app.Services.CreateScope())

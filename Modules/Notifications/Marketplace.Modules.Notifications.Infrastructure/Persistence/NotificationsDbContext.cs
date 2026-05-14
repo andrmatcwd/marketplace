@@ -10,6 +10,7 @@ public sealed class NotificationsDbContext : DbContext
     }
 
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<ContactRequest> ContactRequests => Set<ContactRequest>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

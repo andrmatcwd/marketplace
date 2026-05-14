@@ -1,0 +1,66 @@
+@model BlogPostFormVm
+
+@{
+    ViewData["Title"] = "Створити пост";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Створити пост</h2>
+            <p class="admin-page-subtitle">Додай нову статтю до блогу.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="admin-form-grid">
+                <div class="admin-form-group">
+                    <label asp-for="Title" class="admin-label"></label>
+                    <input asp-for="Title" class="admin-input" placeholder="Заголовок статті" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label asp-for="Slug" class="admin-label"></label>
+                    <input asp-for="Slug" class="admin-input" placeholder="url-friendly-slug" />
+                    <span asp-validation-for="Slug" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="CoverImageUrl" class="admin-label"></label>
+                    <input asp-for="CoverImageUrl" class="admin-input" placeholder="https://..." />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Excerpt" class="admin-label"></label>
+                    <textarea asp-for="Excerpt" class="admin-textarea" rows="3" placeholder="Короткий опис для анонсу та SEO"></textarea>
+                    <span asp-validation-for="Excerpt" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group" style="grid-column: 1 / -1;">
+                    <label asp-for="Content" class="admin-label"></label>
+                    <textarea asp-for="Content" class="admin-textarea" rows="16" placeholder="Повний текст статті (підтримується HTML)"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="admin-form-group">
+                    <label class="admin-label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input asp-for="IsPublished" type="checkbox" />
+                        <span>@Html.DisplayNameFor(m => m.IsPublished)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Зберегти</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

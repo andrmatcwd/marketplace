@@ -1,0 +1,141 @@
+@using Marketplace.Web.Utils
+@model Marketplace.Web.Models.Appointment.AppointmentFormVm
+
+@{
+    var culture = ViewData["Culture"] as string ?? CultureHelper.Current();
+    var isUk = culture == "uk";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/appointment.css" asp-append-version="true" />
+}
+
+<div class="appt-page" data-culture="@culture">
+
+    <!-- Hero -->
+    <div class="appt-hero">
+        <div class="appt-hero__eyebrow">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            @(isUk ? "Для бізнесу" : "Для бизнеса")
+        </div>
+        <h1 class="appt-hero__title">
+            @(isUk ? "Розмістіть свій бізнес у каталозі" : "Разместите свой бизнес в каталоге")
+        </h1>
+        <p class="appt-hero__sub">
+            @(isUk
+                ? "Заповніть форму — наша команда зв'яжеться з вами та допоможе оформити сторінку компанії."
+                : "Заполните форму — наша команда свяжется с вами и поможет оформить страницу компании.")
+        </p>
+    </div>
+
+    <!-- Form card -->
+    <div class="appt-form-wrap">
+        <div class="app-card appt-form-card">
+
+            <form asp-action="Index" asp-route-culture="@culture" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div class="appt-form-section">
+                    <h2 class="appt-form-section__title">
+                        @(isUk ? "Про компанію" : "О компании")
+                    </h2>
+
+                    <div class="appt-form-row">
+                        <div class="app-form-group">
+                            <label asp-for="BusinessName" class="app-label">
+                                @(isUk ? "Назва компанії" : "Название компании") <span class="app-label-req">*</span>
+                            </label>
+                            <input asp-for="BusinessName" class="app-input" placeholder="@(isUk ? "Напр., СТО Автомайстер" : "Напр., СТО Автомастер")" />
+                            <span asp-validation-for="BusinessName" class="app-field-error"></span>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label asp-for="CategoryName" class="app-label">
+                                @(isUk ? "Сфера діяльності" : "Сфера деятельности") <span class="app-label-req">*</span>
+                            </label>
+                            <input asp-for="CategoryName" class="app-input" placeholder="@(isUk ? "Напр., Автосервіс, Ресторан..." : "Напр., Автосервис, Ресторан...")" />
+                            <span asp-validation-for="CategoryName" class="app-field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="appt-form-row">
+                        <div class="app-form-group">
+                            <label asp-for="CityName" class="app-label">
+                                @(isUk ? "Місто" : "Город") <span class="app-label-req">*</span>
+                            </label>
+                            <input asp-for="CityName" class="app-input" placeholder="@(isUk ? "Напр., Київ" : "Напр., Киев")" />
+                            <span asp-validation-for="CityName" class="app-field-error"></span>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label asp-for="Address" class="app-label">@(isUk ? "Адреса" : "Адрес")</label>
+                            <input asp-for="Address" class="app-input" placeholder="@(isUk ? "Вул. Хрещатик, 1" : "Ул. Крещатик, 1")" />
+                            <span asp-validation-for="Address" class="app-field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="app-form-group">
+                        <label asp-for="Website" class="app-label">@(isUk ? "Сайт" : "Сайт")</label>
+                        <input asp-for="Website" class="app-input" placeholder="https://" type="url" />
+                        <span asp-validation-for="Website" class="app-field-error"></span>
+                    </div>
+
+                    <div class="app-form-group">
+                        <label asp-for="Description" class="app-label">@(isUk ? "Опис бізнесу" : "Описание бизнеса")</label>
+                        <textarea asp-for="Description" class="app-input app-textarea" rows="4"
+                                  placeholder="@(isUk ? "Розкажіть про ваші послуги, переваги, досвід..." : "Расскажите о ваших услугах, преимуществах, опыте...")"></textarea>
+                        <span asp-validation-for="Description" class="app-field-error"></span>
+                    </div>
+                </div>
+
+                <div class="appt-form-section">
+                    <h2 class="appt-form-section__title">
+                        @(isUk ? "Контактна особа" : "Контактное лицо")
+                    </h2>
+
+                    <div class="appt-form-row">
+                        <div class="app-form-group">
+                            <label asp-for="ContactName" class="app-label">
+                                @(isUk ? "Ім'я та прізвище" : "Имя и фамилия") <span class="app-label-req">*</span>
+                            </label>
+                            <input asp-for="ContactName" class="app-input" placeholder="@(isUk ? "Олексій Коваль" : "Алексей Коваль")" />
+                            <span asp-validation-for="ContactName" class="app-field-error"></span>
+                        </div>
+
+                        <div class="app-form-group">
+                            <label asp-for="Phone" class="app-label">
+                                @(isUk ? "Телефон" : "Телефон") <span class="app-label-req">*</span>
+                            </label>
+                            <input asp-for="Phone" class="app-input" placeholder="+380 XX XXX XX XX" type="tel" />
+                            <span asp-validation-for="Phone" class="app-field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="app-form-group">
+                        <label asp-for="Email" class="app-label">
+                            @(isUk ? "Email" : "Email") <span class="app-label-req">*</span>
+                        </label>
+                        <input asp-for="Email" class="app-input" placeholder="business@example.com" type="email" />
+                        <span asp-validation-for="Email" class="app-field-error"></span>
+                    </div>
+                </div>
+
+                <div class="appt-form-actions">
+                    <button type="submit" class="btn btn-app appt-submit-btn">
+                        @(isUk ? "Надіслати заявку →" : "Отправить заявку →")
+                    </button>
+                    <p class="appt-form-note">
+                        @(isUk
+                            ? "Надсилаючи форму, ви погоджуєтесь з умовами розміщення."
+                            : "Отправляя форму, вы соглашаетесь с условиями размещения.")
+                    </p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

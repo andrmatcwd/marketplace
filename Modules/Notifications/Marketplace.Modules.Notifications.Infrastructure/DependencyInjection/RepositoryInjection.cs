@@ -9,6 +9,7 @@ public static class RepositoryInjection
     public static IServiceCollection AddNotificationsRepositories(this IServiceCollection services)
     {
         services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IContactRequestRepository, ContactRequestRepository>();
 
         return services;
     }

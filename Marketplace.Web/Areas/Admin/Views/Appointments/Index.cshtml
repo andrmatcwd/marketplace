@@ -1,0 +1,137 @@
+@using Marketplace.Modules.Appointments.Domain.Enums
+@using Marketplace.Web.Areas.Admin.Models.Appointments
+@model AppointmentIndexVm
+
+@{
+    ViewData["Title"] = "Заявки на розміщення";
+
+    string StatusBadge(AppointmentStatus s) => s switch
+    {
+        AppointmentStatus.New       => "admin-badge--blue",
+        AppointmentStatus.InReview  => "admin-badge--yellow",
+        AppointmentStatus.Converted => "admin-badge--green",
+        AppointmentStatus.Rejected  => "admin-badge--gray",
+        _                           => "admin-badge--gray"
+    };
+
+    string StatusLabel(AppointmentStatus s) => s switch
+    {
+        AppointmentStatus.New       => "Нова",
+        AppointmentStatus.InReview  => "На розгляді",
+        AppointmentStatus.Converted => "Конвертовано",
+        AppointmentStatus.Rejected  => "Відхилено",
+        _                           => s.ToString()
+    };
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Заявки на розміщення</h2>
+            <p class="admin-page-subtitle">Всього: @Model.TotalCount</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="admin-btn admin-btn--primary">+ Створити заявку</a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+
+    <!-- Filters -->
+    <div class="admin-card">
+        <form method="get" class="admin-filterbar">
+            <div class="admin-filterbar__group">
+                <label for="search" class="admin-label">Пошук</label>
+                <input id="search" name="search" value="@Model.Search" class="admin-input"
+                       placeholder="Бізнес, контакт, email, місто" />
+            </div>
+
+            <div class="admin-filterbar__group">
+                <label for="status" class="admin-label">Статус</label>
+                <select id="status" name="status" class="admin-select">
+                    <option value="">Усі</option>
+                    @foreach (AppointmentStatus s in Enum.GetValues<AppointmentStatus>())
+                    {
+                        <option value="@((int)s)" selected="@(Model.Status == s)">@StatusLabel(s)</option>
+                    }
+                </select>
+            </div>
+
+            <div class="admin-filterbar__actions">
+                <button type="submit" class="admin-btn admin-btn--primary">Застосувати</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скинути</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <div class="admin-card">
+        @if (Model.Items.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Компанія</th>
+                            <th>Контакт</th>
+                            <th>Сфера / Місто</th>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td><strong>@item.BusinessName</strong></td>
+                                <td>
+                                    <div>@item.ContactName</div>
+                                    <div style="font-size:12px;color:var(--app-text-muted)">@item.Phone</div>
+                                    <div style="font-size:12px;color:var(--app-text-muted)">@item.Email</div>
+                                </td>
+                                <td>
+                                    <div>@item.CategoryName</div>
+                                    <div style="font-size:12px;color:var(--app-text-muted)">@item.CityName</div>
+                                </td>
+                                <td>
+                                    <span class="admin-badge @StatusBadge(item.Status)">@StatusLabel(item.Status)</span>
+                                </td>
+                                <td>@item.CreatedAtUtc.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--secondary">Деталі</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--primary">Змінити</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <div class="admin-pagination">
+                    @for (var p = 1; p <= Model.TotalPages; p++)
+                    {
+                        <a asp-action="Index"
+                           asp-route-search="@Model.Search"
+                           asp-route-status="@((int?)Model.Status)"
+                           asp-route-page="@p"
+                           class="admin-pagination__item @(p == Model.Page ? "is-active" : "")">@p</a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <partial name="~/Areas/Admin/Views/Shared/_AdminEmptyState.cshtml"
+                     model='"Заявок ще немає або нічого не знайдено за фільтром."' />
+        }
+    </div>
+</div>

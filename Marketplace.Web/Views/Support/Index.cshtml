@@ -1,0 +1,204 @@
+@using Marketplace.Web.Utils
+@model Marketplace.Web.Models.Support.SupportFormVm
+
+@{
+    var culture = ViewData["Culture"] as string ?? CultureHelper.Current();
+    var isUk = culture == "uk";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/components/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/support.css" asp-append-version="true" />
+}
+
+<div class="sup-page" data-culture="@culture">
+
+    <!-- Hero -->
+    <div class="sup-hero">
+        <div class="sup-hero__eyebrow">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            @(isUk ? "Підтримка" : "Поддержка")
+        </div>
+        <h1 class="sup-hero__title">
+            @(isUk ? "Служба підтримки" : "Служба поддержки")
+        </h1>
+        <p class="sup-hero__sub">
+            @(isUk
+                ? "Маєте питання, пропозиції або виявили помилку? Напишіть нам — ми відповідаємо протягом одного робочого дня."
+                : "Есть вопрос, предложение или нашли ошибку? Напишите нам — мы отвечаем в течение одного рабочего дня.")
+        </p>
+    </div>
+
+    <!-- Contact info cards -->
+    <div class="sup-contacts">
+        <div class="app-card sup-contact-card">
+            <div class="sup-contact-card__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+            <div>
+                <p class="sup-contact-card__label">Email</p>
+                <p class="sup-contact-card__value"><a href="mailto:support@marketplace.ua">support@marketplace.ua</a></p>
+                <p class="sup-contact-card__note">@(isUk ? "Відповідаємо протягом 24 год." : "Отвечаем в течение 24 ч.")</p>
+            </div>
+        </div>
+
+        <div class="app-card sup-contact-card">
+            <div class="sup-contact-card__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.09 6.09l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+            </div>
+            <div>
+                <p class="sup-contact-card__label">Telegram</p>
+                <p class="sup-contact-card__value"><a href="https://t.me/marketplace_support" target="_blank" rel="noopener">@@marketplace_support</a></p>
+                <p class="sup-contact-card__note">@(isUk ? "Швидкі відповіді у робочий час." : "Быстрые ответы в рабочее время.")</p>
+            </div>
+        </div>
+
+        <div class="app-card sup-contact-card">
+            <div class="sup-contact-card__icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+            </div>
+            <div>
+                <p class="sup-contact-card__label">@(isUk ? "Графік роботи" : "График работы")</p>
+                <p class="sup-contact-card__value">@(isUk ? "Пн – Пт, 9:00 – 18:00" : "Пн – Пт, 9:00 – 18:00")</p>
+                <p class="sup-contact-card__note">@(isUk ? "Київський час (EET/EEST)" : "Киевское время (EET/EEST)")</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main: form + FAQ -->
+    <div class="sup-main">
+
+        <!-- Contact form -->
+        <div class="app-card sup-form-card">
+            <h2 style="font-size:1rem;font-weight:700;margin:0 0 22px;padding-bottom:12px;border-bottom:2px solid var(--app-primary-light);color:var(--app-text)">
+                @(isUk ? "Написати нам" : "Написать нам")
+            </h2>
+
+            <form asp-action="Index" asp-route-culture="@culture" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div class="sup-form-row">
+                    <div class="app-form-group">
+                        <label for="Name" class="app-label">
+                            @(isUk ? "Ваше ім'я" : "Ваше имя") <span class="app-label-req">*</span>
+                        </label>
+                        <input asp-for="Name" id="Name" class="app-input" placeholder="@(isUk ? "Іван Коваль" : "Иван Коваль")" />
+                        <span asp-validation-for="Name" class="app-field-error"></span>
+                    </div>
+
+                    <div class="app-form-group">
+                        <label for="Email" class="app-label">
+                            Email <span class="app-label-req">*</span>
+                        </label>
+                        <input asp-for="Email" id="Email" class="app-input" placeholder="ivan@example.com" type="email" />
+                        <span asp-validation-for="Email" class="app-field-error"></span>
+                    </div>
+                </div>
+
+                <div class="app-form-group" style="margin-top:18px">
+                    <label for="Subject" class="app-label">
+                        @(isUk ? "Тема звернення" : "Тема обращения") <span class="app-label-req">*</span>
+                    </label>
+                    <select asp-for="Subject" id="Subject" class="app-input app-select">
+                        <option value="">@(isUk ? "— Оберіть тему —" : "— Выберите тему —")</option>
+                        <option value="@(isUk ? "Загальне питання" : "Общий вопрос")">@(isUk ? "Загальне питання" : "Общий вопрос")</option>
+                        <option value="@(isUk ? "Технічна проблема" : "Техническая проблема")">@(isUk ? "Технічна проблема" : "Техническая проблема")</option>
+                        <option value="@(isUk ? "Некоректна інформація в каталозі" : "Некорректная информация в каталоге")">@(isUk ? "Некоректна інформація в каталозі" : "Некорректная информация в каталоге")</option>
+                        <option value="@(isUk ? "Питання щодо розміщення бізнесу" : "Вопрос о размещении бизнеса")">@(isUk ? "Питання щодо розміщення бізнесу" : "Вопрос о размещении бизнеса")</option>
+                        <option value="@(isUk ? "Скарга або порушення" : "Жалоба или нарушение")">@(isUk ? "Скарга або порушення" : "Жалоба или нарушение")</option>
+                        <option value="@(isUk ? "Інше" : "Другое")">@(isUk ? "Інше" : "Другое")</option>
+                    </select>
+                    <span asp-validation-for="Subject" class="app-field-error"></span>
+                </div>
+
+                <div class="app-form-group" style="margin-top:18px">
+                    <label for="Message" class="app-label">
+                        @(isUk ? "Повідомлення" : "Сообщение") <span class="app-label-req">*</span>
+                    </label>
+                    <textarea asp-for="Message" id="Message" class="app-input app-textarea" rows="5"
+                              placeholder="@(isUk ? "Опишіть ваше питання якомога детальніше..." : "Опишите ваш вопрос как можно подробнее...")"></textarea>
+                    <span asp-validation-for="Message" class="app-field-error"></span>
+                </div>
+
+                <div class="sup-form-actions">
+                    <button type="submit" class="btn btn-app sup-submit-btn">
+                        @(isUk ? "Надіслати →" : "Отправить →")
+                    </button>
+                    <p class="sup-form-note">
+                        @(isUk
+                            ? "Надсилаючи форму, ви погоджуєтесь з умовами обробки персональних даних."
+                            : "Отправляя форму, вы соглашаетесь с условиями обработки персональных данных.")
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- FAQ -->
+        <div class="app-card sup-faq-card">
+            <h2 class="sup-faq__title">@(isUk ? "Часті питання" : "Частые вопросы")</h2>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Як додати свій бізнес до каталогу?" : "Как добавить свой бизнес в каталог?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "Заповніть форму на сторінці «Для бізнесу» або «Подати заявку». Наша команда розгляне заявку та зв'яжеться з вами протягом 1-2 робочих днів."
+                        : "Заполните форму на странице «Для бизнеса» или «Подать заявку». Наша команда рассмотрит заявку и свяжется с вами в течение 1-2 рабочих дней.")
+                </p>
+            </details>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Як виправити помилку в лістингу?" : "Как исправить ошибку в листинге?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "Зверніться через цю форму, обравши тему «Некоректна інформація в каталозі». Вкажіть назву компанії та опишіть, що потрібно виправити."
+                        : "Обратитесь через эту форму, выбрав тему «Некорректная информация в каталоге». Укажите название компании и опишите, что нужно исправить.")
+                </p>
+            </details>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Як видалити бізнес зі списку?" : "Как удалить бизнес из списка?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "Надішліть запит через форму підтримки з темою «Інше». Вкажіть назву компанії та підтвердіть, що ви є її представником."
+                        : "Отправьте запрос через форму поддержки с темой «Другое». Укажите название компании и подтвердите, что вы являетесь её представителем.")
+                </p>
+            </details>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Скільки часу займає обробка заявки?" : "Сколько времени занимает обработка заявки?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "Стандартний час відповіді — до 24 годин у робочі дні. Термінові питання рекомендуємо надсилати через Telegram."
+                        : "Стандартное время ответа — до 24 часов в рабочие дни. Срочные вопросы рекомендуем отправлять через Telegram.")
+                </p>
+            </details>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Чи є технічна підтримка у вихідні?" : "Есть ли техподдержка в выходные?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "У вихідні та святкові дні ми не працюємо. Ваше повідомлення буде опрацьовано першого робочого дня."
+                        : "В выходные и праздничные дни мы не работаем. Ваше сообщение будет обработано в первый рабочий день.")
+                </p>
+            </details>
+
+            <details class="sup-faq__item">
+                <summary>@(isUk ? "Як поскаржитися на некоректний контент?" : "Как пожаловаться на некорректный контент?")</summary>
+                <p class="sup-faq__answer">
+                    @(isUk
+                        ? "Оберіть тему «Скарга або порушення» у формі та опишіть проблему. Ми розглянемо звернення відповідно до правил платформи."
+                        : "Выберите тему «Жалоба или нарушение» в форме и опишите проблему. Мы рассмотрим обращение в соответствии с правилами платформы.")
+                </p>
+            </details>
+        </div>
+
+    </div>
+</div>

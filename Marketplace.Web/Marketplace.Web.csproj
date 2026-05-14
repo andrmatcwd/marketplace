@@ -21,6 +21,8 @@
     <ProjectReference Include="..\Modules\Listings\Marketplace.Modules.Listings.Infrastructure\Marketplace.Modules.Listings.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Users\Marketplace.Modules.Users.Infrastructure\Marketplace.Modules.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Notifications\Marketplace.Modules.Notifications.Infrastructure\Marketplace.Modules.Notifications.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Blog\Marketplace.Modules.Blog.Infrastructure\Marketplace.Modules.Blog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Appointments\Marketplace.Modules.Appointments.Infrastructure\Marketplace.Modules.Appointments.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

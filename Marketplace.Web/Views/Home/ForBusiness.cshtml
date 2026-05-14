@@ -1,0 +1,450 @@
+@using Marketplace.Web.Utils
+@{
+    var culture = CultureHelper.Current();
+    var isUk = culture == "uk";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/for-business.css" asp-append-version="true" />
+}
+
+<!-- ─── Hero ──────────────────────────────────────────────── -->
+<section class="fb-hero">
+    <div class="fb-hero-card">
+        <div class="fb-hero-badge">
+            @(isUk ? "Для бізнесу" : "Для бизнеса")
+        </div>
+
+        <h1 class="fb-hero-title">
+            @(isUk
+                ? "Залучайте клієнтів через Marketplace"
+                : "Привлекайте клиентов через Marketplace")
+        </h1>
+
+        <p class="fb-hero-subtitle">
+            @(isUk
+                ? "Розмістіть свій бізнес у локальному каталозі послуг і отримуйте нові заявки від клієнтів у вашому місті. Зручно, швидко, без зайвих витрат."
+                : "Разместите свой бизнес в локальном каталоге услуг и получайте новые заявки от клиентов в вашем городе. Удобно, быстро, без лишних затрат.")
+        </p>
+
+        <div class="fb-hero-actions">
+            <a href="#inquiry" class="btn btn-app">
+                @(isUk ? "Залишити заявку" : "Оставить заявку")
+            </a>
+            <a href="#pricing" class="btn btn-app-outline">
+                @(isUk ? "Переглянути плани" : "Посмотреть планы")
+            </a>
+        </div>
+
+        <div class="fb-stats">
+            <div class="fb-stat">
+                <span class="fb-stat-value">10 000+</span>
+                <span class="fb-stat-label">@(isUk ? "переглядів щомісяця" : "просмотров в месяц")</span>
+            </div>
+            <div class="fb-stat">
+                <span class="fb-stat-value">50+</span>
+                <span class="fb-stat-label">@(isUk ? "міст у каталозі" : "городов в каталоге")</span>
+            </div>
+            <div class="fb-stat">
+                <span class="fb-stat-value">500+</span>
+                <span class="fb-stat-label">@(isUk ? "категорій послуг" : "категорий услуг")</span>
+            </div>
+            <div class="fb-stat">
+                <span class="fb-stat-value">SEO</span>
+                <span class="fb-stat-label">@(isUk ? "індексація в пошукових системах" : "индексация в поисковых системах")</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── Why Marketplace ───────────────────────────────────── -->
+<section class="app-section">
+    <div class="section-header mb-4">
+        <h2 class="section-title">
+            @(isUk ? "Чому Marketplace?" : "Почему Marketplace?")
+        </h2>
+        <p class="section-subtitle">
+            @(isUk
+                ? "Сучасний каталог, побудований з фокусом на локальний пошук і SEO"
+                : "Современный каталог, ориентированный на локальный поиск и SEO")
+        </p>
+    </div>
+
+    <div class="fb-intro-grid">
+        <div class="fb-intro-card">
+            <div class="fb-intro-icon">📍</div>
+            <h3 class="fb-intro-title">@(isUk ? "Локальна аудиторія" : "Локальная аудитория")</h3>
+            <p class="fb-intro-text">
+                @(isUk
+                    ? "Клієнти шукають послуги у своєму місті. Ваш бізнес з'являється саме перед тими, хто знаходиться поруч і вже зацікавлений у ваших послугах."
+                    : "Клиенты ищут услуги в своём городе. Ваш бизнес показывается именно тем, кто рядом и уже заинтересован в ваших услугах.")
+            </p>
+        </div>
+
+        <div class="fb-intro-card">
+            <div class="fb-intro-icon">🔍</div>
+            <h3 class="fb-intro-title">@(isUk ? "SEO-видимість" : "SEO-видимость")</h3>
+            <p class="fb-intro-text">
+                @(isUk
+                    ? "Сторінки каталогу оптимізовані для пошукових систем. Ваш профіль індексується Google та Bing, що приносить органічний трафік без додаткових вкладень."
+                    : "Страницы каталога оптимизированы для поисковых систем. Ваш профиль индексируется Google и Bing, что приносит органический трафик без дополнительных вложений.")
+            </p>
+        </div>
+
+        <div class="fb-intro-card">
+            <div class="fb-intro-icon">⚡</div>
+            <h3 class="fb-intro-title">@(isUk ? "Прямий контакт" : "Прямой контакт")</h3>
+            <p class="fb-intro-text">
+                @(isUk
+                    ? "Потенційні клієнти зв'язуються з вами напряму через телефон або форму запиту — без посередників і комісій за угоди."
+                    : "Потенциальные клиенты связываются с вами напрямую по телефону или через форму запроса — без посредников и комиссий за сделки.")
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ─── Pricing ───────────────────────────────────────────── -->
+<section class="fb-pricing-section" id="pricing">
+    <div class="section-header mb-4">
+        <h2 class="section-title">
+            @(isUk ? "Плани та підписки" : "Планы и подписки")
+        </h2>
+        <p class="section-subtitle">
+            @(isUk
+                ? "Оберіть план, який підходить для вашого бізнесу. Розпочніть безкоштовно."
+                : "Выберите план, подходящий для вашего бизнеса. Начните бесплатно.")
+        </p>
+    </div>
+
+    <div class="fb-pricing-grid">
+        <!-- Free -->
+        <div class="fb-plan">
+            <div class="fb-plan-name">@(isUk ? "Базовий" : "Базовый")</div>
+            <div class="fb-plan-desc">
+                @(isUk
+                    ? "Безкоштовне розміщення для малого бізнесу або фрілансерів."
+                    : "Бесплатное размещение для малого бизнеса или фрилансеров.")
+            </div>
+            <div class="fb-plan-price">
+                <span class="fb-plan-price-free">@(isUk ? "Безкоштовно" : "Бесплатно")</span>
+            </div>
+            <ul class="fb-plan-features">
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "1 оголошення в каталозі" : "1 объявление в каталоге")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Базовий профіль з контактами" : "Базовый профиль с контактами")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Видимість у місті та категорії" : "Видимость в городе и категории")</li>
+                <li class="fb-feat-off"><span class="fb-feat-icon">✗</span> @(isUk ? "Виділення у пошуку" : "Выделение в поиске")</li>
+                <li class="fb-feat-off"><span class="fb-feat-icon">✗</span> @(isUk ? "Фотогалерея" : "Фотогалерея")</li>
+                <li class="fb-feat-off"><span class="fb-feat-icon">✗</span> @(isUk ? "Аналітика переглядів" : "Аналитика просмотров")</li>
+            </ul>
+            <a href="#inquiry" class="btn btn-app-outline w-100">
+                @(isUk ? "Розпочати безкоштовно" : "Начать бесплатно")
+            </a>
+        </div>
+
+        <!-- Standard (popular) -->
+        <div class="fb-plan fb-plan--popular">
+            <div class="fb-plan-popular-badge">@(isUk ? "Популярний" : "Популярный")</div>
+            <div class="fb-plan-name">@(isUk ? "Стандартний" : "Стандартный")</div>
+            <div class="fb-plan-desc">
+                @(isUk
+                    ? "Для активних компаній, які хочуть виділитись серед конкурентів."
+                    : "Для активных компаний, которые хотят выделиться среди конкурентов.")
+            </div>
+            <div class="fb-plan-price">
+                <span class="fb-plan-price-value">399</span>
+                <span class="fb-plan-price-period">@(isUk ? "грн / міс" : "грн / мес")</span>
+            </div>
+            <ul class="fb-plan-features">
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "До 5 оголошень у каталозі" : "До 5 объявлений в каталоге")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Розширений профіль із описом" : "Расширенный профиль с описанием")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Фотогалерея (до 10 фото)" : "Фотогалерея (до 10 фото)")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Виділення у категорії" : "Выделение в категории")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Аналітика переглядів профілю" : "Аналитика просмотров профиля")</li>
+                <li class="fb-feat-off"><span class="fb-feat-icon">✗</span> @(isUk ? "Топ-позиція в пошуку" : "Топ-позиция в поиске")</li>
+            </ul>
+            <a href="#inquiry" class="btn btn-app w-100">
+                @(isUk ? "Вибрати план" : "Выбрать план")
+            </a>
+        </div>
+
+        <!-- Premium -->
+        <div class="fb-plan">
+            <div class="fb-plan-name">@(isUk ? "Преміум" : "Премиум")</div>
+            <div class="fb-plan-desc">
+                @(isUk
+                    ? "Максимальна видимість для бізнесу з амбіційними цілями зростання."
+                    : "Максимальная видимость для бизнеса с амбициозными целями роста.")
+            </div>
+            <div class="fb-plan-price">
+                <span class="fb-plan-price-value">899</span>
+                <span class="fb-plan-price-period">@(isUk ? "грн / міс" : "грн / мес")</span>
+            </div>
+            <ul class="fb-plan-features">
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Необмежена кількість оголошень" : "Неограниченное количество объявлений")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Топ-позиція в пошуку та категорії" : "Топ-позиция в поиске и категории")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Фотогалерея (необмежено)" : "Фотогалерея (неограниченно)")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Детальна аналітика та звіти" : "Детальная аналитика и отчёты")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Пріоритетна підтримка" : "Приоритетная поддержка")</li>
+                <li><span class="fb-feat-icon">✓</span> @(isUk ? "Позначка «Перевірений бізнес»" : "Метка «Проверенный бизнес»")</li>
+            </ul>
+            <a href="#inquiry" class="btn btn-app-outline w-100">
+                @(isUk ? "Вибрати план" : "Выбрать план")
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ─── Terms / How to join ───────────────────────────────── -->
+<section class="app-section">
+    <div class="section-header mb-4">
+        <h2 class="section-title">
+            @(isUk ? "Умови співпраці" : "Условия сотрудничества")
+        </h2>
+        <p class="section-subtitle">
+            @(isUk
+                ? "Чотири прості кроки, щоб ваш бізнес з'явився в каталозі"
+                : "Четыре простых шага, чтобы ваш бизнес появился в каталоге")
+        </p>
+    </div>
+
+    <div class="fb-steps-grid">
+        <div class="fb-step">
+            <div class="fb-step-number">1</div>
+            <h3 class="fb-step-title">@(isUk ? "Залиште заявку" : "Оставьте заявку")</h3>
+            <p class="fb-step-text">
+                @(isUk
+                    ? "Заповніть форму нижче або зв'яжіться з нами напряму. Вкажіть назву бізнесу, категорію послуг і місто."
+                    : "Заполните форму ниже или свяжитесь с нами напрямую. Укажите название бизнеса, категорию услуг и город.")
+            </p>
+        </div>
+
+        <div class="fb-step">
+            <div class="fb-step-number">2</div>
+            <h3 class="fb-step-title">@(isUk ? "Ми зв'яжемося з вами" : "Мы свяжемся с вами")</h3>
+            <p class="fb-step-text">
+                @(isUk
+                    ? "Наш менеджер зв'яжеться протягом 1 робочого дня, узгодить деталі та допоможе з вибором відповідного плану."
+                    : "Наш менеджер свяжется в течение 1 рабочего дня, согласует детали и поможет выбрать подходящий план.")
+            </p>
+        </div>
+
+        <div class="fb-step">
+            <div class="fb-step-number">3</div>
+            <h3 class="fb-step-title">@(isUk ? "Заповнення профілю" : "Заполнение профиля")</h3>
+            <p class="fb-step-text">
+                @(isUk
+                    ? "Надайте опис, контакти, фото та інформацію про послуги. Ми допоможемо правильно оформити профіль для максимальної видимості."
+                    : "Предоставьте описание, контакты, фото и информацию об услугах. Мы поможем правильно оформить профиль для максимальной видимости.")
+            </p>
+        </div>
+
+        <div class="fb-step">
+            <div class="fb-step-number">4</div>
+            <h3 class="fb-step-title">@(isUk ? "Публікація та клієнти" : "Публикация и клиенты")</h3>
+            <p class="fb-step-text">
+                @(isUk
+                    ? "Профіль публікується в каталозі та починає індексуватись у пошукових системах. Клієнти знаходять вас і звертаються напряму."
+                    : "Профиль публикуется в каталоге и начинает индексироваться в поисковых системах. Клиенты находят вас и обращаются напрямую.")
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FAQ ───────────────────────────────────────────────── -->
+<section class="app-section">
+    <div class="section-header mb-4 text-center" style="max-width:600px; margin-left:auto; margin-right:auto;">
+        <h2 class="section-title">@(isUk ? "Часті запитання" : "Часто задаваемые вопросы")</h2>
+        <p class="section-subtitle">
+            @(isUk ? "Відповіді на популярні питання про розміщення в каталозі" : "Ответы на популярные вопросы о размещении в каталоге")
+        </p>
+    </div>
+
+    <div class="fb-faq">
+        <div class="fb-faq-item">
+            <button class="fb-faq-question" type="button">
+                @(isUk ? "Чи дійсно базовий план безкоштовний?" : "Действительно ли базовый план бесплатный?")
+                <svg class="fb-faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="fb-faq-answer">
+                @(isUk
+                    ? "Так, базовий план повністю безкоштовний. Ви отримуєте одне активне оголошення з базовим профілем та видимістю у своєму місті та категорії. Перехід на платний план можливий у будь-який момент."
+                    : "Да, базовый план полностью бесплатный. Вы получаете одно активное объявление с базовым профилем и видимостью в своём городе и категории. Переход на платный план возможен в любой момент.")
+            </div>
+        </div>
+
+        <div class="fb-faq-item">
+            <button class="fb-faq-question" type="button">
+                @(isUk ? "Як швидко з'явиться мій профіль після реєстрації?" : "Как быстро появится мой профиль после регистрации?")
+                <svg class="fb-faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="fb-faq-answer">
+                @(isUk
+                    ? "Після заповнення і передачі даних профіль публікується протягом 1–2 робочих днів. Ми перевіряємо інформацію перед публікацією, щоб забезпечити якість каталогу."
+                    : "После заполнения и передачи данных профиль публикуется в течение 1–2 рабочих дней. Мы проверяем информацию перед публикацией, чтобы обеспечить качество каталога.")
+            </div>
+        </div>
+
+        <div class="fb-faq-item">
+            <button class="fb-faq-question" type="button">
+                @(isUk ? "Чи можна змінити або видалити профіль?" : "Можно ли изменить или удалить профиль?")
+                <svg class="fb-faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="fb-faq-answer">
+                @(isUk
+                    ? "Так. Будь-яку інформацію в профілі можна оновити або видалити за запитом. Зв'яжіться з нами через форму нижче або безпосередньо — і ми внесемо зміни якнайшвидше."
+                    : "Да. Любую информацию в профиле можно обновить или удалить по запросу. Свяжитесь с нами через форму ниже или напрямую — и мы внесём изменения как можно скорее.")
+            </div>
+        </div>
+
+        <div class="fb-faq-item">
+            <button class="fb-faq-question" type="button">
+                @(isUk ? "Яку інформацію потрібно надати для розміщення?" : "Какую информацию нужно предоставить для размещения?")
+                <svg class="fb-faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="fb-faq-answer">
+                @(isUk
+                    ? "Мінімально: назва бізнесу, місто, категорія послуг, контактний телефон. Для кращого результату варто також надати опис послуг, адресу, фото та посилання на сайт або соцмережі."
+                    : "Минимально: название бизнеса, город, категория услуг, контактный телефон. Для лучшего результата желательно также предоставить описание услуг, адрес, фото и ссылки на сайт или соцсети.")
+            </div>
+        </div>
+
+        <div class="fb-faq-item">
+            <button class="fb-faq-question" type="button">
+                @(isUk ? "Чи є контракт або мінімальний термін?" : "Есть ли контракт или минимальный срок?")
+                <svg class="fb-faq-chevron" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="fb-faq-answer">
+                @(isUk
+                    ? "Ні жорстких зобов'язань. Платні плани тарифікуються щомісяця і скасовуються в будь-який момент без штрафів. Базовий план безкоштовний без обмежень за часом."
+                    : "Никаких жёстких обязательств. Платные планы тарифицируются ежемесячно и отменяются в любой момент без штрафов. Базовый план бесплатный без ограничений по времени.")
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── Inquiry form ───────────────────────────────────────── -->
+<section class="fb-inquiry-section" id="inquiry">
+    <div class="fb-inquiry-grid">
+
+        <div class="fb-inquiry-info">
+            <h2 class="fb-inquiry-info-title">
+                @(isUk ? "Залишити заявку" : "Оставить заявку")
+            </h2>
+            <p class="fb-inquiry-info-text">
+                @(isUk
+                    ? "Заповніть форму і наш менеджер зв'яжеться з вами протягом одного робочого дня. Ми відповімо на всі запитання та допоможемо з вибором плану."
+                    : "Заполните форму, и наш менеджер свяжется с вами в течение одного рабочего дня. Мы ответим на все вопросы и поможем с выбором плана.")
+            </p>
+
+            <ul class="fb-inquiry-bullets">
+                <li>
+                    <span class="fb-inquiry-bullet-icon">✓</span>
+                    @(isUk ? "Безкоштовна консультація" : "Бесплатная консультация")
+                </li>
+                <li>
+                    <span class="fb-inquiry-bullet-icon">✓</span>
+                    @(isUk ? "Відповідь протягом 1 робочого дня" : "Ответ в течение 1 рабочего дня")
+                </li>
+                <li>
+                    <span class="fb-inquiry-bullet-icon">✓</span>
+                    @(isUk ? "Допоможемо оформити профіль" : "Поможем оформить профиль")
+                </li>
+                <li>
+                    <span class="fb-inquiry-bullet-icon">✓</span>
+                    @(isUk ? "Без прихованих платежів" : "Без скрытых платежей")
+                </li>
+            </ul>
+        </div>
+
+        <div class="fb-inquiry-form-card">
+            <h3 class="fb-inquiry-form-title">
+                @(isUk ? "Форма зв'язку" : "Форма связи")
+            </h3>
+
+            <form id="businessInquiryForm" novalidate data-culture="@culture">
+                <div class="fb-form-row mb-3">
+                    <div>
+                        <label class="form-label" for="fbName">
+                            @(isUk ? "Ваше ім'я" : "Ваше имя") <span class="text-danger">*</span>
+                        </label>
+                        <input id="fbName"
+                               name="Name"
+                               type="text"
+                               class="form-control app-input"
+                               placeholder="@(isUk ? "Іван Іваненко" : "Иван Иванов")"
+                               autocomplete="name"
+                               required />
+                    </div>
+                    <div>
+                        <label class="form-label" for="fbPhone">
+                            @(isUk ? "Телефон" : "Телефон") <span class="text-danger">*</span>
+                        </label>
+                        <input id="fbPhone"
+                               name="Phone"
+                               type="tel"
+                               class="form-control app-input"
+                               placeholder="+380 XX XXX XX XX"
+                               autocomplete="tel"
+                               required />
+                    </div>
+                </div>
+
+                <div class="fb-form-row mb-3">
+                    <div>
+                        <label class="form-label" for="fbEmail">Email</label>
+                        <input id="fbEmail"
+                               name="Email"
+                               type="email"
+                               class="form-control app-input"
+                               placeholder="email@example.com"
+                               autocomplete="email" />
+                    </div>
+                    <div>
+                        <label class="form-label" for="fbCompany">
+                            @(isUk ? "Назва компанії" : "Название компании")
+                        </label>
+                        <input id="fbCompany"
+                               name="CompanyName"
+                               type="text"
+                               class="form-control app-input"
+                               placeholder="@(isUk ? "Ваш бізнес" : "Ваш бизнес")" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="fbMessage">
+                        @(isUk ? "Повідомлення" : "Сообщение") <span class="text-danger">*</span>
+                    </label>
+                    <textarea id="fbMessage"
+                              name="Message"
+                              class="form-control app-input"
+                              rows="4"
+                              placeholder="@(isUk ? "Розкажіть про ваш бізнес, місто, категорію послуг та план, що цікавить вас..." : "Расскажите о вашем бизнесе, городе, категории услуг и интересующем плане...")"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-app w-100" id="fbSubmitBtn">
+                    <span id="fbSubmitText">@(isUk ? "Надіслати заявку" : "Отправить заявку")</span>
+                    <span id="fbSubmitSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                </button>
+
+                <div id="fbFormFeedback" class="fb-form-feedback"></div>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/pages/for-business.js" asp-append-version="true"></script>
+}

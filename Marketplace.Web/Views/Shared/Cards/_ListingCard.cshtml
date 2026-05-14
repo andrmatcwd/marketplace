@@ -1,6 +1,22 @@
-﻿@model Marketplace.Web.Models.Listings.ListingCardVm
+@using Marketplace.Web.Utils
+@model Marketplace.Web.Models.Listings.ListingCardVm
 
-<article class="listing-card app-card h-100">
+@{
+    var culture = CultureHelper.Current();
+    var isUk = culture == "uk";
+    var labelAdd    = isUk ? "Зберегти"               : "Сохранить";
+    var labelRemove = isUk ? "Видалити зі збережених" : "Удалить из сохранённых";
+}
+
+<article class="listing-card app-card h-100"
+         data-listing-id="@Model.Id"
+         data-listing-title="@Model.Title"
+         data-listing-url="@Model.Url"
+         data-listing-image="@Model.GetImageOrDefault()"
+         data-listing-city="@Model.CityName"
+         data-listing-category="@Model.CategoryName"
+         data-listing-rating="@Model.RatingFormatted">
+
     <a href="@Model.Url" class="listing-card-link" aria-label="@Model.Title">
         <div class="listing-card-media">
             <img src="@Model.GetImageOrDefault()"
@@ -41,4 +57,24 @@
             </div>
         </div>
     </a>
+
+    <button class="listing-card-fav"
+            type="button"
+            data-fav-btn="@Model.Id"
+            data-label-add="@labelAdd"
+            data-label-remove="@labelRemove"
+            aria-pressed="false"
+            title="@labelAdd">
+        <svg class="fav-icon--empty" width="15" height="15" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <svg class="fav-icon--filled" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+    </button>
+
 </article>

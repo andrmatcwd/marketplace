@@ -1,0 +1,25 @@
+@using Marketplace.Web.Utils
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/appointment.css" asp-append-version="true" />
+}
+
+@{
+    var culture = ViewData["Culture"] as string ?? CultureHelper.Current();
+    var isUk = culture == "uk";
+}
+
+<div class="appt-success">
+    <div class="appt-success__icon" aria-hidden="true">✓</div>
+    <h1 class="appt-success__title">
+        @(isUk ? "Заявку отримано!" : "Заявка получена!")
+    </h1>
+    <p class="appt-success__text">
+        @(isUk
+            ? "Дякуємо за звернення. Наша команда розгляне вашу заявку та зв'яжеться з вами найближчим часом."
+            : "Спасибо за обращение. Наша команда рассмотрит вашу заявку и свяжется с вами в ближайшее время.")
+    </p>
+    <a href="/@culture" class="btn btn-app">
+        @(isUk ? "На головну" : "На главную")
+    </a>
+</div>

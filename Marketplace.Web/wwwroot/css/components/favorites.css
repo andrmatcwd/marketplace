@@ -1,0 +1,232 @@
+/* ═══════════════════════════════════════════════════════════
+   FAVORITES — heart button, toast, nav badge, page
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Heart button on listing card ───────────────────────────── */
+.listing-card {
+    position: relative;
+}
+
+.listing-card-fav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .92);
+    border: 1.5px solid var(--app-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--app-text-muted);
+    padding: 0;
+    flex-shrink: 0;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .12);
+    transition: background .15s, color .15s, border-color .15s, transform .15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.listing-card-fav:hover {
+    background: #fff;
+    color: #e11d48;
+    border-color: #fecdd3;
+    transform: scale(1.12);
+}
+
+.listing-card-fav.is-saved {
+    background: #fff1f2;
+    color: #e11d48;
+    border-color: #fda4af;
+}
+
+/* toggle heart icon variants */
+.listing-card-fav .fav-icon--filled { display: none; }
+.listing-card-fav.is-saved .fav-icon--empty  { display: none; }
+.listing-card-fav.is-saved .fav-icon--filled { display: block; }
+
+/* ── Nav badge ──────────────────────────────────────────────── */
+.fav-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.fav-nav-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #e11d48;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* ── Save button on listing details page ───────────────────── */
+.listing-header-actions {
+    margin-top: 18px;
+}
+
+.listing-details-fav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    border: 2px solid var(--app-border);
+    border-radius: var(--app-radius-md);
+    background: var(--app-surface);
+    color: var(--app-text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.listing-details-fav:hover {
+    border-color: #fda4af;
+    color: #e11d48;
+    background: #fff1f2;
+}
+
+.listing-details-fav.is-saved {
+    border-color: #fda4af;
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+/* icon toggle */
+.listing-details-fav .fav-icon--filled { display: none; }
+.listing-details-fav.is-saved .fav-icon--empty  { display: none; }
+.listing-details-fav.is-saved .fav-icon--filled { display: block; }
+
+/* text toggle */
+.listing-details-fav .fav-text--saved { display: none; }
+.listing-details-fav.is-saved .fav-text--add   { display: none; }
+.listing-details-fav.is-saved .fav-text--saved { display: inline; }
+
+/* ── Toast notification ─────────────────────────────────────── */
+.fav-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #1e293b;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: 999px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .2);
+    opacity: 0;
+    transition: opacity .22s, transform .22s;
+    z-index: 9999;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.fav-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.fav-toast--added { background: var(--app-primary); }
+
+/* ═══════════════════════════════════════════════════════════
+   FAVORITES PAGE
+   ═══════════════════════════════════════════════════════════ */
+
+.favs-hero {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--app-border);
+    margin-bottom: 36px;
+}
+
+.favs-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--app-primary);
+    margin-bottom: 14px;
+}
+
+.favs-hero__title {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--app-text);
+    margin: 0 0 10px;
+}
+
+.favs-hero__sub {
+    font-size: 1rem;
+    color: var(--app-text-muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.favs-empty {
+    text-align: center;
+    padding: 80px 24px;
+}
+
+.favs-empty__icon {
+    font-size: 54px;
+    display: block;
+    margin-bottom: 22px;
+    opacity: .25;
+}
+
+.favs-empty__title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--app-text);
+    margin: 0 0 10px;
+}
+
+.favs-empty__text {
+    font-size: 14.5px;
+    color: var(--app-text-muted);
+    line-height: 1.7;
+    margin: 0 0 28px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── Listings grid ─────────────────────────────────────────── */
+.favs-section {
+    padding-bottom: 72px;
+}
+
+.favs-count {
+    font-size: 13.5px;
+    color: var(--app-text-muted);
+    margin-bottom: 20px;
+}
+
+.favs-count strong {
+    color: var(--app-text);
+    font-weight: 700;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 767px) {
+    .favs-hero { padding: 32px 0 24px; margin-bottom: 24px; }
+    .favs-empty { padding: 56px 16px; }
+    .fav-toast { bottom: 76px; /* above mobile bottom bar */ }
+}
