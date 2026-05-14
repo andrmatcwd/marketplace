@@ -1,0 +1,17 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    var measurementId = Configuration["GoogleAnalytics:MeasurementId"];
+    if (string.IsNullOrWhiteSpace(measurementId) || measurementId == "G-XXXXXXXXXX") return;
+}
+<script async src="https://www.googletagmanager.com/gtag/js?id=@measurementId"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+
+    gtag('consent', 'default', {
+        analytics_storage: localStorage.getItem('cookie_consent_accepted') === 'true' ? 'granted' : 'denied'
+    });
+
+    gtag('js', new Date());
+    gtag('config', '@measurementId');
+</script>

@@ -17,6 +17,7 @@
             <p class="admin-page-subtitle">Оновлення даних оголошення.</p>
         </div>
         <div style="display:flex;gap:8px;">
+            <a asp-area="Admin" asp-controller="ListingPhotos" asp-action="Index" asp-route-listingId="@Model.Id" class="admin-btn admin-btn--primary">🖼 Фото</a>
             <a asp-area="Admin" asp-controller="ListingVacancies" asp-action="Index" asp-route-listingId="@Model.Id" class="admin-btn admin-btn--secondary">Вакансії</a>
             <a asp-area="Admin" asp-controller="ListingRentals" asp-action="Edit" asp-route-listingId="@Model.Id" class="admin-btn admin-btn--secondary">Оренда / Кімнати</a>
         </div>

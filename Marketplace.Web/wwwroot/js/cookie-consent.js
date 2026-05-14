@@ -18,6 +18,11 @@
         acceptBtn.addEventListener("click", function () {
             localStorage.setItem(STORAGE_KEY, "true");
 
+            if (typeof gtag !== "undefined") {
+                gtag("consent", "update", { analytics_storage: "granted" });
+                gtag("event", "page_view");
+            }
+
             banner.classList.add("cookie-consent-hide");
 
             setTimeout(function () {

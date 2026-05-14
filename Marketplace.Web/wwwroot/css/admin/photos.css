@@ -1,0 +1,129 @@
+/* ═══════════════════════════════════════════════════════════
+   ADMIN PHOTO MANAGER
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Upload zone ─────────────────────────────────────────── */
+.photo-upload-zone {
+    border: 2px dashed var(--admin-border, #e2e8f0);
+    border-radius: 10px;
+    padding: 36px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    margin-bottom: 28px;
+    background: var(--admin-surface, #fafbfc);
+}
+
+.photo-upload-zone:hover,
+.photo-upload-zone--active {
+    border-color: var(--admin-primary, #3b82f6);
+    background: #eff6ff;
+}
+
+.photo-upload-zone__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--admin-text-muted, #64748b);
+    pointer-events: none;
+}
+
+.photo-upload-zone__inner svg { color: var(--admin-primary, #3b82f6); }
+
+.photo-upload-zone__inner p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.photo-upload-zone__link {
+    color: var(--admin-primary, #3b82f6);
+    text-decoration: underline;
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.photo-upload-zone__hint {
+    font-size: 12px !important;
+    color: var(--admin-text-muted, #94a3b8) !important;
+}
+
+/* ── Photo grid ──────────────────────────────────────────── */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* ── Photo card ──────────────────────────────────────────── */
+.photo-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border, #e2e8f0);
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.photo-card__img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.photo-card__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-card__badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--admin-primary, #3b82f6);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: .04em;
+}
+
+.photo-card__actions {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+/* ── Upload status ───────────────────────────────────────── */
+.photo-upload-status {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.photo-upload-status--ok    { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.photo-upload-status--error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+/* ── Extra button size ───────────────────────────────────── */
+.admin-btn--xs {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.admin-btn--danger {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.admin-btn--danger:hover { background: #fecaca; }

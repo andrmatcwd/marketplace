@@ -9,6 +9,9 @@
             <h2 class="admin-page-title">Редагувати кімнату</h2>
             <p class="admin-page-subtitle">Кімната #@Model.Id.</p>
         </div>
+        <div>
+            <a asp-area="Admin" asp-controller="RoomPhotos" asp-action="Index" asp-route-roomId="@Model.Id" asp-route-listingId="@Model.ListingId" class="admin-btn admin-btn--primary">🖼 Фото кімнати</a>
+        </div>
     </div>
 
     <div class="admin-card admin-card--form">

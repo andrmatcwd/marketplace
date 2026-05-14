@@ -97,6 +97,7 @@ builder.Services.AddScoped<ICatalogFilterEnricher, CatalogFilterEnricher>();
 builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>();
 
 builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
+builder.Services.AddScoped<IPhotoStorageService, LocalPhotoStorageService>();
 
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();
 builder.Services.AddScoped<CanonicalUrlBuilder>();

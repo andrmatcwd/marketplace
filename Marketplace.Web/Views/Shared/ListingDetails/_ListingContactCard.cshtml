@@ -40,7 +40,12 @@
             {
                 <div class="contact-row">
                     <span class="contact-icon">🌐</span>
-                    <a href="@Model.Contact.Website" rel="nofollow noopener" target="_blank">
+                    <a href="@Model.Contact.Website"
+                       class="listing-website-link"
+                       data-listing-id="@Model.Id"
+                       data-listing-title="@Model.Title"
+                       data-website="@Model.Contact.Website"
+                       rel="nofollow noopener" target="_blank">
                         @Model.Contact.Website
                     </a>
                 </div>

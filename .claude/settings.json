@@ -14,7 +14,10 @@
       "Bash(grep \"\\\\.cs$\")",
       "Bash(sqlite3 /Users/andrmatcwd/Projects/Marketplace.Web/Marketplace.Web/app.db \".tables\")",
       "Bash(sqlite3 /Users/andrmatcwd/Projects/Marketplace.Web/Marketplace.Web/app.db \"SELECT MigrationId FROM __EFMigrationsHistory ORDER BY MigrationId;\")",
-      "Bash(xargs ls -1)"
+      "Bash(xargs ls -1)",
+      "Bash(grep -E \"\\\\.\\(cs|resx\\)$\")",
+      "WebSearch",
+      "Bash(claude --version)"
     ]
   }
 }

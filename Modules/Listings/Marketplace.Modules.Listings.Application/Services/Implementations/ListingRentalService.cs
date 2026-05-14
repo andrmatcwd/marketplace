@@ -115,6 +115,30 @@ public class ListingRentalService : IListingRentalService
         await _repository.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<string>> GetRoomImagesAsync(int roomId, CancellationToken cancellationToken)
+    {
+        var room = await _repository.GetRoomByIdAsync(roomId, cancellationToken);
+        if (room is null) return Array.Empty<string>();
+        return room.ImageUrls.AsReadOnly();
+    }
+
+    public async Task AddRoomImageAsync(int roomId, string url, CancellationToken cancellationToken)
+    {
+        var room = await _repository.GetRoomByIdAsync(roomId, cancellationToken);
+        if (room is null) throw new Exception($"Room {roomId} not found.");
+        room.ImageUrls.Add(url);
+        await _repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<string?> DeleteRoomImageAsync(int roomId, string url, CancellationToken cancellationToken)
+    {
+        var room = await _repository.GetRoomByIdAsync(roomId, cancellationToken);
+        if (room is null) return null;
+        if (!room.ImageUrls.Remove(url)) return null;
+        await _repository.SaveChangesAsync(cancellationToken);
+        return url;
+    }
+
     private static RentalAdminDto ToDto(ListingRental r) => new()
     {
         Id = r.Id,

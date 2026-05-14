@@ -35,7 +35,8 @@
                                     {
                                         <img src="@image"
                                              alt="@room.Title"
-                                             loading="lazy" />
+                                             loading="lazy"
+                                             class="rental-room-thumb" />
                                     }
                                 </div>
                             }
@@ -106,4 +107,19 @@
             }
         </div>
     </div>
+    <style>.rental-room-thumb { cursor: pointer; opacity: .75; transition: opacity .15s; } .rental-room-thumb:hover { opacity: 1; }</style>
+    <script>
+        document.addEventListener("click", function (e) {
+            var thumb = e.target.closest(".rental-room-thumb");
+            if (!thumb) return;
+            var gallery = thumb.closest(".rental-room-gallery");
+            var main = gallery.querySelector(".rental-room-main-image img");
+            var prevSrc = main.src;
+            var prevAlt = main.alt;
+            main.src = thumb.src;
+            main.alt = thumb.alt;
+            thumb.src = prevSrc;
+            thumb.alt = prevAlt;
+        });
+    </script>
 }

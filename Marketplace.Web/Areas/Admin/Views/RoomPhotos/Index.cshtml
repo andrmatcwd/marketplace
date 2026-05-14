@@ -1,0 +1,65 @@
+@model List<string>
+@{
+    ViewData["Title"] = "Фото кімнати";
+    var roomId = (int)ViewBag.RoomId;
+    var listingId = (int)ViewBag.ListingId;
+    var roomTitle = (string)ViewBag.RoomTitle;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/photos.css" asp-append-version="true" />
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Фото кімнати: @roomTitle</h2>
+            <p class="admin-page-subtitle">Завантажте фото кімнати (JPG, PNG, WebP, до 10 MB).</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <a asp-area="Admin" asp-controller="ListingRentals" asp-action="EditRoom" asp-route-id="@roomId" asp-route-listingId="@listingId" class="admin-btn admin-btn--secondary">← Назад до кімнати</a>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <!-- Upload area -->
+    <div class="admin-card photo-upload-zone" id="uploadZone"
+         data-room-id="@roomId"
+         data-upload-url="@Url.Action("Upload", "RoomPhotos", new { area = "Admin" })"
+         data-mode="room">
+        <div class="photo-upload-zone__inner">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p>Перетягніть фото сюди або <label for="photoFileInput" class="photo-upload-zone__link">оберіть файли</label></p>
+            <p class="photo-upload-zone__hint">JPG, PNG, WebP, GIF — до 10 MB кожен</p>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" multiple hidden />
+    </div>
+
+    <!-- Photo grid -->
+    <div class="photo-grid" id="photoGrid"
+         data-delete-url="@Url.Action("Delete", "RoomPhotos", new { area = "Admin" })"
+         data-room-id="@roomId"
+         data-mode="room">
+
+        @foreach (var url in Model)
+        {
+            <div class="photo-card" data-url="@url">
+                <div class="photo-card__img-wrap">
+                    <img src="@url" alt="" loading="lazy" />
+                </div>
+                <div class="photo-card__actions">
+                    <button type="button" class="admin-btn admin-btn--xs admin-btn--danger js-delete-photo" title="Видалити">Видалити</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="photo-upload-status" id="uploadStatus" hidden></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin/photo-manager.js" asp-append-version="true"></script>
+}

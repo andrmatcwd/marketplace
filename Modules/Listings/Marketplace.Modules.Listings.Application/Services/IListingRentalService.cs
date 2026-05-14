@@ -12,4 +12,7 @@ public interface IListingRentalService
     Task AddRoomAsync(CreateRentalRoomCommand command, CancellationToken cancellationToken);
     Task EditRoomAsync(EditRentalRoomCommand command, CancellationToken cancellationToken);
     Task DeleteRoomAsync(int id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<string>> GetRoomImagesAsync(int roomId, CancellationToken cancellationToken);
+    Task AddRoomImageAsync(int roomId, string url, CancellationToken cancellationToken);
+    Task<string?> DeleteRoomImageAsync(int roomId, string url, CancellationToken cancellationToken);
 }
