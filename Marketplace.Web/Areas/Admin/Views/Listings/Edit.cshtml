@@ -8,6 +8,7 @@
     var categories = ViewBag.Categories as List<SelectListItem> ?? new();
     var subCategories = ViewBag.SubCategories as List<SelectListItem> ?? new();
     var cities = ViewBag.Cities as List<SelectListItem> ?? new();
+    var sellers = ViewBag.Sellers as List<SelectListItem> ?? new();
 }
 
 <div class="admin-page">
@@ -45,7 +46,13 @@
 
                 <div class="admin-form-group">
                     <label asp-for="SellerId" class="admin-label"></label>
-                    <input asp-for="SellerId" class="admin-input" />
+                    <select asp-for="SellerId" class="admin-select">
+                        <option value="">— No seller —</option>
+                        @foreach (var item in sellers)
+                        {
+                            <option value="@item.Value" selected="@(Model.SellerId == item.Value)">@item.Text</option>
+                        }
+                    </select>
                     <span asp-validation-for="SellerId" class="text-danger"></span>
                 </div>
 

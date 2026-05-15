@@ -39,4 +39,9 @@ public sealed class CatalogUrlBuilder : ICatalogUrlBuilder
 
     public string BuildListingUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, string listingSlug, int id)
         => $"/{culture}/{citySlug}/{categorySlug}/{subCategorySlug}/{listingSlug}/{id}";
+
+    public string BuildVacanciesUrl(string culture, int page = 1)
+        => page <= 1
+            ? $"/{culture}/vacancies"
+            : $"/{culture}/vacancies/page-{page}";
 }

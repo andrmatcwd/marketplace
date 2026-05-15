@@ -1,9 +1,11 @@
+using System.Security.Claims;
 using Marketplace.Web.Models.Listings.Forms;
 using Marketplace.Web.Navigation;
 using Marketplace.Web.Seo;
 using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Seo;
 using Marketplace.Web.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Marketplace.Web.Controllers;
@@ -96,57 +98,37 @@ public sealed class ListingsController : Controller
         return View("Details", vm);
     }
 
-    [HttpPost]
+    [HttpPost("/{culture:regex(^uk|ru$)}/review")]
+    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateReview(
-    string culture,
-    CreateListingReviewVm model,
-    CancellationToken cancellationToken)
+        string culture,
+        CreateListingReviewVm model,
+        CancellationToken cancellationToken)
     {
         culture = CultureHelper.NormalizeRouteCulture(culture);
 
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized(new { success = false, message = "Unauthorized" });
+
         if (!ModelState.IsValid)
         {
-            TempData["ReviewError"] = culture == "uk"
-                ? "Будь ласка, перевірте форму."
-                : "Please check the form.";
-
-            return RedirectToAction("Details", new { culture, id = model.ListingId });
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+            return BadRequest(new { success = false, errors });
         }
 
-        // var listing = await _dbContext.Listings
-        //     .Include(x => x.Reviews)
-        //     .FirstOrDefaultAsync(x => x.Id == model.ListingId, cancellationToken);
+        await _listingService.SubmitReviewAsync(
+            model.ListingId,
+            userId,
+            model.AuthorName,
+            model.Text,
+            model.Rating ?? 5,
+            cancellationToken);
 
-        // if (listing == null)
-        // {
-        //     return NotFound();
-        // }
-
-        // var review = new ListingReview
-        // {
-        //     Id = Guid.NewGuid(),
-        //     Listing = listing,
-        //     AuthorName = model.AuthorName,
-        //     Email = model.Email,
-        //     Rating = model.Rating ?? 5,
-        //     Text = model.Text,
-        //     IsApproved = true, // або false якщо модерація
-        //     CreatedAtUtc = DateTime.UtcNow
-        // };
-
-        // listing.Reviews.Add(review);
-
-        // // 🔥 Перерахунок рейтингу
-        // listing.ReviewsCount = listing.Reviews.Count;
-        // listing.Rating = Math.Round(listing.Reviews.Average(x => x.Rating), 1);
-
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-
-        // TempData["ReviewSuccess"] = culture == "uk"
-        //     ? "Дякуємо за відгук!"
-        //     : "Thank you for your review!";
-
-        return RedirectToAction("Details", new { culture, id = model.ListingId });
+        return Ok(new { success = true });
     }
 }

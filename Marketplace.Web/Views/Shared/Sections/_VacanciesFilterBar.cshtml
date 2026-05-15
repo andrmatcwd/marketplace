@@ -1,0 +1,65 @@
+@model Marketplace.Web.Models.Vacancies.VacanciesFilterVm
+
+<form method="get" class="filter-bar app-card">
+    <div class="filter-bar-inner">
+        <div class="filter-bar-group filter-bar-group-grow">
+            <label class="filter-label" for="search">Search</label>
+            <input id="search"
+                   name="search"
+                   value="@Model.Search"
+                   type="text"
+                   class="form-control app-input"
+                   placeholder="Job title or keyword" />
+        </div>
+
+        @if (Model.Cities != null && Model.Cities.Any())
+        {
+            <div class="filter-bar-group">
+                <label class="filter-label" for="city">City</label>
+                <select id="city" name="city" class="form-select app-select" data-min-search="0">
+                    <option value="">All cities</option>
+                    @foreach (var option in Model.Cities)
+                    {
+                        if (string.Equals(option.Value, Model.City, StringComparison.OrdinalIgnoreCase))
+                        {
+                            <option value="@option.Value" selected>@option.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        }
+
+        @if (Model.EmploymentTypes != null && Model.EmploymentTypes.Any())
+        {
+            <div class="filter-bar-group">
+                <label class="filter-label" for="employmentType">Employment type</label>
+                <select id="employmentType" name="employmentType" class="form-select app-select" data-min-search="0">
+                    <option value="">All types</option>
+                    @foreach (var option in Model.EmploymentTypes)
+                    {
+                        if (string.Equals(option.Value, Model.EmploymentType, StringComparison.OrdinalIgnoreCase))
+                        {
+                            <option value="@option.Value" selected>@option.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+        }
+
+        <input type="hidden" name="page" value="1" />
+        <input type="hidden" name="pageSize" value="@Model.PageSize" />
+
+        <div class="filter-bar-actions">
+            <button type="submit" class="btn btn-app">Apply</button>
+            <a href="@Model.ResetUrl" class="btn btn-app-outline">Reset</a>
+        </div>
+    </div>
+</form>

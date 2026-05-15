@@ -20,4 +20,7 @@ public sealed class SubCategoryPageVm
     public SeoBottomVm? SeoBottom { get; set; } = new();
 
     public ListingsSectionVm ListingsSection { get; set; } = new();
+    public IReadOnlyList<ListingMapMarkerVm> MapMarkers { get; set; } = Array.Empty<ListingMapMarkerVm>();
+
+    public bool HasMapMarkers => MapMarkers.Count > 0;
 }

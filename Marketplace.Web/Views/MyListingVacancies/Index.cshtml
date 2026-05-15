@@ -1,0 +1,57 @@
+@model IReadOnlyList<Marketplace.Web.Areas.Admin.Models.Vacancies.VacancyListItemVm>
+@{
+    ViewData["Title"] = "Vacancies";
+    var listingId = (int)ViewBag.ListingId;
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Vacancies</h1>
+        <div class="d-flex gap-2">
+            <a asp-action="Create" asp-route-listingId="@listingId" class="btn btn-primary btn-sm">+ Add Vacancy</a>
+            <a asp-controller="MyListings" asp-action="Edit" asp-route-id="@listingId" class="btn btn-outline-secondary btn-sm">← Back to Listing</a>
+        </div>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Title</th>
+                        <th>Employment</th>
+                        <th>Salary</th>
+                        <th>Location</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model)
+                    {
+                        <tr>
+                            <td>@v.Title</td>
+                            <td>@v.EmploymentType</td>
+                            <td>@v.SalaryText</td>
+                            <td>@v.LocationText</td>
+                            <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@v.Id" asp-route-listingId="@listingId" method="post" style="display:inline;" onsubmit="return confirm('Delete vacancy?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <p class="text-muted mb-3">No vacancies yet.</p>
+            <a asp-action="Create" asp-route-listingId="@listingId" class="btn btn-primary">Add your first vacancy</a>
+        </div>
+    }
+</div>

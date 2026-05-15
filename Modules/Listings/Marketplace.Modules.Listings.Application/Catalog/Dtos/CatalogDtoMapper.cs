@@ -26,7 +26,8 @@ internal static class CatalogDtoMapper
             listing.City.Name, listing.City.Slug,
             listing.Category.Name, listing.Category.Slug,
             listing.SubCategory.Name, listing.SubCategory.Slug,
-            primary?.Url, primary?.Alt ?? listing.Title);
+            primary?.Url, primary?.Alt ?? listing.Title,
+            listing.Latitude, listing.Longitude);
     }
 
     internal static ListingDetailsDto ToDetailsDto(Listing listing) => new(
@@ -43,7 +44,7 @@ internal static class CatalogDtoMapper
             .ToList(),
         listing.Reviews.OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new ListingReviewDto(
-                x.Reviewer?.UserId ?? x.AuthorName ?? "Anonymous",
+                x.AuthorName ?? x.Reviewer?.UserId ?? "Anonymous",
                 x.Text, x.Rating, x.CreatedAtUtc))
             .ToList(),
         listing.Rental is null ? null : new ListingRentalDto(

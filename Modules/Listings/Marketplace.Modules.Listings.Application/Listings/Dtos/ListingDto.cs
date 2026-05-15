@@ -8,6 +8,7 @@ public class ListingDto
     public int Id { get; set; }
 
     public string Title { get; set; } = string.Empty;
+    public string? ShortDescription { get; set; }
     public string Description { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
@@ -15,9 +16,17 @@ public class ListingDto
 
     public string? SellerId { get; set; }
 
+    public string? Phone { get; set; }
+    public string? Email { get; set; }
+    public string? Website { get; set; }
+
     public string? AddressLine { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
+
+    public int CategoryId { get; set; }
+    public int SubCategoryId { get; set; }
+    public int CityId { get; set; }
 
     public SubscriptionType SubscriptionType { get; set; } = SubscriptionType.Free;
     public ListingStatus Status { get; set; } = ListingStatus.Active;

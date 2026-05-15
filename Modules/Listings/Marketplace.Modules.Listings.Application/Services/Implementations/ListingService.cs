@@ -42,7 +42,7 @@ public class ListingService : IListingService
         };
     }
 
-    public async Task AddAsync(CreateListingCommand command, CancellationToken cancellationToken)
+    public async Task<int> AddAsync(CreateListingCommand command, CancellationToken cancellationToken)
     {
         var listing = new Listing
         {
@@ -68,6 +68,7 @@ public class ListingService : IListingService
 
         await _listingRepository.AddAsync(listing, cancellationToken);
         await _listingRepository.SaveChangesAsync(cancellationToken);
+        return listing.Id;
     }
 
     public async Task EditAsync(EditListingCommand command, CancellationToken cancellationToken)

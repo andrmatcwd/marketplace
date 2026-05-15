@@ -1,3 +1,4 @@
+using Marketplace.Modules.Listings.Application.Catalog.Commands;
 using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Web.Mappings;
 using Marketplace.Web.Models.Listings;
@@ -53,4 +54,11 @@ public sealed class ListingService : IListingService
 
         return vm;
     }
+
+    public Task SubmitReviewAsync(
+        int listingId, string userId, string authorName, string text, int rating,
+        CancellationToken cancellationToken)
+        => _mediator.Send(
+            new SubmitPublicReviewCommand(listingId, userId, authorName, text, rating),
+            cancellationToken);
 }

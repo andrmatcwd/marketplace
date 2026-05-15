@@ -1,9 +1,14 @@
 ﻿@model Marketplace.Web.Models.Catalog.CategoryPageVm
+@using System.Text.Json
 
 @{
     ViewData["Title"] = Model.Hero.Title;
     var structuredData = ViewData["StructuredData"] as string;
     var breadcrumbsStructuredData = ViewData["BreadcrumbsStructuredData"] as string;
+
+    var markersJson = JsonSerializer.Serialize(
+        Model.MapMarkers.Select(x => new { lat = x.Lat, lng = x.Lng, title = x.Title, url = x.Url }));
+    var hasMap = Model.HasMapMarkers;
 }
 
 @section StructuredData {
@@ -16,6 +21,11 @@
     <link rel="stylesheet" href="~/css/components/listing-card.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/taxonomy-card.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/components/pagination.css" asp-append-version="true" />
+    @if (hasMap)
+    {
+        <link rel="stylesheet" href="~/css/components/listing-details.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    }
 }
 
 <partial name="~/Views/Shared/Sections/_PageHero.cshtml" model="Model.Hero" />
@@ -45,5 +55,28 @@
 }
 
 <partial name="~/Views/Shared/Sections/_SeoBottom.cshtml" model="Model.SeoBottom" />
+
+@if (hasMap)
+{
+    <section class="app-card listing-map-card">
+        <div class="listing-map-body">
+            <div class="listing-map-header">
+                <h2 class="section-title">Listings on the map</h2>
+            </div>
+            <div id="catalogMap"
+                 class="listing-map-canvas"
+                 data-markers="@markersJson">
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts {
+    @if (hasMap)
+    {
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="~/js/maps/catalog-map-osm.js" asp-append-version="true"></script>
+    }
+}
 
 @* toggle-collapsible.js is loaded globally in _Layout.cshtml *@

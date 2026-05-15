@@ -1,0 +1,68 @@
+@using Marketplace.Modules.Listings.Application.Listings.Dtos
+@model IReadOnlyList<ListingImageAdminDto>
+@{
+    ViewData["Title"] = "Listing Photos";
+    var listingId = (int)ViewBag.ListingId;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/photos.css" asp-append-version="true" />
+}
+
+<div class="py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0">Photos</h1>
+            <p class="text-muted mb-0">Upload photos (JPG, PNG, WebP, up to 10 MB). First photo is the primary.</p>
+        </div>
+        <a asp-controller="MyListings" asp-action="Edit" asp-route-id="@listingId" class="btn btn-outline-secondary btn-sm">← Back to Listing</a>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <div class="photo-upload-zone" id="uploadZone"
+         data-listing-id="@listingId"
+         data-upload-url="@Url.Action("Upload", "MyListingPhotos")"
+         data-mode="listing">
+        <div class="photo-upload-zone__inner">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <p>Drag photos here or <label for="photoFileInput" class="photo-upload-zone__link">choose files</label></p>
+            <p class="photo-upload-zone__hint">JPG, PNG, WebP, GIF — up to 10 MB each</p>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" multiple hidden />
+    </div>
+
+    <div class="photo-grid" id="photoGrid"
+         data-delete-url="@Url.Action("Delete", "MyListingPhotos", new { listingId })"
+         data-primary-url="@Url.Action("SetPrimary", "MyListingPhotos")"
+         data-listing-id="@listingId">
+
+        @foreach (var img in Model)
+        {
+            <div class="photo-card" data-id="@img.Id" data-url="@img.Url">
+                <div class="photo-card__img-wrap">
+                    <img src="@img.Url" alt="@img.Alt" loading="lazy" />
+                    @if (img.IsPrimary)
+                    {
+                        <span class="photo-card__badge">Primary</span>
+                    }
+                </div>
+                <div class="photo-card__actions">
+                    @if (!img.IsPrimary)
+                    {
+                        <button type="button" class="admin-btn admin-btn--xs admin-btn--secondary js-set-primary">★ Set Primary</button>
+                    }
+                    <button type="button" class="admin-btn admin-btn--xs admin-btn--danger js-delete-photo">Delete</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="photo-upload-status" id="uploadStatus" hidden></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin/photo-manager.js" asp-append-version="true"></script>
+}

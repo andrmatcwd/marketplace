@@ -12,4 +12,5 @@ public class ListingFilter : PaginationFilter
     public int? CategoryId { get; set; }
     public int? SubCategoryId { get; set; }
     public ListingStatus? Status { get; set; }
+    public string? SellerId { get; set; }
 }

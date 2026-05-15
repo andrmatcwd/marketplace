@@ -18,6 +18,7 @@ public sealed class ListingMappingProfile : Profile
             .ForMember(dest => dest.SubCategorySlug, opt => opt.MapFrom(src => src.SubCategory != null ? src.SubCategory.Slug : string.Empty))
             .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
             .ForMember(dest => dest.CitySlug, opt => opt.MapFrom(src => src.City.Slug))
+            .ForMember(dest => dest.AddressLine, opt => opt.MapFrom(src => src.Address))
             .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.Images.Select(i => i.Url).ToList()));
     }
 }

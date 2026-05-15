@@ -10,4 +10,6 @@ public interface ICatalogUrlBuilder
     string BuildSubCategoryUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, int page = 1);
 
     string BuildListingUrl(string culture, string citySlug, string categorySlug, string subCategorySlug, string listingSlug, int id);
+
+    string BuildVacanciesUrl(string culture, int page = 1);
 }

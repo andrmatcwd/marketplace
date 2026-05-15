@@ -113,7 +113,8 @@
 
             try {
                 if (mode === "listing") {
-                    await fetch(deleteUrl + "?photoId=" + card.dataset.id, {
+                    var sep = deleteUrl.indexOf("?") >= 0 ? "&" : "?";
+                    await fetch(deleteUrl + sep + "photoId=" + card.dataset.id, {
                         method: "POST",
                         headers: { "RequestVerificationToken": getAntiForgeryToken() }
                     });

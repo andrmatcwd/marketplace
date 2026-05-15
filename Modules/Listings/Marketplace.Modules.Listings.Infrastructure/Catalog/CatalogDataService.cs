@@ -1,6 +1,9 @@
 using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Modules.Listings.Application.Catalog.Queries;
 using Marketplace.Modules.Listings.Application.Catalog.Services;
+using Marketplace.Modules.Listings.Application.Common.Models;
+using Marketplace.Modules.Listings.Application.Reviews.Dtos;
+using Marketplace.Modules.Listings.Application.Reviews.Filters;
 using Marketplace.Modules.Listings.Domain.Entities;
 using Marketplace.Modules.Listings.Domain.Enums.Listing;
 using Marketplace.Modules.Listings.Infrastructure.Persistence;
@@ -221,6 +224,250 @@ public sealed class CatalogDataService : ICatalogDataService
             .Where(x => x.CityId == cityId && x.CategoryId == categoryId)
             .ApplySearch(search)
             .CountAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<ListingMapMarkerDto>> GetListingMapMarkersAsync(
+        int cityId, int? categoryId, int? subCategoryId, CancellationToken cancellationToken)
+    {
+        var query = _db.Listings
+            .AsNoTracking()
+            .Where(x => x.Status == ListingStatus.Active &&
+                        x.CityId == cityId &&
+                        x.Latitude != null &&
+                        x.Longitude != null);
+
+        if (categoryId.HasValue)
+            query = query.Where(x => x.CategoryId == categoryId.Value);
+
+        if (subCategoryId.HasValue)
+            query = query.Where(x => x.SubCategoryId == subCategoryId.Value);
+
+        return await query
+            .Select(x => new ListingMapMarkerDto(
+                x.Id,
+                x.Title,
+                x.Slug,
+                x.Latitude!.Value,
+                x.Longitude!.Value,
+                x.City.Slug,
+                x.Category.Slug,
+                x.SubCategory.Slug))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<PublicVacancyDto>> GetPublicVacanciesAsync(
+        VacancyListingFilter filter, CancellationToken cancellationToken)
+    {
+        var query = _db.ListingVacancies
+            .AsNoTracking()
+            .Where(v => v.Listing.Status == ListingStatus.Active);
+
+        if (filter.CityId.HasValue)
+            query = query.Where(v => v.Listing.CityId == filter.CityId.Value);
+
+        if (!string.IsNullOrWhiteSpace(filter.EmploymentType))
+            query = query.Where(v => v.EmploymentType == filter.EmploymentType);
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var s = filter.Search.ToLower();
+            query = query.Where(v =>
+                EF.Functions.Like(v.Title.ToLower(), $"%{s}%") ||
+                (v.Description != null && EF.Functions.Like(v.Description.ToLower(), $"%{s}%")));
+        }
+
+        return await query
+            .OrderByDescending(v => v.Id)
+            .Skip((filter.Page - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .Select(v => new PublicVacancyDto(
+                v.Id,
+                v.Title,
+                v.Description,
+                v.EmploymentType,
+                v.SalaryText,
+                v.LocationText,
+                v.ListingId,
+                v.Listing.Title,
+                v.Listing.Slug,
+                v.Listing.City.Name,
+                v.Listing.City.Slug,
+                v.Listing.Category.Name,
+                v.Listing.Category.Slug,
+                v.Listing.SubCategory.Name,
+                v.Listing.SubCategory.Slug))
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<int> CountPublicVacanciesAsync(
+        VacancyListingFilter filter, CancellationToken cancellationToken)
+    {
+        var query = _db.ListingVacancies
+            .AsNoTracking()
+            .Where(v => v.Listing.Status == ListingStatus.Active);
+
+        if (filter.CityId.HasValue)
+            query = query.Where(v => v.Listing.CityId == filter.CityId.Value);
+
+        if (!string.IsNullOrWhiteSpace(filter.EmploymentType))
+            query = query.Where(v => v.EmploymentType == filter.EmploymentType);
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var s = filter.Search.ToLower();
+            query = query.Where(v =>
+                EF.Functions.Like(v.Title.ToLower(), $"%{s}%") ||
+                (v.Description != null && EF.Functions.Like(v.Description.ToLower(), $"%{s}%")));
+        }
+
+        return query.CountAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<string>> GetDistinctVacancyEmploymentTypesAsync(
+        CancellationToken cancellationToken)
+    {
+        return await _db.ListingVacancies
+            .AsNoTracking()
+            .Where(v => v.EmploymentType != null && v.Listing.Status == ListingStatus.Active)
+            .Select(v => v.EmploymentType!)
+            .Distinct()
+            .OrderBy(x => x)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task SubmitPublicReviewAsync(
+        int listingId, string userId, string authorName, string text, int rating,
+        CancellationToken cancellationToken)
+    {
+        var listingExists = await _db.Listings
+            .AnyAsync(x => x.Id == listingId && x.Status == ListingStatus.Active, cancellationToken);
+
+        if (!listingExists) return;
+
+        var reviewer = await _db.Reviewers
+            .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+
+        if (reviewer is null)
+        {
+            reviewer = new Reviewer
+            {
+                UserId = userId,
+                IsActive = true,
+                CreatedAtUtc = DateTime.UtcNow,
+                UpdatedAtUtc = DateTime.UtcNow
+            };
+            _db.Reviewers.Add(reviewer);
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        _db.Reviews.Add(new Review
+        {
+            ListingId = listingId,
+            ReviewerId = reviewer.Id,
+            AuthorName = authorName,
+            Text = text,
+            Rating = rating,
+            CreatedAtUtc = DateTime.UtcNow,
+            UpdatedAtUtc = DateTime.UtcNow
+        });
+
+        await _db.SaveChangesAsync(cancellationToken);
+
+        var stats = await _db.Reviews
+            .Where(r => r.ListingId == listingId)
+            .GroupBy(r => r.ListingId)
+            .Select(g => new { Count = g.Count(), Avg = g.Average(r => r.Rating) })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (stats is not null)
+        {
+            var listing = await _db.Listings.FindAsync([listingId], cancellationToken);
+            if (listing is not null)
+            {
+                listing.ReviewsCount = stats.Count;
+                listing.Rating = Math.Round(stats.Avg, 1);
+                await _db.SaveChangesAsync(cancellationToken);
+            }
+        }
+    }
+
+    public async Task<PagedResult<ReviewDto>> GetAdminReviewsAsync(
+        ReviewFilter filter, CancellationToken cancellationToken)
+    {
+        IQueryable<Review> query = _db.Reviews.AsNoTracking().Include(r => r.Listing);
+
+        if (filter.ListingId.HasValue)
+            query = query.Where(r => r.ListingId == filter.ListingId.Value);
+
+        if (filter.Rating.HasValue)
+            query = query.Where(r => (int)r.Rating == filter.Rating.Value);
+
+        var total = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .OrderByDescending(r => r.CreatedAtUtc)
+            .Skip((filter.Page - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .Select(r => new ReviewDto
+            {
+                Id = r.Id,
+                ListingId = r.ListingId,
+                ListingTitle = r.Listing.Title,
+                AuthorName = r.AuthorName,
+                Text = r.Text,
+                Rating = r.Rating,
+                CreatedAtUtc = r.CreatedAtUtc
+            })
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<ReviewDto>
+        {
+            Items = items,
+            Page = filter.Page,
+            PageSize = filter.PageSize,
+            TotalCount = total
+        };
+    }
+
+    public Task<ReviewDto?> GetAdminReviewByIdAsync(int id, CancellationToken cancellationToken)
+        => _db.Reviews
+            .AsNoTracking()
+            .Include(r => r.Listing)
+            .Where(r => r.Id == id)
+            .Select(r => new ReviewDto
+            {
+                Id = r.Id,
+                ListingId = r.ListingId,
+                ListingTitle = r.Listing.Title,
+                AuthorName = r.AuthorName,
+                Text = r.Text,
+                Rating = r.Rating,
+                CreatedAtUtc = r.CreatedAtUtc
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task DeleteReviewAndRecalculateAsync(int id, CancellationToken cancellationToken)
+    {
+        var review = await _db.Reviews.FindAsync([id], cancellationToken);
+        if (review is null) return;
+
+        var listingId = review.ListingId;
+        _db.Reviews.Remove(review);
+        await _db.SaveChangesAsync(cancellationToken);
+
+        var stats = await _db.Reviews
+            .Where(r => r.ListingId == listingId)
+            .GroupBy(r => r.ListingId)
+            .Select(g => new { Count = g.Count(), Avg = g.Average(r => r.Rating) })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        var listing = await _db.Listings.FindAsync([listingId], cancellationToken);
+        if (listing is not null)
+        {
+            listing.ReviewsCount = stats?.Count ?? 0;
+            listing.Rating = stats is not null ? Math.Round(stats.Avg, 1) : 0;
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+    }
 
     public Task<int?> GetCityIdBySlugAsync(string citySlug, CancellationToken cancellationToken)
         => _db.Cities

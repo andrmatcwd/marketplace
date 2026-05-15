@@ -12,4 +12,8 @@ public interface IListingService
         string serviceSlug,
         int id,
         CancellationToken cancellationToken);
+
+    Task SubmitReviewAsync(
+        int listingId, string userId, string authorName, string text, int rating,
+        CancellationToken cancellationToken);
 }

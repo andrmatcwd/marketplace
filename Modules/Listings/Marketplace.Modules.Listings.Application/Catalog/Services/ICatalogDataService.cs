@@ -1,5 +1,8 @@
 using Marketplace.Modules.Listings.Application.Catalog.Dtos;
 using Marketplace.Modules.Listings.Application.Catalog.Queries;
+using Marketplace.Modules.Listings.Application.Common.Models;
+using Marketplace.Modules.Listings.Application.Reviews.Dtos;
+using Marketplace.Modules.Listings.Application.Reviews.Filters;
 using Marketplace.Modules.Listings.Domain.Entities;
 
 namespace Marketplace.Modules.Listings.Application.Catalog.Services;
@@ -50,6 +53,27 @@ public interface ICatalogDataService
 
     Task<int> CountListingsByCategoryInCityAsync(
         int cityId, int categoryId, string? search, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<ListingMapMarkerDto>> GetListingMapMarkersAsync(
+        int cityId, int? categoryId, int? subCategoryId, CancellationToken cancellationToken);
+
+    // Vacancies
+    Task<IReadOnlyList<PublicVacancyDto>> GetPublicVacanciesAsync(
+        VacancyListingFilter filter, CancellationToken cancellationToken);
+
+    Task<int> CountPublicVacanciesAsync(
+        VacancyListingFilter filter, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<string>> GetDistinctVacancyEmploymentTypesAsync(CancellationToken cancellationToken);
+
+    // Reviews
+    Task SubmitPublicReviewAsync(
+        int listingId, string userId, string authorName, string text, int rating,
+        CancellationToken cancellationToken);
+
+    Task<PagedResult<ReviewDto>> GetAdminReviewsAsync(ReviewFilter filter, CancellationToken cancellationToken);
+    Task<ReviewDto?> GetAdminReviewByIdAsync(int id, CancellationToken cancellationToken);
+    Task DeleteReviewAndRecalculateAsync(int id, CancellationToken cancellationToken);
 
     // Search / AutoComplete helpers
     Task<int?> GetCityIdBySlugAsync(string citySlug, CancellationToken cancellationToken);

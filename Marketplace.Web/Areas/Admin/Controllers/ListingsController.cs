@@ -12,6 +12,8 @@ using Marketplace.Modules.Listings.Application.SubCategories.Filters;
 using Marketplace.Modules.Listings.Application.SubCategories.Queries.GetSubCategoriesByFilter;
 using Marketplace.Modules.Listings.Domain.Enums.Listing;
 using Marketplace.Modules.Listings.Domain.Enums.Subscription;
+using Marketplace.Modules.Users.Application.Users.Filters;
+using Marketplace.Modules.Users.Application.Users.Queries.GetUsersByFilter;
 using Marketplace.Web.Areas.Admin.Models.Listings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -120,13 +122,20 @@ public class ListingsController : Controller
             Id = listing.Id,
             Title = listing.Title,
             Slug = listing.Slug,
+            ShortDescription = listing.ShortDescription,
             Description = listing.Description,
-            Status = listing.Status,
-            SubscriptionType = listing.SubscriptionType,
-            SellerId = listing.SellerId,
+            Phone = listing.Phone,
+            Email = listing.Email,
+            Website = listing.Website,
             Address = listing.AddressLine,
             Latitude = listing.Latitude,
-            Longitude = listing.Longitude
+            Longitude = listing.Longitude,
+            SellerId = listing.SellerId,
+            CategoryId = listing.CategoryId,
+            SubCategoryId = listing.SubCategoryId,
+            CityId = listing.CityId,
+            Status = listing.Status,
+            SubscriptionType = listing.SubscriptionType
         });
     }
 
@@ -192,8 +201,9 @@ public class ListingsController : Controller
         var categoriesTask = _sender.Send(new GetCategoriesByFilterQuery(new CategoryFilter { PageSize = 100 }), cancellationToken);
         var subCategoriesTask = _sender.Send(new GetSubCategoriesByFilterQuery(new SubCategoryFilter { PageSize = 100 }), cancellationToken);
         var citiesTask = _sender.Send(new GetCitiesByFilterQuery(new CityFilter { PageSize = 100 }), cancellationToken);
+        var usersTask = _sender.Send(new GetUsersByFilterQuery(new UserFilter { PageSize = 500 }), cancellationToken);
 
-        await Task.WhenAll(categoriesTask, subCategoriesTask, citiesTask);
+        await Task.WhenAll(categoriesTask, subCategoriesTask, citiesTask, usersTask);
 
         ViewBag.Categories = categoriesTask.Result.Items
             .OrderBy(x => x.Name)
@@ -208,6 +218,17 @@ public class ListingsController : Controller
         ViewBag.Cities = citiesTask.Result.Items
             .OrderBy(x => x.Name)
             .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name })
+            .ToList();
+
+        ViewBag.Sellers = usersTask.Result.Items
+            .OrderBy(x => x.DisplayName)
+            .Select(x => new SelectListItem
+            {
+                Value = x.IdentityUserId,
+                Text = string.IsNullOrWhiteSpace(x.Email)
+                    ? x.DisplayName
+                    : $"{x.DisplayName} ({x.Email})"
+            })
             .ToList();
 
         ViewBag.Statuses = Enum.GetValues<ListingStatus>()

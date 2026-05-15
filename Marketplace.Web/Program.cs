@@ -22,6 +22,7 @@ using Marketplace.Web.Services.Home;
 using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Media;
 using Marketplace.Web.Services.Seo;
+using Marketplace.Web.Services.Vacancies;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -87,6 +88,7 @@ builder.Services.AddScoped<ICatalogUrlBuilder, CatalogUrlBuilder>();
 builder.Services.AddScoped<ICatalogBreadcrumbBuilder, CatalogBreadcrumbBuilder>();
 
 builder.Services.AddScoped<ICatalogService, CatalogService>();
+builder.Services.AddScoped<IVacanciesService, VacanciesService>();
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ISeoService, SeoService>();

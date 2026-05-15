@@ -32,7 +32,9 @@ public sealed class CatalogVmMapper : ICatalogVmMapper
             CityName = dto.CityName,
             CityUrl = _urlBuilder.BuildCityUrl(culture, dto.CitySlug),
             Rating = dto.Rating,
-            ReviewsCount = dto.ReviewsCount
+            ReviewsCount = dto.ReviewsCount,
+            Latitude = dto.Latitude,
+            Longitude = dto.Longitude
         };
     }
 

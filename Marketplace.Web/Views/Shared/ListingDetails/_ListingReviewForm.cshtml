@@ -1,0 +1,53 @@
+@using Microsoft.AspNetCore.Http
+@model Marketplace.Web.Models.Listings.Forms.CreateListingReviewVm
+
+@{
+    var culture = Context.GetRouteValue("culture")?.ToString() ?? "uk";
+    var isUk = culture == "uk";
+}
+
+<section class="app-card listing-review-form-section">
+    <div class="listing-review-form-header">
+        <h3 class="section-title">@(isUk ? "Залишити відгук" : "Оставить отзыв")</h3>
+    </div>
+
+    <div id="review-alert" class="review-form-alert" style="display:none"></div>
+
+    <form id="review-form"
+          asp-action="CreateReview" asp-controller="Listings" asp-route-culture="@culture"
+          method="post"
+          class="listing-review-form"
+          data-msg-success="@(isUk ? "Дякуємо! Ваш відгук успішно додано." : "Спасибо! Ваш отзыв успешно добавлен.")"
+          data-msg-error="@(isUk ? "Сталася помилка. Спробуйте ще раз." : "Произошла ошибка. Попробуйте ещё раз.")">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="ListingId" />
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-semibold">@(isUk ? "Оцінка" : "Оценка")</label>
+            <div class="star-rating-picker" data-star-picker>
+                <input type="hidden" name="Rating" id="rating-hidden" value="" />
+                @for (var i = 1; i <= 5; i++)
+                {
+                    <button type="button" class="star-pick-btn" data-value="@i" aria-label="@i зірок">★</button>
+                }
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-semibold">@(isUk ? "Ім'я" : "Имя")</label>
+            <input name="AuthorName" class="form-control app-input"
+                   value="@User.Identity!.Name"
+                   placeholder="@(isUk ? "Ваше ім'я" : "Ваше имя")" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-semibold">@(isUk ? "Текст відгуку" : "Текст отзыва")</label>
+            <textarea name="Text" class="form-control app-input" rows="4"
+                      placeholder="@(isUk ? "Поділіться враженнями..." : "Поделитесь впечатлениями...")"></textarea>
+        </div>
+
+        <button type="submit" id="review-submit" class="btn btn-app btn-sm">
+            @(isUk ? "Надіслати відгук" : "Отправить отзыв")
+        </button>
+    </form>
+</section>

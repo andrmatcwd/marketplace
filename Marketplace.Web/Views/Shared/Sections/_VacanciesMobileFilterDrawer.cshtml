@@ -1,0 +1,12 @@
+@model Marketplace.Web.Models.Vacancies.VacanciesFilterVm
+
+<div class="mobile-filter-backdrop" data-mobile-filter-drawer>
+    <div class="mobile-filter-panel">
+        <div class="mobile-filter-header">
+            <h2 class="section-title">Filters</h2>
+            <button type="button" class="btn btn-app-outline" data-mobile-filter-close>Close</button>
+        </div>
+
+        <partial name="~/Views/Shared/Sections/_VacanciesFilterBar.cshtml" model="Model" />
+    </div>
+</div>

@@ -1,0 +1,102 @@
+@model List<Marketplace.Web.Areas.Admin.Models.Reviews.ReviewListItemVm>
+@{
+    ViewData["Title"] = "Відгуки";
+    int page = (int)ViewBag.Page;
+    int totalPages = (int)ViewBag.TotalPages;
+    int totalCount = (int)ViewBag.TotalCount;
+    int? listingId = ViewBag.ListingId as int?;
+    int? rating = ViewBag.Rating as int?;
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Відгуки</h2>
+            <p class="admin-page-subtitle">Всього: @totalCount</p>
+        </div>
+    </div>
+
+    <div class="admin-card mb-3">
+        <form method="get" class="admin-filter-row">
+            <input type="number" name="listingId" value="@listingId" placeholder="ID оголошення" class="admin-input" />
+            <select name="rating" class="admin-input">
+                <option value="">— Будь-яка оцінка —</option>
+                @for (var i = 5; i >= 1; i--)
+                {
+                    <option value="@i" selected="@(rating == i)">@i ★</option>
+                }
+            </select>
+            <button type="submit" class="admin-btn admin-btn--secondary">Фільтр</button>
+            <a href="@Url.Action("Index")" class="admin-btn admin-btn--ghost">Скинути</a>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        @if (Model.Any())
+        {
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Оголошення</th>
+                            <th>Автор</th>
+                            <th>Оцінка</th>
+                            <th>Відгук</th>
+                            <th>Дата</th>
+                            <th class="admin-table__actions">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Reviews" asp-action="Index"
+                                       asp-route-listingId="@item.ListingId" class="admin-link">
+                                        @item.ListingTitle
+                                    </a>
+                                </td>
+                                <td>@(item.AuthorName ?? "—")</td>
+                                <td>
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        <span style="color: @(i <= item.Rating ? "#f5b50a" : "#d1d5db")">★</span>
+                                    }
+                                </td>
+                                <td class="admin-table__text-clamp">@item.Text</td>
+                                <td>@item.CreatedAtUtc.ToString("dd.MM.yyyy")</td>
+                                <td class="admin-table__actions">
+                                    <a asp-action="Delete" asp-route-id="@item.Id"
+                                       class="admin-btn admin-btn--xs admin-btn--danger">Видалити</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (totalPages > 1)
+            {
+                <div class="admin-pagination">
+                    @if (page > 1)
+                    {
+                        <a href="@Url.Action("Index", new { page = page - 1, listingId, rating })"
+                           class="admin-btn admin-btn--secondary admin-btn--xs">← Назад</a>
+                    }
+                    <span class="admin-pagination__info">@(page) / @totalPages</span>
+                    @if (page < totalPages)
+                    {
+                        <a href="@Url.Action("Index", new { page = page + 1, listingId, rating })"
+                           class="admin-btn admin-btn--secondary admin-btn--xs">Вперед →</a>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">Відгуків не знайдено.</p>
+        }
+    </div>
+</div>

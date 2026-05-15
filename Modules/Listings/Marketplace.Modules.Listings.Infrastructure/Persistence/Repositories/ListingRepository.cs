@@ -30,6 +30,8 @@ public class ListingRepository
             query = query.Where(x => x.CityId == filter.CityId.Value);
         if (filter.Status.HasValue)
             query = query.Where(x => x.Status == filter.Status.Value);
+        if (!string.IsNullOrWhiteSpace(filter.SellerId))
+            query = query.Where(x => x.SellerId == filter.SellerId);
 
         var totalCount = await query.CountAsync(cancellationToken);
 

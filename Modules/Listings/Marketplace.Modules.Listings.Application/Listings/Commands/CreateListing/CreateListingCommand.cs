@@ -21,4 +21,4 @@ public sealed record CreateListingCommand(
     int CategoryId,
     int SubCategoryId,
     int CityId
-) : IRequest<Unit>;
+) : IRequest<int>;

@@ -24,6 +24,9 @@ public sealed class ListingCardVm
     public double Rating { get; set; }
     public int ReviewsCount { get; set; }
 
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+
     public bool IsFeatured { get; set; }
     public bool IsVerified { get; set; }
 

@@ -1,0 +1,43 @@
+@model Marketplace.Web.Areas.Admin.Models.Reviews.ReviewListItemVm
+@{
+    ViewData["Title"] = "Видалити відгук";
+}
+
+<div class="admin-page">
+    <div class="admin-toolbar">
+        <div>
+            <h2 class="admin-page-title">Видалити відгук</h2>
+            <p class="admin-page-subtitle">Ви впевнені, що хочете видалити цей відгук? Рейтинг оголошення буде перераховано.</p>
+        </div>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <dl>
+            <dt>Оголошення</dt>
+            <dd>@Model.ListingTitle (#@Model.ListingId)</dd>
+            <dt>Автор</dt>
+            <dd>@(Model.AuthorName ?? "—")</dd>
+            <dt>Оцінка</dt>
+            <dd>
+                @for (var i = 1; i <= 5; i++)
+                {
+                    <span style="color: @(i <= Model.Rating ? "#f5b50a" : "#d1d5db"); font-size: 1.1rem">★</span>
+                }
+                (@Model.Rating)
+            </dd>
+            <dt>Текст</dt>
+            <dd>@(Model.Text ?? "—")</dd>
+            <dt>Дата</dt>
+            <dd>@Model.CreatedAtUtc.ToString("dd.MM.yyyy HH:mm")</dd>
+        </dl>
+
+        <form method="post" asp-action="DeleteConfirmed">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="admin-form-actions">
+                <button type="submit" class="admin-btn admin-btn--danger">Видалити</button>
+                <a asp-action="Index" class="admin-btn admin-btn--secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>

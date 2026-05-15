@@ -48,6 +48,12 @@
         <partial name="~/Views/Shared/ListingDetails/_ListingFeatures.cshtml" model="Model" />
         <partial name="~/Views/Shared/ListingDetails/_ListingVacancies.cshtml" model="Model.Vacancies" />
         <partial name="~/Views/Shared/ListingDetails/_ListingReviews.cshtml" model="Model.Reviews" />
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <partial name="~/Views/Shared/ListingDetails/_ListingReviewForm.cshtml" model="Model.ReviewForm" />
+        }
+
         <partial name="~/Views/Shared/ListingDetails/_ContactListingModal.cshtml" model="Model" />
     </div>
 
@@ -84,4 +90,8 @@
     <script src="~/js/google-maps.js" asp-append-version="true"></script>
     <script src="~/js/pages/listing-contact-modal.js" asp-append-version="true"></script>
     <script src="~/js/listing-analytics.js" asp-append-version="true"></script>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <script src="~/js/review-form.js" asp-append-version="true"></script>
+    }
 }

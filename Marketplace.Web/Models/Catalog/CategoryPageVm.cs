@@ -19,7 +19,9 @@ public sealed class CategoryPageVm
 
     public TaxonomySectionVm<SubCategoryCardVm> SubCategoriesSection { get; set; } = new();
     public ListingsSectionVm ListingsSection { get; set; } = new();
+    public IReadOnlyList<ListingMapMarkerVm> MapMarkers { get; set; } = Array.Empty<ListingMapMarkerVm>();
 
     public bool HasSubCategories => SubCategoriesSection.Items != null && SubCategoriesSection.Items.Any();
     public bool HasListings => ListingsSection.Listings != null && ListingsSection.Listings.Any();
+    public bool HasMapMarkers => MapMarkers.Count > 0;
 }

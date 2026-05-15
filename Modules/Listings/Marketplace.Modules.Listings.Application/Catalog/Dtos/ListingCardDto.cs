@@ -14,4 +14,6 @@ public sealed record ListingCardDto(
     string SubCategoryName,
     string SubCategorySlug,
     string? PrimaryImageUrl,
-    string? PrimaryImageAlt);
+    string? PrimaryImageAlt,
+    double? Latitude,
+    double? Longitude);

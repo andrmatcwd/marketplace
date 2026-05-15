@@ -4,6 +4,7 @@ using Marketplace.Web.Models.Catalog;
 using Marketplace.Web.Models.Shared;
 using Marketplace.Web.Navigation;
 using MediatR;
+using System.Globalization;
 
 namespace Marketplace.Web.Services.Catalog;
 
@@ -239,10 +240,12 @@ public sealed class CatalogService : ICatalogService
         var subCategoriesTask = _mediator.Send(new GetCategorySubCategoriesInCityQuery(city.Id, category.Id), cancellationToken);
         var topListingsTask = _mediator.Send(new GetTopListingsByCategoryQuery(city.Id, category.Id, filter.Search, 6), cancellationToken);
         var totalCountTask = _mediator.Send(new CountListingsByCategoryQuery(city.Id, category.Id, filter.Search), cancellationToken);
-        await Task.WhenAll(subCategoriesTask, topListingsTask, totalCountTask);
+        var mapMarkersTask = _mediator.Send(new GetListingMapMarkersQuery(city.Id, category.Id, null), cancellationToken);
+        await Task.WhenAll(subCategoriesTask, topListingsTask, totalCountTask, mapMarkersTask);
         var subCategories = subCategoriesTask.Result;
         var topListings = topListingsTask.Result;
         var totalCount = totalCountTask.Result;
+        var mapMarkers = mapMarkersTask.Result;
 
         return new CategoryPageVm
         {
@@ -273,7 +276,12 @@ public sealed class CatalogService : ICatalogService
                 Filter = filter,
                 Listings = topListings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
                 Pagination = new PaginationVm { CurrentPage = 1, TotalPages = 1 }
-            }
+            },
+            MapMarkers = mapMarkers
+                .Select(x => new ListingMapMarkerVm(
+                    x.Latitude, x.Longitude, x.Title,
+                    _urlBuilder.BuildListingUrl(culture, x.CitySlug, x.CategorySlug, x.SubCategorySlug, x.Slug, x.Id)))
+                .ToList()
         };
     }
 
@@ -308,9 +316,11 @@ public sealed class CatalogService : ICatalogService
 
         var listingsTask = _mediator.Send(new GetCatalogListingsQuery(listingFilter), cancellationToken);
         var totalCountTask = _mediator.Send(new CountCatalogListingsQuery(listingFilter), cancellationToken);
-        await Task.WhenAll(listingsTask, totalCountTask);
+        var mapMarkersTask = _mediator.Send(new GetListingMapMarkersQuery(city.Id, null, subCategory.Id), cancellationToken);
+        await Task.WhenAll(listingsTask, totalCountTask, mapMarkersTask);
         var listings = listingsTask.Result;
         var totalCount = totalCountTask.Result;
+        var mapMarkers = mapMarkersTask.Result;
 
         return new SubCategoryPageVm
         {
@@ -338,7 +348,12 @@ public sealed class CatalogService : ICatalogService
                 Filter = filter,
                 Listings = listings.Select(x => _mapper.MapListingCard(x, culture)).ToList(),
                 Pagination = _paginationBuilder.Build(filter, totalCount, page => _urlBuilder.BuildSubCategoryUrl(culture, city.Slug, subCategory.CategorySlug, subCategory.Slug, page))
-            }
+            },
+            MapMarkers = mapMarkers
+                .Select(x => new ListingMapMarkerVm(
+                    x.Latitude, x.Longitude, x.Title,
+                    _urlBuilder.BuildListingUrl(culture, x.CitySlug, x.CategorySlug, x.SubCategorySlug, x.Slug, x.Id)))
+                .ToList()
         };
     }
 }

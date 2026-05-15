@@ -21,7 +21,7 @@ public interface IListingService
 
     Task<PagedResult<ListingDto>> GetByFilterAsync(ListingFilter filter, CancellationToken cancellationToken);
 
-    Task AddAsync(CreateListingCommand command, CancellationToken cancellationToken);
+    Task<int> AddAsync(CreateListingCommand command, CancellationToken cancellationToken);
 
     Task EditAsync(EditListingCommand command, CancellationToken cancellationToken);
 
