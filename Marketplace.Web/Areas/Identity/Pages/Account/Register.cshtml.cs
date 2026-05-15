@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Marketplace.Modules.Users.Application.Users.Commands.CreateUser;
 using Marketplace.Modules.Users.Domain.Enums;
 using MediatR;
+using Marketplace.Web.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -127,6 +128,8 @@ namespace Marketplace.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, AppRoles.User);
 
                     var displayName = Input.Email.Split('@')[0];
                     await _sender.Send(new CreateUserCommand(

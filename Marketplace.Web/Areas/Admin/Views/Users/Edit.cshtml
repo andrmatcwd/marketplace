@@ -1,5 +1,6 @@
 @model Marketplace.Web.Areas.Admin.Models.Users.UserEditVm
 @using Marketplace.Modules.Users.Domain.Enums
+@using Marketplace.Web.Authorization
 @{
     ViewData["Title"] = "Edit User";
 }
@@ -61,20 +62,23 @@
                 </div>
 
                 <div class="admin-form-group">
-                    <label class="admin-label">Admin role</label>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-                        @if (Model.IsSelf)
-                        {
-                            <input type="checkbox" id="IsAdmin" checked disabled />
-                            <input type="hidden" name="IsAdmin" value="true" />
-                            <span class="text-muted" style="font-size:.85em;">You cannot remove your own admin role.</span>
-                        }
-                        else
-                        {
-                            <input asp-for="IsAdmin" type="checkbox" id="IsAdmin" />
-                            <label for="IsAdmin" style="margin:0;">Grant admin access</label>
-                        }
-                    </div>
+                    <label asp-for="Role" class="admin-label">Role</label>
+                    @if (Model.IsSelf)
+                    {
+                        <input type="text" value="@Model.Role" class="admin-input" disabled />
+                        <input type="hidden" name="Role" value="@Model.Role" />
+                        <span class="text-muted" style="font-size:.85em;">You cannot change your own role.</span>
+                    }
+                    else
+                    {
+                        <select asp-for="Role" class="admin-select">
+                            @foreach (var role in AppRoles.All)
+                            {
+                                <option value="@role" selected="@(Model.Role == role)">@role</option>
+                            }
+                        </select>
+                    }
+                    <span asp-validation-for="Role" class="text-danger"></span>
                 </div>
             </div>
 

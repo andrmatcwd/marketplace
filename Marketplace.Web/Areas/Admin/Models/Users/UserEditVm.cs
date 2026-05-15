@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Marketplace.Modules.Users.Domain.Enums;
+using Marketplace.Web.Authorization;
 
 namespace Marketplace.Web.Areas.Admin.Models.Users;
 
@@ -22,7 +23,7 @@ public class UserEditVm
     public string? Bio { get; set; }
 
     public UserStatus Status { get; set; }
-    public bool IsAdmin { get; set; }
+    public string Role { get; set; } = AppRoles.User;
 
     public string? IdentityUserId { get; set; }
     public bool IsSelf { get; set; }

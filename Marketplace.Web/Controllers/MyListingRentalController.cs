@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Listings.Queries.GetById;
 using Marketplace.Modules.Listings.Application.Rentals.Commands;
 using Marketplace.Modules.Listings.Application.Rentals.Queries;
@@ -9,7 +10,7 @@ using System.Security.Claims;
 
 namespace Marketplace.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppPolicies.SellerOrAbove)]
 public class MyListingRentalController : Controller
 {
     private readonly ISender _sender;

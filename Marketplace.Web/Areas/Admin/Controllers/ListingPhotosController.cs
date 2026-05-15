@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Listings.Commands.ManageImages;
 using Marketplace.Modules.Listings.Application.Listings.Queries.GetListingImages;
 using Marketplace.Web.Services.Media;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class ListingPhotosController : Controller
 {
     private readonly ISender _sender;

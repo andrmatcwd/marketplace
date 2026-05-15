@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Categories.Filters;
 using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
 using Marketplace.Modules.Listings.Application.Cities.Filters;
@@ -23,7 +24,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class ListingsController : Controller
 {
     private readonly ISender _sender;

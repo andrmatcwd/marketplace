@@ -77,14 +77,17 @@
                                     }
                                 </td>
                                 <td>
-                                    @if (item.IsAdmin)
-                                    {
-                                        <span class="admin-badge admin-badge--blue">Admin</span>
+                                    @{
+                                        var badgeClass = item.Role switch
+                                        {
+                                            "Admin"     => "admin-badge--red",
+                                            "Manager"   => "admin-badge--blue",
+                                            "Moderator" => "admin-badge--yellow",
+                                            "Seller"    => "admin-badge--green",
+                                            _           => "admin-badge--gray"
+                                        };
                                     }
-                                    else
-                                    {
-                                        <span class="admin-badge admin-badge--gray">User</span>
-                                    }
+                                    <span class="admin-badge @badgeClass">@item.Role</span>
                                 </td>
                                 <td>@item.CreatedAtUtc.ToString("yyyy-MM-dd")</td>
                                 <td class="admin-table__actions">

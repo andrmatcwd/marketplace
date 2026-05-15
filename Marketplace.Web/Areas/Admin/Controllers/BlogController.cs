@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Blog.Application.BlogPosts.Commands.CreateBlogPost;
 using Marketplace.Modules.Blog.Application.BlogPosts.Commands.DeleteBlogPost;
 using Marketplace.Modules.Blog.Application.BlogPosts.Commands.UpdateBlogPost;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class BlogController : Controller
 {
     private readonly ISender _sender;

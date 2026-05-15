@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Listings.Filters;
 using Marketplace.Modules.Listings.Application.Listings.Queries.GetListingsByFilter;
 using Marketplace.Modules.Listings.Application.Subscriptions.Commands.AssignSubscription;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class SubscriptionsController : Controller
 {
     private readonly ISender _sender;

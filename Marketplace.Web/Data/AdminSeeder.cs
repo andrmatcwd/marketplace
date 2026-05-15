@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Marketplace.Web.Data;
@@ -20,10 +21,11 @@ public sealed class AdminSeeder
 
     public async Task SeedAsync()
     {
-        const string role = "Admin";
-
-        if (!await _roleManager.RoleExistsAsync(role))
-            await _roleManager.CreateAsync(new IdentityRole(role));
+        foreach (var role in AppRoles.All)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+                await _roleManager.CreateAsync(new IdentityRole(role));
+        }
 
         var email = _config["AdminUser:Email"] ?? "admin@marketplace.com";
         var password = _config["AdminUser:Password"] ?? "Admin@12345";
@@ -38,7 +40,7 @@ public sealed class AdminSeeder
                     $"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
         }
 
-        if (!await _userManager.IsInRoleAsync(user, role))
-            await _userManager.AddToRoleAsync(user, role);
+        if (!await _userManager.IsInRoleAsync(user, AppRoles.Admin))
+            await _userManager.AddToRoleAsync(user, AppRoles.Admin);
     }
 }

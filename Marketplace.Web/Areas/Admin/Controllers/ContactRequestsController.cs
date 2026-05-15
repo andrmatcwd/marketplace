@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Notifications.Application.ContactRequests.Commands.DeleteContactRequest;
 using Marketplace.Modules.Notifications.Application.ContactRequests.Commands.UpdateContactRequestStatus;
 using Marketplace.Modules.Notifications.Application.ContactRequests.Filters;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class ContactRequestsController : Controller
 {
     private readonly ISender _sender;

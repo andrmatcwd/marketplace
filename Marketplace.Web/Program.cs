@@ -23,6 +23,7 @@ using Marketplace.Web.Services.Listings;
 using Marketplace.Web.Services.Media;
 using Marketplace.Web.Services.Seo;
 using Marketplace.Web.Services.Vacancies;
+using Marketplace.Web.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,16 @@ builder.Services
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AppPolicies.SellerOrAbove, p =>
+        p.RequireRole(AppRoles.Seller, AppRoles.Manager, AppRoles.Moderator, AppRoles.Admin));
+    options.AddPolicy(AppPolicies.ModeratorOrAbove, p =>
+        p.RequireRole(AppRoles.Moderator, AppRoles.Manager, AppRoles.Admin));
+    options.AddPolicy(AppPolicies.ManagerOrAbove, p =>
+        p.RequireRole(AppRoles.Manager, AppRoles.Admin));
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -78,6 +89,16 @@ builder.Services
     })
     .AddRoles<Microsoft.AspNetCore.Identity.IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services
+    .AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+        options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.None;
+    });
 
 builder.Services.AddHttpClient();
 

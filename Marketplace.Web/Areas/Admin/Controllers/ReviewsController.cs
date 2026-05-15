@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Reviews.Commands.DeleteReview;
 using Marketplace.Modules.Listings.Application.Reviews.Filters;
 using Marketplace.Modules.Listings.Application.Reviews.Queries.GetById;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ModeratorOrAbove)]
 public sealed class ReviewsController : Controller
 {
     private readonly ISender _sender;

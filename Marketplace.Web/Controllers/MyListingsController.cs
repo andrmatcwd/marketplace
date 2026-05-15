@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Categories.Filters;
 using Marketplace.Modules.Listings.Application.Categories.Queries.GetCategoriesByFilter;
 using Marketplace.Modules.Listings.Application.Cities.Filters;
@@ -21,7 +22,7 @@ using System.Security.Claims;
 
 namespace Marketplace.Web.Controllers;
 
-[Authorize]
+[Authorize(Policy = AppPolicies.SellerOrAbove)]
 public class MyListingsController : Controller
 {
     private readonly ISender _sender;

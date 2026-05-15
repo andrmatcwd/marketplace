@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Listings.Application.Rentals.Commands;
 using Marketplace.Modules.Listings.Application.Rentals.Queries;
 using Marketplace.Web.Services.Media;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public class RoomPhotosController : Controller
 {
     private readonly ISender _sender;

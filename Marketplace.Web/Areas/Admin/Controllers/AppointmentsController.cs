@@ -1,3 +1,4 @@
+using Marketplace.Web.Authorization;
 using Marketplace.Modules.Appointments.Application.Appointments.Commands.CreateAppointment;
 using Marketplace.Modules.Appointments.Application.Appointments.Commands.DeleteAppointment;
 using Marketplace.Modules.Appointments.Application.Appointments.Commands.UpdateAppointment;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Marketplace.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize(Roles = "Admin")]
+[Authorize(Policy = AppPolicies.ManagerOrAbove)]
 public sealed class AppointmentsController : Controller
 {
     private readonly ISender _sender;
