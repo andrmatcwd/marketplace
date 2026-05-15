@@ -24,6 +24,7 @@ using Marketplace.Web.Services.Media;
 using Marketplace.Web.Services.Seo;
 using Marketplace.Web.Services.Vacancies;
 using Marketplace.Web.Authorization;
+using Marketplace.Web.Services.AiSearch;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -120,6 +121,7 @@ builder.Services.AddScoped<ICatalogFilterEnricher, CatalogFilterEnricher>();
 builder.Services.AddScoped<ICatalogPaginationBuilder, CatalogPaginationBuilder>();
 
 builder.Services.AddScoped<IContactRequestService, ContactRequestService>();
+builder.Services.AddScoped<IAiSearchService, AiSearchService>();
 builder.Services.AddScoped<IPhotoStorageService, LocalPhotoStorageService>();
 
 builder.Services.AddScoped<IAbsoluteUrlBuilder, AbsoluteUrlBuilder>();

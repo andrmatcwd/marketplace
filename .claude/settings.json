@@ -17,7 +17,15 @@
       "Bash(xargs ls -1)",
       "Bash(grep -E \"\\\\.\\(cs|resx\\)$\")",
       "WebSearch",
-      "Bash(claude --version)"
+      "Bash(claude --version)",
+      "Bash(dotnet add *)",
+      "Bash(git fetch *)",
+      "Bash(git push *)",
+      "Bash(dotnet user-secrets *)",
+      "Bash(git checkout *)",
+      "Bash(git reset *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

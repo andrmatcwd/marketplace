@@ -34,51 +34,86 @@
 
             <div class="home-search-panel app-card">
                 <div class="home-search-panel-body">
-                    <h2 class="home-search-title">Start your search</h2>
-                    <p class="home-search-description">
-                        Choose a city and search for the service you need.
-                    </p>
+                    <div class="home-search-tabs">
+                        <button type="button" class="home-search-tab is-active" data-tab="classic">Search</button>
+                        <button type="button" class="home-search-tab" data-tab="ai">
+                            <span class="home-search-tab-ai-icon">✦</span> AI Search
+                        </button>
+                    </div>
 
-                    <form method="get"
-                          action="@Model.Hero.SearchActionUrl"
-                          id="homeSearchForm"
-                          class="home-search-form">
-                        <div class="home-search-field">
-                            <label for="homeSearchInput" class="filter-label">Service</label>
-                            <input id="homeSearchInput"
-                                   name="search"
-                                   type="text"
-                                   class="form-control app-input"
-                                   placeholder="@Model.Hero.SearchPlaceholder" />
-                        </div>
+                    <div id="homeTabClassic">
+                        <h2 class="home-search-title">Start your search</h2>
+                        <p class="home-search-description">
+                            Choose a city and search for the service you need.
+                        </p>
 
-                        <div class="home-search-field">
-                            <label for="homeCitySelect" class="filter-label">City</label>
-                            <select id="homeCitySelect" name="city" class="form-select app-select">
-                                <option value="">@Model.Hero.CityPlaceholder</option>
-                                @foreach (var option in Model.CityOptions)
-                                {
-                                    if (string.Equals(option.Value, Model.SelectedCitySlug, StringComparison.OrdinalIgnoreCase))
+                        <form method="get"
+                              action="@Model.Hero.SearchActionUrl"
+                              id="homeSearchForm"
+                              class="home-search-form">
+                            <div class="home-search-field">
+                                <label for="homeSearchInput" class="filter-label">Service</label>
+                                <input id="homeSearchInput"
+                                       name="search"
+                                       type="text"
+                                       class="form-control app-input"
+                                       placeholder="@Model.Hero.SearchPlaceholder" />
+                            </div>
+
+                            <div class="home-search-field">
+                                <label for="homeCitySelect" class="filter-label">City</label>
+                                <select id="homeCitySelect" name="city" class="form-select app-select">
+                                    <option value="">@Model.Hero.CityPlaceholder</option>
+                                    @foreach (var option in Model.CityOptions)
                                     {
-                                        <option value="@option.Value" selected>@option.Text</option>
+                                        if (string.Equals(option.Value, Model.SelectedCitySlug, StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <option value="@option.Value" selected>@option.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@option.Value">@option.Text</option>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <option value="@option.Value">@option.Text</option>
-                                    }
-                                }
-                            </select>
-                        </div>
+                                </select>
+                            </div>
 
-                        <div class="home-search-actions">
-                            <button type="submit" class="btn btn-app">Search</button>
-                            <button type="button" class="btn btn-app-outline" id="detectLocationBtn">
-                                Detect my city
-                            </button>
-                        </div>
+                            <div class="home-search-actions">
+                                <button type="submit" class="btn btn-app">Search</button>
+                                <button type="button" class="btn btn-app-outline" id="detectLocationBtn">
+                                    Detect my city
+                                </button>
+                            </div>
 
-                        <div id="detectedCityMessage" class="home-detected-city" hidden></div>
-                    </form>
+                            <div id="detectedCityMessage" class="home-detected-city" hidden></div>
+                        </form>
+                    </div>
+
+                    <div id="homeTabAi" hidden>
+                        <h2 class="home-search-title">Describe your problem</h2>
+                        <p class="home-search-description">
+                            Tell us what you need in plain words — AI will find the right listings for you.
+                        </p>
+
+                        <div class="home-search-form">
+                            <div class="home-search-field">
+                                <label for="aiSearchInput" class="filter-label">What do you need?</label>
+                                <textarea id="aiSearchInput"
+                                          class="form-control app-input"
+                                          rows="3"
+                                          maxlength="500"
+                                          placeholder="e.g. My bathroom pipe is leaking and I need a plumber in Kyiv"></textarea>
+                            </div>
+
+                            <div class="home-search-actions">
+                                <button type="button" class="btn btn-app" id="aiSearchBtn">
+                                    Find with AI
+                                </button>
+                            </div>
+
+                            <div id="aiSearchError" class="home-ai-error" hidden></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,4 +180,8 @@
 
 @section Scripts {
     <script src="~/js/pages/home.js" asp-append-version="true"></script>
+    <script src="~/js/pages/home-ai-search.js" asp-append-version="true"></script>
+    <script>
+        window.__culture = '@Html.Raw(Model.Culture ?? "uk")';
+    </script>
 }
